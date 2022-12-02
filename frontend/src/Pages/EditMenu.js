@@ -29,7 +29,7 @@ const EditMenu = () => {
     const [err, setErr] = useState('');
 
 
-    const addNewItem = async (name, price, ingredients) => {
+    const addNewItem = async (name, price, ingredients, photoURL) => {
         console.log("clicked");
         console.log(name);
         console.log(price);
@@ -37,7 +37,7 @@ const EditMenu = () => {
         try {
             const response = await fetch('http://localhost:5000/newItem', {
                 method: 'POST',
-                body: JSON.stringify({ itemName: name, itemPrice: price, itemIngreds: ingredients }),
+                body: JSON.stringify({ itemName: name, itemPrice: price, itemIngreds: ingredients, url: photoURL}),
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
@@ -124,7 +124,7 @@ const EditMenu = () => {
                             <TextField onChange = { ( event ) => setNewItemIngredients(event.target.value)} value={newItemIngredients} size="small" label="Ingredients of Item" variant="filled" style = {{ width: "95%", marginRight: "5%", marginBottom: "2%", backgroundColor: "white"}}/>
                             <TextField onChange = { ( event ) => setNewItemURL(event.target.value)} value={newItemURL} size="small" label="Photo URL" variant="filled" style = {{ width: "95%", marginRight: "5%", backgroundColor: "white"}}/>
                         </div>
-                        <Button onClick = {event => {addNewItem(newItemName, newItemPrice, newItemIngredients); setNewItemName(""); setNewItemPrice(""); setNewItemIngredients("")}} style = {{ height: "7.5%", width: "10%", marginLeft: "5%", marginTop: "7%", color: "white", backgroundColor: "blue" }}><TranslatedText text = "Add Item" key = {lang}/></Button>
+                        <Button onClick = {event => {addNewItem(newItemName, newItemPrice, newItemIngredients, newItemURL); setNewItemName(""); setNewItemPrice(""); setNewItemIngredients(""); setNewItemURL("")}} style = {{ height: "7.5%", width: "10%", marginLeft: "5%", marginTop: "7%", color: "white", backgroundColor: "blue" }}><TranslatedText text = "Add Item" key = {lang}/></Button>
                     </span>
                 </div>
 

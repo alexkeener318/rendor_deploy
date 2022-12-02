@@ -363,12 +363,12 @@ async function updateInventory(orderItems){
 //array of bowls
 async function bowlContent(){
     let item;
-    let bowl ={};
     bowls =[];
     await pool
             .query("SELECT item_name,url FROM menu WHERE item_name like '%Bowl%';")
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
+                    let bowl ={};
                     item=query_res.rows[i];
                     console.log(query_res.rows[i]);
                     bowl.name =item.item_name;
@@ -382,12 +382,12 @@ async function bowlContent(){
 //array of gyros
 async function gyrosContent(){
     let item;
-    let gyro ={};
     gyros=[];
     await pool
             .query("SELECT item_name, url FROM menu WHERE item_name like '%Gyro%';")
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
+                    let gyro ={};
                     item=query_res.rows[i];
                     console.log(query_res.rows[i]);
                     gyro.name =item.item_name;
@@ -416,14 +416,15 @@ function drinksContent(){
 async function extrasContent(){
     //extras=["2 Meatballs", "2 Falafels", "Fries", "Garlic Fries", "Hummus & Pita", "Extra Dressing", "Extra Hummus", "Extra Protein", "Pita Bread"];
     let item;
-    let extra ={};
     extras=[];
     await pool
             .query("SELECT item_name,url FROM menu WHERE item_name not like '%Gyro%' and item_name not like '%Bowl%' and item_name not like 'Bottled Water' and item_name not like 'Fountain Drinks';")
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
+                    let extra ={};
                     item=query_res.rows[i];
                     console.log(query_res.rows[i]);
+                    extra.id = i;
                     extra.name =item.item_name;
                     extra.url =item.url;
                     extras.push(extra);
@@ -641,7 +642,7 @@ async function getQuantity(item){
 
 //gets the pinpad entry and returns a person with its name, id(pinpad), and role(manager or employee)
 // manager IDs: 45678, 67890
-async function employeeType(id){
+async function employeeType(email){
     let person ={};
     employee_name="";
     query_str="SELECT * from employees where employee_id = '"+ email +"';";
@@ -826,7 +827,7 @@ async function main(){
 
     // Adds new menu items
     app.post("/newItem",jsonParser,(req,res)=>{
-        addMenu(req.body.itemName,req.body.itemPrice,req.body.itemIngreds)
+        addMenu(req.body.itemName,req.body.itemPrice,req.body.itemIngreds,req.body.url)
         .then(()=>{
             res.send("Successfully added new menu item");
         })
