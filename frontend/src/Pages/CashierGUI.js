@@ -78,6 +78,10 @@ const CashierGUI = () => {
         if (role === "Customer"){
             logout()
         }
+
+        if (role === "Manager"){
+            setManagerButtons([...managerButtons].slice(0, managerButtons.length - 1))
+        }
         
     },[role])
 
@@ -372,6 +376,7 @@ const CashierGUI = () => {
                                         </Link>
                                     );
                                 })}
+                                
                         </div>
                     </div>
                    
