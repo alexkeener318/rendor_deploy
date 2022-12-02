@@ -16,7 +16,7 @@ const OneColRow = (props) => {
             </div>
         </div>
     );
-  }
+}
   
-  export default OneColRow;
+export default OneColRow;
   
