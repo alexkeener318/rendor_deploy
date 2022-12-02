@@ -22,9 +22,10 @@ import Map from "./Pages/Map";
 import EditMenu from "./Pages/EditMenu";
 
 // contexts
- import { UserContext } from "./contexts/user";
- import { LanguageContext } from "./contexts/language";
+import { UserContext } from "./contexts/user";
+import { LanguageContext } from "./contexts/language";
 import Auth0ProviderWithHistory from "./auth0ProviderWithHistory";
+import LowstockGUI from "./Pages/LowstockGUI";
 
 
 
@@ -49,7 +50,7 @@ const App= ()=> {
             <Route path="/excessreport" element={<ExcessReport />} />
             {/* <Route path="/customergui" element={<CustomerGUI />} /> */}
             <Route path="/" element={<CustomerGUI />} />
-
+            <Route path="/lowstockgui" element={<LowstockGUI />} />
             <Route path="/cashiergui" element={<CashierGUI />} />
             <Route path="/statistics" element={<Statistics />} />
             <Route path="/map" element={<Map />} />
