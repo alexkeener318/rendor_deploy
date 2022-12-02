@@ -6,6 +6,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Button, TextField, Card, CardMedia, CardContent } from "@mui/material"
 import { Grid } from '@mui/material';
 import { useAuth0 } from "@auth0/auth0-react";
+import axios from 'axios'
 
 // components
 import TranslatedText from "../Components/TranslatedText";
@@ -43,6 +44,9 @@ const CashierGUI = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [err, setErr] = useState('');
 
+    const { logout } = useAuth0() 
+    const [ role, setRole ] = useState('Employee')
+
     // TODO: IMPLEMENT LOGIC FOR SERVER VS MANAGER
     const [managerButtons, setManagerButtons] = useState([...managerButtonList])
 
@@ -57,8 +61,25 @@ const CashierGUI = () => {
         if (!isAuthenticated){
             navigate("/")
         }
-        //console.log(name, email)
+        
+        if ( email != undefined ){
+            axios.post("http://localhost:5000/employeeType", { pin:email })
+                .then(data => {
+                    setRole(data.data.role)
+                    console.log(data.data)
+                })
+        }
+        
+
+
     },[isAuthenticated])
+
+    useEffect(() =>{
+        if (role === "Customer"){
+            logout()
+        }
+        
+    },[role])
 
     function buttonMenu() {
         setManagerButtons([...managerButtonList]);

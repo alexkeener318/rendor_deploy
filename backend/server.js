@@ -196,11 +196,12 @@ function getName() {
 
 // adding new items to menu
 let itemID;
-async function addMenu(itemName, itemPrice, itemIngreds) {
+//addMenu("tomato salad", 2.00, "Tomatoes,Dressing", "www.urmom.com");
+async function addMenu(itemName, itemPrice, itemIngreds, url) {
     await getItemID()
     .then(()=>{
         // send in query
-        const query = "INSERT INTO menu VALUES(" +itemID + ",'" + itemName +"', " + itemPrice +", '" + itemIngreds + "');";
+        const query = "INSERT INTO menu VALUES(" +itemID + ",'" + itemName +"', " + itemPrice +", '" + itemIngreds + "', '" + url + "');";
         console.log(query);
         pool.query(query);
     })
@@ -361,56 +362,73 @@ async function updateInventory(orderItems){
 
 //array of bowls
 async function bowlContent(){
-    let bowl;
-    bowls=[];
+    let item;
+    let bowl ={};
+    bowls =[];
     await pool
-            .query("SELECT item_name FROM menu WHERE item_name like '%Bowl%';")
+            .query("SELECT item_name,url FROM menu WHERE item_name like '%Bowl%';")
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
-                    bowl=query_res.rows[i];
+                    item=query_res.rows[i];
                     console.log(query_res.rows[i]);
-                    bowls.push(bowl.item_name);
+                    bowl.name =item.item_name;
+                    bowl.url =item.url;
+                    bowls.push(bowl);
                 }});
-    //console.log(bowls[0])
+    //console.log(bowls[0].name)
     return bowls;
 }
 
 //array of gyros
 async function gyrosContent(){
-    let gyro;
+    let item;
+    let gyro ={};
     gyros=[];
     await pool
-            .query("SELECT item_name FROM menu WHERE item_name like '%Gyro%';")
+            .query("SELECT item_name, url FROM menu WHERE item_name like '%Gyro%';")
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
-                    gyro=query_res.rows[i];
+                    item=query_res.rows[i];
                     console.log(query_res.rows[i]);
-                    gyros.push(gyro.item_name);
+                    gyro.name =item.item_name;
+                    gyro.url =item.url;
+                    gyros.push(gyro);
                 }});
-    //console.log(gyros[0])
+    console.log(gyros[0].name)
+    console.log(gyros[0].url)
     return gyros;
 }
 
 //array of drinks
 function drinksContent(){
-    drinks=["Fountain Drinks", "Bottled Water"];
+    let drink1={}; //water bottle
+    drink1.url=  "https://www.shutterstock.com/image-photo/plastic-water-bottle-big-small-600w-1907885707.jpg"
+    drink1.name = "Bottled Water"
+    let drink2={};//fountain drinks
+    drink2.url=  "https://www.shutterstock.com/image-photo/soda-fountain-cup-isolated-on-600w-445209874.jpg"
+    drink2.name = "Fountain Drinks"
+    drinks=[drink2, drink1];
+    //console.log(drinks[0].url);
     return drinks;
 }
 
 //array of extras
 async function extrasContent(){
     //extras=["2 Meatballs", "2 Falafels", "Fries", "Garlic Fries", "Hummus & Pita", "Extra Dressing", "Extra Hummus", "Extra Protein", "Pita Bread"];
-    let extra;
+    let item;
+    let extra ={};
     extras=[];
     await pool
-            .query("SELECT item_name FROM menu WHERE item_name not like '%Gyro%' and item_name not like '%Bowl%' and item_name not like 'Bottled Water' and item_name not like 'Fountain Drinks';")
+            .query("SELECT item_name,url FROM menu WHERE item_name not like '%Gyro%' and item_name not like '%Bowl%' and item_name not like 'Bottled Water' and item_name not like 'Fountain Drinks';")
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
-                    extra=query_res.rows[i];
+                    item=query_res.rows[i];
                     console.log(query_res.rows[i]);
-                    extras.push(extra.item_name);
+                    extra.name =item.item_name;
+                    extra.url =item.url;
+                    extras.push(extra);
                 }});
-    //console.log(extras[0])
+    //console.log(extras[0].name)
     return extras;
 }
 
@@ -626,24 +644,28 @@ async function getQuantity(item){
 async function employeeType(id){
     let person ={};
     employee_name="";
-    query_str="SELECT employee_name from employees where employee_id = "+ id +";";
+    query_str="SELECT * from employees where employee_id = '"+ email +"';";
+    person.role = 'Customer'
+
     await pool
             .query(query_str)
             .then(query_res => {
-                for (let i = 0; i < query_res.rowCount; i++){
-                    employee_name=query_res.rows[i];
-                    console.log(query_res.rows[i]);
-                    person.name=employee_name.employee_name;
-                }});
-    person.id=id;
-    if(person.name =="Reagan R" || person.name =="Lightfoot" ){
-        person.role="Manager";
-    }else{
-        person.role="Employee";
-    }
-    // console.log(person.name);
-    // console.log(person.id);
-    // console.log(person.role);
+                
+                if (query_res.rows.length > 0){
+                    let sqlPerson = query_res.rows[0]
+                    person = sqlPerson
+                    console.log("person is ", person)
+                }
+
+            });
+    // if(person. =="Reagan R" || person.name =="David A" ){
+    //     person.role="Manager";
+    // }else{
+    //     person.role="Employee";
+    // }
+    //  console.log(person.name);
+    //  console.log(person.email);
+    //  console.log(person.role);
     return person;
 }
 
