@@ -41,3 +41,14 @@ th, td {
   opacity: 80%;
 }
 
+.hoverCard{
+  height:95%;
+  cursor: pointer;
+  transition: all .2s ease-in-out !important;
+}
+
+.hoverCard:hover{
+  box-shadow: 2px 2px 5px 0.5px lightblue;
+  transform: scale(1.1) ;
+  cursor: pointer;
+}

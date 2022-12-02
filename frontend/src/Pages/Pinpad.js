@@ -1,17 +1,22 @@
+// react
 import { useContext, useState } from "react";
-import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
+// external imports
+import { createTheme, ThemeProvider, Button } from "@mui/material";
+import axios from 'axios';
+
+// components
+import LanguagePicker from "../Components/LanguagePicker";
+import TranslatedText from "../Components/TranslatedText";
 import Header from "../Components/Header"
 
-import { createTheme, ThemeProvider, Button } from "@mui/material";
-import { Link } from "react-router-dom";
-import TranslatedText from "./TranslatedText";
+// pages
 
 // contexts
 import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
-import LanguagePicker from "../Components/LanguagePicker";
+
 const numbers = [ 0,
             1, 2, 3,
             4, 5, 6, 

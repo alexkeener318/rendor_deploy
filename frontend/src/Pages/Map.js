@@ -1,14 +1,20 @@
+// react
+import { useState, useEffect, useContext } from "react";
 
-import Header from "../Components/Header"
+// external imports
 import axios from 'axios'
 
-import { useState, useEffect, useContext } from "react";
+// components
+import Header from "../Components/Header"
+import TranslatedText from "../Components/TranslatedText";
 import translate, { setCORS } from "google-translate-api-browser";
-import TranslatedText from "./TranslatedText";
+
+// pages
 
 // contexts
 import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
+
 
 
 const Map = ()=> {

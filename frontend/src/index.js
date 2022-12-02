@@ -12,6 +12,7 @@ import ExcessReport from  './Pages/ExcessReport';
 import CustomerGUI from './Pages/CustomerGUI'
 import CashierGUI from './Pages/CashierGUI';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Auth0ProviderWithHistory from './auth0ProviderWithHistory';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

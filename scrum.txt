@@ -128,3 +128,24 @@ Sprint 3 - Meeting 1: 11/27/22
         that were a little too difficult in the time allowed were pushed to the third sprint as well. This includes the google OAuth
         API. With that in mind, being able to work on one big task and the finishing touches for a sprint makes it easier on the team.
 
+Sprint 3 - Meeting 2: 11/30/22
+    Agenda
+        - Any current issues that anyone has and if members can help
+        - What tasks that have been completed and what each member is currently Demoing
+        - Making sure we're on track with ideal burndown
+    Accomplishments
+        - Implement check on negative inventory items
+        - Add animations to homepage
+        - Implemented google OAuth
+        - Low stock shown on frontend
+    Plans
+        - Revise color scheme to ensure that website is accessible
+        - Revise website arrangement to ensure accessibility
+        - Create HTTPS request to see items that haven't sold a lot of stock
+        - Host the website
+        - Mobile integration
+    Minutes
+        Since the first week of the sprint was Thanksgiving break, we did not have the time to work on the project. As a result,
+        last meeting was used to discuss any tasks we needed to add to the sprint that we did not account for when originally creating the 
+        backlog for this project. We also delegated the tasks to each member. Progress on tasks that had to be pushed from sprint 2
+        to this sprint were discussed as well. We ended the meeting feeling good about our progress.

@@ -4,7 +4,7 @@ import { Button, Select, FormControl, MenuItem } from "@mui/material"
 
 import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import TranslatedText from "../Pages/TranslatedText";
+import TranslatedText from "./TranslatedText";
 
 import { LanguageContext } from "../contexts/language";
 
@@ -21,7 +21,8 @@ const LanguagePicker = (props) => {
         
           
     <div style={{display:"flex", alignItems:"center"}}>
-            <h3 style={{marginRight:5}}><TranslatedText text="Language" key = {lang}/>:</h3>
+            
+
             <FormControl variant = "standard">
             <Select
               labelId="demo-simple-select-label"

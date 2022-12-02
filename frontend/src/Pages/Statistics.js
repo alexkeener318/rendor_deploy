@@ -1,18 +1,23 @@
+// react
 import { useContext, useEffect, useState } from "react";
-import Header from "../Components/Header";
+import { Link } from "react-router-dom";
+
+// external imports
 import { useTheme } from '@mui/material/styles';
 import { Button } from "@mui/material"
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
 import { margin, width } from "@mui/system";
-import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
 import axios from 'axios'
 
+// components
+import Header from "../Components/Header";
+import TranslatedText from "../Components/TranslatedText";
 
+// pages
 import ExcessReport from "./ExcessReport";
 import PopularCombos from "./PopularCombos";
 import POSReport from "./POSReport";
-import TranslatedText from "./TranslatedText";
 
 // contexts
 import { UserContext } from "../contexts/user";
@@ -35,6 +40,10 @@ const Statistics = () => {
   const [orders, setOrders] = useState();
   const [graphData, setGraphData] = useState([]);
 
+  function updateState( time, total) {
+    setGraphData(graphData => [...graphData, createData(time, total)]);
+
+  }
 
   useEffect(() => {
     axios.post("http://localhost:5000/statsTable", { startDate: startDate, endDate:endDate})
@@ -47,35 +56,37 @@ const Statistics = () => {
 
     axios.post("http://localhost:5000/statsGraph", { startDate: startDate, endDate:endDate})
       .then(retrievedData => {
-        console.log(retrievedData);
-        // setGraphData([]);
-        // let numElements = retrievedData.data.length-1; 
-        // console.log("numElements: ", numElements);
+        // console.log(retrievedData);
+        // console.log("retrieved data: ", retrievedData);
+        setGraphData([]);
+        let numElements = retrievedData.data.length-1; 
 
-        // if (numElements >= 5) {
-        //     let elementsPerBreakpoint = numElements/5;
-        //     let breakpointTotal; 
-        //     let elemIndex = 0;
-        //     for (var breakpoint = 0; breakpoint < 5; breakpoint++) {
-        //         breakpointTotal = 0;
-        //         for (var i = 0; i < elementsPerBreakpoint; i++) {
-        //             breakpointTotal += retrievedData.data[elemIndex].total;
-        //             elemIndex++;
-        //         }
-        //         console.log("timestamp: ", retrievedData.data[elemIndex].timestamp);
-        //         console.log("total: ", breakpointTotal);
-        //         setGraphData(graphData => [...graphData, createData(retrievedData.data[elemIndex].timestamp, breakpointTotal)]);
-        //     }
-        // }
-        // // {(retrievedData.data ?? []).map( (elem) => {
-        // //     setGraphData(graphData => [...graphData, createData(elem.timestamp, elem.total)]);
-        // // })}
+        if (numElements >= 5) {
+            let elementsPerBreakpoint = numElements/5;
+            let breakpointTotal; 
+            let time = 0;
+            let elemIndex = 0;
+            for (var breakpoint = 0; breakpoint < 5; breakpoint++) {
+                breakpointTotal = 0;
+                for (var i = 0; i < elementsPerBreakpoint; i++) {
+                    breakpointTotal += retrievedData.data[elemIndex].total;
+                    elemIndex++;
+                }
+                console.log("timestamp: ", retrievedData.data[elemIndex].timestamp);
+                console.log("total: ", breakpointTotal);
+                updateState(retrievedData.data[elemIndex].timestamp, breakpointTotal);
+                //setGraphData(graphData => [...graphData, createData(retrievedData.data[elemIndex].timestamp, breakpointTotal)]);
+            }
+        }
+        // {(retrievedData.data ?? []).map( (elem) => {
+        //     setGraphData(graphData => [...graphData, createData(elem.timestamp, elem.total)]);
+        // })}
       })
   },[startDate,endDate])
 
-  useEffect((setGraphData) => {
+  useEffect(() => {
     console.log(graphData);
-  })
+  }, [graphData])
 
 
   return (

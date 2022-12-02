@@ -1,16 +1,24 @@
-import { useContext } from "react";
-
-import Header from "../Components/Header";
+// react
+// external imports
 import { TextField } from "@mui/material";
 import { useTheme } from '@mui/material/styles';
 import { Button } from "@mui/material"
-import { DataGrid } from '@mui/x-data-grid'; 
+import { DataGrid } from '@mui/x-data-grid';
+
+// components
+import Header from "../Components/Header";
 import ThreeColRow from "../Components/ThreeColRow";
-import TranslatedText from "./TranslatedText";
+import TranslatedText from "../Components/TranslatedText";
+
+// pages
+import { useContext, useEffect, useState } from "react";
+import axios from 'axios'
+
 
 // contexts
 import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
+
 
 
 const columns = [
@@ -35,6 +43,18 @@ const columns = [
   
 
 const ExcessReport = () => {
+    const [startDate, setStartDate] = useState("2022-09-20");
+    const [endDate, setEndDate] = useState("2022-10-05");
+    const [excessReportData, setExcessReportData] = useState([]);
+
+    useEffect(() => {
+      axios.post("http://localhost:5000/excessReport", { dateOne: startDate, dateTwo:endDate})
+        .then(data => {
+          setExcessReportData(data.data)
+          console.log(data.data)
+        })
+    },[startDate,endDate])
+
     const {lang, setLang} = useContext(LanguageContext)
 
     return (
@@ -42,8 +62,29 @@ const ExcessReport = () => {
             <Header title = "Excess Report" path = "/statistics"></Header>   
             <div style = {{ height: "90%" }}>
                 <div style={{display:"flex", marginTop: "2.5%", justifyContent:"space-evenly"}}>
-                    <TextField size="small" label="Start Date" variant="outlined"/>
-                    <TextField size="small" label="End Date" variant="outlined"/>
+                    <TextField
+                        id="date"
+                        label="Starting Date"
+                        type="date"
+                        //defaultValue="2022-05-24"
+                        value = {startDate}
+                        onChange = { ( event ) => setStartDate(event.target.value)}
+                        sx={{ width: 220 }}
+                        InputLabelProps={{
+                        shrink: true,
+                        }}
+                    />
+                    <TextField
+                        id="date"
+                        label="Ending Date"
+                        type="date"
+                        value = {endDate}
+                        onChange = { ( event ) => setEndDate(event.target.value)}
+                        sx={{ width: 220 }}
+                        InputLabelProps={{
+                        shrink: true,
+                        }}
+                    />
                 </div>
 
                 <div style={{height:"80%", width: "60%", marginLeft: "20%", overflowY:"scroll", border:"solid", borderWidth:2, borderColor:"blue", backgroundColor:"blue", marginTop:20}}>
@@ -53,9 +94,9 @@ const ExcessReport = () => {
                     </div>
 
 
-                    {rows.map( (row) =>{
+                    {(excessReportData ?? []).map( (row) =>{
                     return (
-                        <ThreeColRow item = {row.item} quantity = {row.quantity} price = {row.sales}/>
+                        <ThreeColRow item = {row.name} quantity = {row.quantity} price = {row.sales}/>
                     )
                     })}
 

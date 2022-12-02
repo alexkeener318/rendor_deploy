@@ -1,19 +1,22 @@
-
-import Header from "../Components/Header"
-import axios from 'axios'
+// react
 import { useEffect, useState, useContext } from "react";
+
+// external imports
+import axios from 'axios'
 import { TextField } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid'; 
-
 import { createTheme, ThemeProvider } from "@mui/material";
+
+// components
+import Header from "../Components/Header"
 import ThreeColRow from "../Components/ThreeColRow";
-import TranslatedText from "./TranslatedText";
+import TranslatedText from "../Components/TranslatedText";
+
+// pages
 
 // contexts
 import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
-
-
 
 const rows = [
   {id:1, item: "Butter Chicken", quantity: 20, sales: 30},
@@ -41,8 +44,8 @@ const POSReport = ()=> {
     axios.post("http://localhost:5000/posreport", { startDate: startDate, endDate:endDate})
       .then(data => {
         setPosData(data.data)
-        console.log(data.data)
       })
+
   },[startDate,endDate])
 
   return (
@@ -63,7 +66,6 @@ const POSReport = ()=> {
                 id="date"
                 label="Starting Date"
                 type="date"
-                //defaultValue="2022-05-24"
                 value = {startDate}
                 onChange = { ( event ) => setStartDate(event.target.value)}
                 sx={{ width: 220 }}
@@ -95,7 +97,7 @@ const POSReport = ()=> {
 
             {(posData ?? []).map( (row) =>{
               return (
-                <ThreeColRow item = {row.itemName} quantity = {row.quantity} price = {'$'+row.sales}/>
+                <ThreeColRow key = {row.id} item = {row.itemName} quantity = {row.quantity} price = {'$'+row.sales}/>
               )
             })}
 

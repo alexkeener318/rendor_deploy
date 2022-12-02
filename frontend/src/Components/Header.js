@@ -5,10 +5,23 @@ import { Button, Select, FormControl, MenuItem } from "@mui/material"
 import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import LanguagePicker from "./LanguagePicker";
-import TranslatedText from "../Pages/TranslatedText";
+import TranslatedText from "./TranslatedText";
 
 import { LanguageContext } from "../contexts/language";
 
+import { useAuth0 } from "@auth0/auth0-react";
+import LoginButton from "./loginButton";
+import LogoutButton from "./logoutButton";
+
+const AuthNav = () => {
+  const { isAuthenticated } = useAuth0()
+
+  return (
+    <div >
+      {isAuthenticated ? <LogoutButton/> : <LoginButton/>}
+    </div>
+  )
+}
 
 const Header = (props) => {
   const {lang,setLang} = useContext(LanguageContext)
@@ -20,21 +33,32 @@ const Header = (props) => {
     }
 
     return (
-      <div style = {{ height: "10%",}}>
+      <div >
         <div style = {{  height:"85%",display:"grid", gridTemplateColumns:"1.5fr 8fr 1.5fr"}}>
           
           
           <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-            <Link to = {(props.path ?? '/')} style={{textDecoration:"none"}}>
-              <Button style ={{backgroundColor:"blue"}} variant = "contained" ><TranslatedText key = {lang} text = "Back" /></Button>
-            </Link>
+            {props.path !== "none" && 
+              <Link to = {(props.path ?? '/')} style={{textDecoration:"none"}}>
+                <Button style ={{backgroundColor:"blue"}} variant = "contained" ><TranslatedText key = {lang} text = "Back" /></Button>
+              </Link>
+            }
+            
           </div>
 
           <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-            <h1 style = {{textAlign: "center"}}><TranslatedText key = {lang} text = {props.title} /></h1>
+            <div>
+              <h1 style = {{textAlign: "center"}}><TranslatedText key = {lang} text = {props.title} /></h1>
+              <div style={{display:"flex", justifyContent:"center"}}>
+              <LanguagePicker/>
+              </div>
+            </div>
+
           </div>
           
-          <LanguagePicker/>
+          <div style={{display:"flex", alignItems:"center"}}>
+            <AuthNav/>
+          </div>
 
             
         </div>

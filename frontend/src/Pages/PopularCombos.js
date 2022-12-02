@@ -1,20 +1,23 @@
-
-import Header from "../Components/Header"
-
+// react
 import { useState, useContext, useEffect } from "react";
+
+// external imports
 import axios from 'axios'
 import { TextField } from "@mui/material";
-import { DataGrid } from '@mui/x-data-grid'; 
-
+import { DataGrid } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from "@mui/material";
+
+// components
+import Header from "../Components/Header"
 import FiveColRow from "../Components/FiveColRow";
 import ThreeColRow from "../Components/ThreeColRow";
-import TranslatedText from "./TranslatedText";
+import TranslatedText from "../Components/TranslatedText";
+
+// pages
 
 // contexts
 import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
-
 
 
 
@@ -44,7 +47,6 @@ const PopularCombos = ()=> {
     axios.post("http://localhost:5000/popCombos", { startDate: startDate, endDate:endDate})
       .then(data => {
         setCombos(data.data)
-        console.log(data.data)
       })
   },[startDate,endDate])
 
@@ -99,7 +101,7 @@ const PopularCombos = ()=> {
 
             {(combos ?? []).map( (row) =>{
               return (
-                <ThreeColRow item = {row.first} quantity = {row.second} price = {row.value} />
+                <ThreeColRow key = {row.id} item = {row.first} quantity = {row.second} price = {row.value} />
               )
             })}
 

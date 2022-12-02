@@ -1,10 +1,15 @@
-import Header from "../Components/Header";
-import { TextField } from "@mui/material";
-import InputAdornment from '@mui/material/InputAdornment';
-import {Button} from "@mui/material";
+// react
 import { useContext, useEffect, useState } from "react";
 
-import TranslatedText from "./TranslatedText";
+// external imports
+import { TextField,Button } from "@mui/material";
+import InputAdornment from '@mui/material/InputAdornment';
+
+// components
+import Header from "../Components/Header";
+import TranslatedText from "../Components/TranslatedText";
+
+// pages
 
 // contexts
 import { UserContext } from "../contexts/user";

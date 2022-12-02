@@ -1,21 +1,24 @@
-import Header from "../Components/Header"
-import CustomerGUI from "./CustomerGUI";
-import { Button, TextField } from "@mui/material";
-import { DataGrid } from '@mui/x-data-grid'; 
+// react
+import React, { useState, useContext, createContext } from "react";
 
+// external imports
+import { Button, TextField } from "@mui/material";
+import { DataGrid } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from "@mui/material";
+
+// components
+import Header from "../Components/Header"
+import TranslatedText from "../Components/TranslatedText";
 import ThreeColRow from "../Components/ThreeColRow";
 
-import { useState } from "react";
-import { createContext } from "react";
+// pages
+import CustomerGUI from "./CustomerGUI";
 import { globalTotal } from './CustomerGUI'
-import React, {useContext} from 'react';
-
-import TranslatedText from "./TranslatedText";
 
 // contexts
 import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
+
 
 const Checkout = ()=> {
 

@@ -1,43 +1,33 @@
-
-import Header from "../Components/Header"
-import axios from 'axios'
-
+// react
 import { useState, useEffect, useContext } from "react";
-import { TextField } from "@mui/material";
-import { DataGrid } from '@mui/x-data-grid'; 
 
+// external imports
+import axios from 'axios'
+import { Button, TextField } from "@mui/material";
+import { DataGrid, selectedGridRowsCountSelector } from '@mui/x-data-grid'; 
 import { createTheme, ThemeProvider } from "@mui/material";
+
+// components
+import Header from "../Components/Header"
 import FiveColRow from "../Components/FiveColRow";
-import TranslatedText from "./TranslatedText";
+import TranslatedText from "../Components/TranslatedText";
+
+// pages
 
 // contexts
 import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
 
 
-
-
-const rows = [
-  {id:1, item: "Butter Chicken", quantity: 20, prevQuantity: 30, lasthipment: "2022/09/12", nextShipment: "2022/10/01"},
-  {id:2, item: "Butter Chicken", quantity: 20, prevQuantity: 30, lasthipment: "date 1", nextShipment: "date 2"},
-  {id:3, item: "Butter Chicken", quantity: 20, prevQuantity: 30, lasthipment: "date 1", nextShipment: "date 2"},
-  {id:4, item: "Butter Chicken", quantity: 20, prevQuantity: 30, lasthipment: "date 1", nextShipment: "date 2"},
-  {id:5, item: "Butter Chicken", quantity: 20, prevQuantity: 30, lasthipment: "date 1", nextShipment: "date 2"},
-  {id:6, item: "Butter Chicken", quantity: 20, prevQuantity: 30, lasthipment: "date 1", nextShipment: "date 2"},
-  {id:7, item: "Butter Chicken", quantity: 20, prevQuantity: 30, lasthipment: "date 1", nextShipment: "date 2"},
-  {id:8, item: "Butter Chicken", quantity: 20, prevQuantity: 30, lasthipment: "date 1", nextShipment: "date 2"},
-  {id:9, item: "Butter Chicken", quantity: 20, prevQuantity: 30, lasthipment: "date 1", nextShipment: "date 2"},
-  {id:10, item: "Butter Chicken", quantity: 20, prevQuantity: 30, lasthipment: "date 1", nextShipment: "date 2"}
-]
-
-
-
 const Inventory = ()=> {
   const {lang, setLang} = useContext(LanguageContext)
 
-  const [startDate, setStartDate] = useState("2022-09-20");
+  const [startDate, setStartDate] = useState("2022-09-20")
   const [endDate, setEndDate] = useState("2022-10-05")
-  const[data, setData] = useState([])
+  const [data, setData] = useState([])
+  const [stockItems, setStockItems] = useState([])
+  const [isLoading, setIsLoading] = useState(false);
+  const [err, setErr] = useState('');
 
   useEffect(()=>{
     axios.get('http://localhost:5000/getInventory')
@@ -47,6 +37,27 @@ const Inventory = ()=> {
       })
   },[startDate, endDate])
 
+  const lowStock = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('http://localhost:5000/lowStock', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+        },
+      });
+
+      const result = await response.json();
+      setStockItems(result);
+      console.log(stockItems);
+
+    } catch (err) {
+        setErr(err.message);
+    } finally {
+        setIsLoading(false);
+    }
+  }
  
 
   return (
@@ -99,14 +110,28 @@ const Inventory = ()=> {
 
             { (data ?? []).map( (row) =>{
               return (
-                <FiveColRow item = {row.ingredient_id} quantity = {row.name} prevQuantity = {row.quantity} lastShipment = {row.ingredient_unit} nextShipment = {row.last_shipment.slice(0,10)} />
+                <FiveColRow key = {row.ingredient_id} item = {row.ingredient_id} quantity = {row.name} prevQuantity = {row.quantity} lastShipment = {row.ingredient_unit} nextShipment = {row.last_shipment.slice(0,10)} />
               )
             }) }
             
 
           </div>
 
+          <div style = {{  marginTop: "3%", paddingLeft: "2.5%", paddingRight: "2.5%", paddingBottom: "2%", backgroundColor: "lightgrey" }}>
+                <p style = {{fontSize: "20px", textAlign: "center", paddingTop: "2%"}}>
+                    <Button onClick = {event => lowStock()} style = {{ height: "100%", width: "17.5%", backgroundColor: "blue", color: "white" }}><TranslatedText text = "Low Stock" key={lang}/></Button>
+                    { (stockItems ?? []).map( elem => {
+                        return (
+                            <div key = { elem.id }>
+                                    { elem }
+                            </div>
+                        )
+                    })}
+             </p>
+          </div>
+
         </div>
+
       </div>
 
       <br/>
