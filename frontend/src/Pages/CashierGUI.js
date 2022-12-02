@@ -306,18 +306,19 @@ const CashierGUI = () => {
             </div>
             <div style = {{ minHeight: "80%", marginTop: "2.5%", padding: "2.5%", backgroundColor: "lightgrey" }}>
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} style={{ height: "100%" }}>
-                {results.map( elem => {
+                {results.length!==0 && results.map( elem => {
                      return (
                         <Grid  item xs = {3}  style = {{height:"40vh"}}>
                             
                             {/* menu item goes here */}
-                            <Card  className = "hoverCard" key = {elem.id} onClick = {event => handleClick(elem.itemName)} >
+                            <Card  className = "hoverCard" key = {elem.id} onClick = {event => handleClick(elem.name)} >
                                 <CardMedia
+                                    key = {elem.url}
                                     component = {"img"}
                                     style ={{height:"75%",backgroundImage: elem.url, backgroundPosition:"top center", backgroundSize:"120%" }}
                                 /> 
                                 <CardContent style={{textAlign:"center", height:"25%"}}>
-                                    <TranslatedText text = {elem.itemName} key = {lang + elem.url}/>
+                                    <TranslatedText text = {elem.name} key = {lang + elem.url}/>
                                 </CardContent>
                             </Card>
                             {/* <Button key = {elem.url} onClick = {event => handleClick(elem.itemName)} style = {{ backgroundColor: "blue", color: "white", width: "100%", height: "100%", backgroundSize: "160%",backgroundImage: elem.url, backgroundPosition:"top center" }}>
@@ -368,7 +369,7 @@ const CashierGUI = () => {
                             {managerButtons.map( elem => {
                                 return (
                                         <Link key = {elem.id} to={elem.linkName} style={{ textDecoration:"none" }}>
-                                            <Button style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "blue", color: "white" }}><TranslatedText text = {elem.buttonName} key = {lang}/></Button>
+                                            <Button style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "green", color: "white" }}><TranslatedText text = {elem.buttonName} key = {lang}/></Button>
                                         </Link>
                                     );
                                 })}

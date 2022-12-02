@@ -86,7 +86,6 @@ const Inventory = ()=> {
                 shrink: true,
                 }}
             />
-
             <TextField
                 id="date"
                 label="Ending Date"
@@ -144,7 +143,3 @@ const Inventory = ()=> {
 }
 
 export default Inventory;
-
-
-
-

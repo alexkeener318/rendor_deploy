@@ -71,15 +71,15 @@ let allOrdered = [];
         .then(()=>{
             console.log("Finished Query");
             itemPrice = price.item_price;
-            rawPrice += itemPrice;
+            rawPrice += roundTotal(itemPrice);
             // calculate tax
             //console.log("itemPrice: " + itemPrice);
-            let taxPrice = itemPrice * 0.0825;
+            let taxPrice = roundTotal(itemPrice * 0.0825);
             // Update amount being paid in taxes
             tax += taxPrice;
             // calculate order total
             totalPrice += roundTotal(parseFloat(itemPrice) + parseFloat(taxPrice));
-            totalPrice = roundTotal(totalPrice);
+            roundTotal(totalPrice);
             console.log("totalPrice: " + totalPrice + "\n tax: " + tax);
         });
     }
@@ -288,7 +288,6 @@ async function checkStock(){
 
 function roundTotal(num){
     num.toFixed(2);
-    console.log("number before: " + num);
     let newNum = "";
     let currNum = "";
     currNum += num;
@@ -310,29 +309,11 @@ function roundTotal(num){
             break;
         }
     }
-    console.log("newNum b4 round: " + newNum);
     // Rounds if necessary
     newNum = parseFloat(newNum);
     if(big){
-        num += 0.01;
-        newNum = "";
-        currNum = "";
-        currNum += num;
-        numDigs = 0;
-        hitDeci = false;
-        big = false;
-        for(let char of currNum){
-            newNum += char;
-            if(char == '.'){
-                hitDeci = true;
-            }
-            if(hitDeci){
-                numDigs++;
-            }
-        }
+        newNum += 0.01;
     }
-    console.log("newNum after round: " + newNum);
-    console.log("rounded number: " + parseFloat(newNum) + "\n");
     return parseFloat(newNum);
 }
 
@@ -382,12 +363,12 @@ async function updateInventory(orderItems){
 //array of bowls
 async function bowlContent(){
     let item;
-    let bowl ={};
     bowls =[];
     await pool
             .query("SELECT item_name,url FROM menu WHERE item_name like '%Bowl%';")
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
+                    let bowl ={};
                     item=query_res.rows[i];
                     console.log(query_res.rows[i]);
                     bowl.name =item.item_name;
@@ -401,12 +382,12 @@ async function bowlContent(){
 //array of gyros
 async function gyrosContent(){
     let item;
-    let gyro ={};
     gyros=[];
     await pool
             .query("SELECT item_name, url FROM menu WHERE item_name like '%Gyro%';")
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
+                    let gyro ={};
                     item=query_res.rows[i];
                     console.log(query_res.rows[i]);
                     gyro.name =item.item_name;
@@ -435,14 +416,15 @@ function drinksContent(){
 async function extrasContent(){
     //extras=["2 Meatballs", "2 Falafels", "Fries", "Garlic Fries", "Hummus & Pita", "Extra Dressing", "Extra Hummus", "Extra Protein", "Pita Bread"];
     let item;
-    let extra ={};
     extras=[];
     await pool
             .query("SELECT item_name,url FROM menu WHERE item_name not like '%Gyro%' and item_name not like '%Bowl%' and item_name not like 'Bottled Water' and item_name not like 'Fountain Drinks';")
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
+                    let extra ={};
                     item=query_res.rows[i];
                     console.log(query_res.rows[i]);
+                    extra.id = i;
                     extra.name =item.item_name;
                     extra.url =item.url;
                     extras.push(extra);
@@ -658,9 +640,8 @@ async function getQuantity(item){
     return quantity;
 }
 
-//gets the email and returns a person with its name, email, and role(manager or employee)
-// manager emails: reaganreitmeyer@tamu.edu,davitasatr@tamu.edu 
-//employeeType("reaganreitmeyer@tamu.edu");
+//gets the pinpad entry and returns a person with its name, id(pinpad), and role(manager or employee)
+// manager IDs: 45678, 67890
 async function employeeType(email){
     let person ={};
     employee_name="";
@@ -806,11 +787,7 @@ async function excessReport(dateOne, dateTwo){
         })
         let percentage = numSold / (numSold + numLeft);
         if(percentage <= 0.10){
-            let object ={};
-            object.name = invItems[i].name;
-            object.quantity = numLeft;
-            object.sales = numSold;
-            returnItems.push(object);
+            returnItems.push(invItems[i].name);
         }
     }
     // return the list
@@ -850,7 +827,7 @@ async function main(){
 
     // Adds new menu items
     app.post("/newItem",jsonParser,(req,res)=>{
-        addMenu(req.body.itemName,req.body.itemPrice,req.body.itemIngreds)
+        addMenu(req.body.itemName,req.body.itemPrice,req.body.itemIngreds,req.body.url)
         .then(()=>{
             res.send("Successfully added new menu item");
         })
