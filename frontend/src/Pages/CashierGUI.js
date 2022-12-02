@@ -79,15 +79,17 @@ const CashierGUI = () => {
             logout()
         }
 
-        if (role === "Manager"){
+        if (role === "Employee"){
             setManagerButtons([...managerButtons].slice(0, managerButtons.length - 1))
+        }
+
+        if (role == "Manager"){
+            setManagerButtons([...managerButtonList])
         }
         
     },[role])
 
-    function buttonMenu() {
-        setManagerButtons([...managerButtonList]);
-    }
+    
 
     const bowlMenu = async () => {
         try {

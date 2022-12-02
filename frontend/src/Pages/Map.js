@@ -22,7 +22,7 @@ const Map = ()=> {
 
   return (
     <div style={{ height: "100%"}}>
-      <Header title = "Map" path = "/customergui"/>
+      <Header title = "Map" path = "/"/>
       
         {/* <GoogleMap zoom = {10} center ={{lat: 30.613048885620053, lng: -96.34111433863698}} mapContainerStyle={{minWidth:"70%", minHeight:"70%"}}>
             <Marker position = {{lat: 30.613048885620053, lng: -96.34111433863698}} />
