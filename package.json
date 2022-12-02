@@ -13,6 +13,6 @@
     "concurrently": "^7.6.0"
   },
   "scripts": {
-    "start": "concurrently \"cd frontend && npm install && npm start\" \"cd backend && node server\""
+    "start": "concurrently \"cd frontend && npm start\" \"cd backend && node server\""
 }
 }
