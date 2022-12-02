@@ -78,12 +78,18 @@ const CashierGUI = () => {
         if (role === "Customer"){
             logout()
         }
+
+        if (role === "Employee"){
+            setManagerButtons([...managerButtons].slice(0, managerButtons.length - 1))
+        }
+
+        if (role == "Manager"){
+            setManagerButtons([...managerButtonList])
+        }
         
     },[role])
 
-    function buttonMenu() {
-        setManagerButtons([...managerButtonList]);
-    }
+    
 
     const bowlMenu = async () => {
         try {
@@ -311,11 +317,11 @@ const CashierGUI = () => {
                         <Grid  item xs = {3}  style = {{height:"40vh"}}>
                             
                             {/* menu item goes here */}
-                            <Card  className = "hoverCard" key = {elem.id} onClick = {event => handleClick(elem.name)} >
+                            <Card  className = "hoverCard" key = {elem.url} onClick = {event => handleClick(elem.name)} >
                                 <CardMedia
                                     key = {elem.url}
                                     component = {"img"}
-                                    style ={{height:"75%",backgroundImage: elem.url, backgroundPosition:"top center", backgroundSize:"120%" }}
+                                    style ={{height:"75%",backgroundImage: ("url(\"" + elem.url + "\")"), backgroundPosition:"top center", backgroundSize:"120%" }}
                                 /> 
                                 <CardContent style={{textAlign:"center", height:"25%"}}>
                                     <TranslatedText text = {elem.name} key = {lang + elem.url}/>
@@ -373,6 +379,7 @@ const CashierGUI = () => {
                                         </Link>
                                     );
                                 })}
+                                
                         </div>
                     </div>
                    
