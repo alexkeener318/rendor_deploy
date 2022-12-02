@@ -619,7 +619,6 @@ async function getPrice(item){
                     console.log(query_res.rows[i]);
                 }});
     price=price_str.price;
-    //console.log(price)
     return price;
 }
 
