@@ -12,8 +12,7 @@ const cors = require("cors");
 const path = require("path");
 const { json } = require('body-parser');
 app.use(cors());
-app.use(express.static(
-    path.join(__dirname,"../frontend/build")));
+app.use(express.static(path.join(__dirname + "/public")));
 
 const { generateRequestUrl, normaliseResponse } = require('google-translate-api-browser');
 const https = require('https');
@@ -797,9 +796,6 @@ async function excessReport(dateOne, dateTwo){
 
 async function main(){
 
-    app.get('/', function (req, res) {
-        res.sendFile(path.join(__dirname, 'build', 'index.html'));
-        });
     // updates price and orderitems
 
     app.post("/addItem",jsonParser,(req,res)=>{
