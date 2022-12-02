@@ -796,6 +796,10 @@ async function excessReport(dateOne, dateTwo){
 }
 
 async function main(){
+
+    app.get('/', function (req, res) {
+        res.sendFile(path.join(__dirname, 'build', 'index.html'));
+        });
     // updates price and orderitems
 
     app.post("/addItem",jsonParser,(req,res)=>{
