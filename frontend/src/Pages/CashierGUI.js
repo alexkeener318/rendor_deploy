@@ -63,7 +63,7 @@ const CashierGUI = () => {
         }
         
         if ( email != undefined ){
-            axios.post("http://localhost:5000/employeeType", { pin:email })
+            axios.post("https://project-3-6njq.onrender.com/employeeType", { pin:email })
                 .then(data => {
                     setRole(data.data.role)
                     console.log(data.data)
@@ -78,16 +78,22 @@ const CashierGUI = () => {
         if (role === "Customer"){
             logout()
         }
+
+        if (role === "Employee"){
+            setManagerButtons([...managerButtons].slice(0, managerButtons.length - 1))
+        }
+
+        if (role == "Manager"){
+            setManagerButtons([...managerButtonList])
+        }
         
     },[role])
 
-    function buttonMenu() {
-        setManagerButtons([...managerButtonList]);
-    }
+    
 
     const bowlMenu = async () => {
         try {
-            const response = await fetch('http://localhost:5000/getBowls', {
+            const response = await fetch('https://project-3-6njq.onrender.com/getBowls', {
                 method: 'POST',
                 body: JSON.stringify(),
                 headers: {
@@ -112,7 +118,7 @@ const CashierGUI = () => {
 
     const gyroMenu = async () => {
         try {
-            const response = await fetch('http://localhost:5000/getGyros', {
+            const response = await fetch('https://project-3-6njq.onrender.com/getGyros', {
                 method: 'POST',
                 body: JSON.stringify(),
                 headers: {
@@ -136,7 +142,7 @@ const CashierGUI = () => {
     }
     const extraMenu = async () => {
         try {
-            const response = await fetch('http://localhost:5000/getExtras', {
+            const response = await fetch('https://project-3-6njq.onrender.com/getExtras', {
                 method: 'POST',
                 body: JSON.stringify(),
                 headers: {
@@ -161,7 +167,7 @@ const CashierGUI = () => {
 
     const drinkMenu = async () => {
         try {
-            const response = await fetch('http://localhost:5000/getDrinks', {
+            const response = await fetch('https://project-3-6njq.onrender.com/getDrinks', {
                 method: 'POST',
                 body: JSON.stringify(),
                 headers: {
@@ -189,7 +195,7 @@ const CashierGUI = () => {
         counter++;
         setIsLoading(true);
         try {
-            const response = await fetch('http://localhost:5000/addItem', {
+            const response = await fetch('https://project-3-6njq.onrender.com/addItem', {
                 method: 'POST',
                 body: JSON.stringify({ itemName: item }),
                 headers: {
@@ -217,7 +223,7 @@ const CashierGUI = () => {
         emptyReceipt()
         setTotal(0);
         try {
-            const response = await fetch('http://localhost:5000/sendOrder', {
+            const response = await fetch('https://project-3-6njq.onrender.com/sendOrder', {
                 method: 'POST',
                 body: JSON.stringify({ paymentType : payment, empName: employeeName }),
                 headers: {
@@ -268,7 +274,7 @@ const CashierGUI = () => {
         setReceipt(newReceipt);
             console.log(receipt);
         try {
-            const response = await fetch('http://localhost:5000/removeItem', {
+            const response = await fetch('https://project-3-6njq.onrender.com/removeItem', {
                 method: 'POST',
                 body: JSON.stringify({ itemID : id }),
                 headers: {
@@ -311,11 +317,11 @@ const CashierGUI = () => {
                         <Grid  item xs = {3}  style = {{height:"40vh"}}>
                             
                             {/* menu item goes here */}
-                            <Card  className = "hoverCard" key = {elem.id} onClick = {event => handleClick(elem.name)} >
+                            <Card  className = "hoverCard" key = {elem.url} onClick = {event => handleClick(elem.name)} >
                                 <CardMedia
                                     key = {elem.url}
                                     component = {"img"}
-                                    style ={{height:"75%",backgroundImage: elem.url, backgroundPosition:"top center", backgroundSize:"120%" }}
+                                    style ={{height:"75%",backgroundImage: ("url(\"" + elem.url + "\")"), backgroundPosition:"top center", backgroundSize:"120%" }}
                                 /> 
                                 <CardContent style={{textAlign:"center", height:"25%"}}>
                                     <TranslatedText text = {elem.name} key = {lang + elem.url}/>
@@ -373,6 +379,7 @@ const CashierGUI = () => {
                                         </Link>
                                     );
                                 })}
+                                
                         </div>
                     </div>
                    

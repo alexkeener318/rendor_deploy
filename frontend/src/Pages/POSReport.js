@@ -41,7 +41,7 @@ const POSReport = ()=> {
   const [posData, setPosData] = useState([])
 
   useEffect(() => {
-    axios.post("http://localhost:5000/posreport", { startDate: startDate, endDate:endDate})
+    axios.post("https://project-3-6njq.onrender.com/posreport", { startDate: startDate, endDate:endDate})
       .then(data => {
         setPosData(data.data)
       })

@@ -149,3 +149,24 @@ Sprint 3 - Meeting 2: 11/30/22
         last meeting was used to discuss any tasks we needed to add to the sprint that we did not account for when originally creating the 
         backlog for this project. We also delegated the tasks to each member. Progress on tasks that had to be pushed from sprint 2
         to this sprint were discussed as well. We ended the meeting feeling good about our progress.
+
+Sprint 3 - Meeting 3: 12/02/22
+    Agenda
+        - Any current issues that anyone has and if members can help
+        - What tasks that have been completed and what each member is currently Demoing
+        - Making sure we're on track with ideal burndown
+    Accomplishments
+        - Low stock frontend
+        - Create HTTPS request to see items that haven't sold a lot of stock
+        - Revise color scheme to ensure that website is accessible
+        - Revise website arrangement to ensure accessibility
+    Plans
+        - Host the website
+        - Mobile integration
+        - Track extra toppings used
+    Minutes
+        After our meeting with the professor, he mentioned a problem that we have to figure out a way to track the extra toppings that
+        customers order. We discussed different ways to implement the task. We decided to create a page where it lists all the toppings
+        and the employee can manually input the quantity at the end of the day. That will then be updated in the backend by subtracting 
+        the amount for each extra topping. The most concerning task is hosting the website since there have been issues with getting it to 
+        work successfully with backend although it works frontend wise. 

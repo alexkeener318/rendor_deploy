@@ -35,7 +35,7 @@ const EditMenu = () => {
         console.log(price);
         console.log(ingredients);
         try {
-            const response = await fetch('http://localhost:5000/newItem', {
+            const response = await fetch('https://project-3-6njq.onrender.com/newItem', {
                 method: 'POST',
                 body: JSON.stringify({ itemName: name, itemPrice: price, itemIngreds: ingredients, url: photoURL}),
                 headers: {
@@ -58,7 +58,7 @@ const EditMenu = () => {
     const deleteItem = async (name) => {
         console.log("clicked");
         try {
-            const response = await fetch('http://localhost:5000/deleteItem', {
+            const response = await fetch('https://project-3-6njq.onrender.com/deleteItem', {
                 method: 'POST',
                 body: JSON.stringify({ item: name }),
                 headers: {
@@ -81,7 +81,7 @@ const EditMenu = () => {
     const changePrice = async (itemName, newPrice) => {
         console.log("clicked");
         try {
-            const response = await fetch('http://localhost:5000/updateItem', {
+            const response = await fetch('https://project-3-6njq.onrender.com/updateItem', {
                 method: 'POST',
                 body: JSON.stringify({ item: itemName, price: newPrice }),
                 headers: {
