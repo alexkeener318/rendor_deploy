@@ -260,13 +260,10 @@ const CustomerGUI = () => {
                         </div>
                         <div className="checkoutButtons" style = {{ width:"80%", marginLeft: "10%" }}>
                             <Button onClick = {event => handleCheckout("Credit", "customer")} style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "blue", color: "white" }}><TranslatedText text = {"Credit"} key = {lang}/></Button>
-                            <Button onClick = {event => handleCheckout("Dining Dollars", "customer")} style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "blue", color: "white" }}><TranslatedText text = {"Drining Dollars"} key = {lang}/></Button>
+                            <Button onClick = {event => handleCheckout("Dining Dollars", "customer")} style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "blue", color: "white" }}><TranslatedText text = {"Dining Dollars"} key = {lang}/></Button>
                         </div>
                     </div>
                     
-                    <Link to="/pinpad" style={{ textDecoration:"none" }}>
-                        <Button style = {{ maxHeight: "25%", width: "60%", marginTop: "2.5%", marginLeft: "20%", backgroundColor: "red", color: "white" }}><TranslatedText text = {"Sign In"} key = {lang}/></Button>
-                    </Link>
                 </div>
             </div>
 
