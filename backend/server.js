@@ -769,7 +769,11 @@ async function excessReport(dateOne, dateTwo){
         })
         let percentage = numSold / (numSold + numLeft);
         if(percentage <= 0.10){
-            returnItems.push(invItems[i].name);
+            let object ={};
+            object.name = invItems[i].name;
+            object.quantity = numLeft;
+            object.sales = numSold;
+            returnItems.push(object);
         }
     }
     // return the list
