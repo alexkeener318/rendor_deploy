@@ -3,8 +3,8 @@ import { useState, useEffect, useContext } from "react";
 
 // external imports
 import axios from 'axios'
-import { TextField } from "@mui/material";
-import { DataGrid } from '@mui/x-data-grid'; 
+import { Button, TextField } from "@mui/material";
+import { DataGrid, selectedGridRowsCountSelector } from '@mui/x-data-grid'; 
 import { createTheme, ThemeProvider } from "@mui/material";
 
 // components
@@ -22,9 +22,12 @@ import { LanguageContext } from '../contexts/language';
 const Inventory = ()=> {
   const {lang, setLang} = useContext(LanguageContext)
 
-  const [startDate, setStartDate] = useState("2022-09-20");
+  const [startDate, setStartDate] = useState("2022-09-20")
   const [endDate, setEndDate] = useState("2022-10-05")
-  const[data, setData] = useState([])
+  const [data, setData] = useState([])
+  const [stockItems, setStockItems] = useState([])
+  const [isLoading, setIsLoading] = useState(false);
+  const [err, setErr] = useState('');
 
   useEffect(()=>{
     axios.get('https://project-3-6njq.onrender.com/getInventory')
@@ -34,6 +37,27 @@ const Inventory = ()=> {
       })
   },[startDate, endDate])
 
+  const lowStock = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('http://localhost:5000/lowStock', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+        },
+      });
+
+      const result = await response.json();
+      setStockItems(result);
+      console.log(stockItems);
+
+    } catch (err) {
+        setErr(err.message);
+    } finally {
+        setIsLoading(false);
+    }
+  }
  
 
   return (
@@ -62,7 +86,6 @@ const Inventory = ()=> {
                 shrink: true,
                 }}
             />
-
             <TextField
                 id="date"
                 label="Ending Date"
@@ -93,7 +116,21 @@ const Inventory = ()=> {
 
           </div>
 
+          <div style = {{  marginTop: "3%", paddingLeft: "2.5%", paddingRight: "2.5%", paddingBottom: "2%", backgroundColor: "lightgrey" }}>
+                <p style = {{fontSize: "20px", textAlign: "center", paddingTop: "2%"}}>
+                    <Button onClick = {event => lowStock()} style = {{ height: "100%", width: "17.5%", backgroundColor: "blue", color: "white" }}><TranslatedText text = "Low Stock" key={lang}/></Button>
+                    { (stockItems ?? []).map( elem => {
+                        return (
+                            <div key = { elem.id }>
+                                    { elem }
+                            </div>
+                        )
+                    })}
+             </p>
+          </div>
+
         </div>
+
       </div>
 
       <br/>
@@ -106,7 +143,3 @@ const Inventory = ()=> {
 }
 
 export default Inventory;
-
-
-
-

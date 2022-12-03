@@ -6,6 +6,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Button, TextField, Card, CardMedia, CardContent } from "@mui/material"
 import { Grid } from '@mui/material';
 import { useAuth0 } from "@auth0/auth0-react";
+import axios from 'axios'
 
 // components
 import TranslatedText from "../Components/TranslatedText";
@@ -19,51 +20,11 @@ import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
 
 
-const bowlList = [
-    {id: 1, itemName: "Butter Chicken Bowl", url:`url("https://www.shutterstock.com/image-photo/chicken-over-rice-new-york-600w-2214082787.jpg")`},
-    {id: 2, itemName: "Lemon Chicken Bowl", url:`url("https://www.shutterstock.com/image-photo/mediterranean-chicken-shawarma-rice-bowl-600w-1198272178.jpg")`},
-    {id: 3, itemName: "Veggie Bowl", url:`url("https://www.shutterstock.com/image-photo/healthy-quinoa-bowl-duck-avocado-600w-1934068175.jpg")`},
-    {id: 4, itemName: "Seasoned Meat Bowl", url: `url("https://www.shutterstock.com/image-photo/halal-food-gyro-chicken-platter-600w-1108805390.jpg")`},
-    {id: 5, itemName: "Meatball Bowl", url:`url("https://www.shutterstock.com/image-photo/baked-quinoa-meatballs-vegetable-salad-600w-543170401.jpg")`}
-]
-
-const gyroList = [
-    {id: 1, itemName: "Seasoned Meat Gyro", url:`url("https://www.shutterstock.com/image-photo/greek-lamb-meat-gyros-tzatziki-600w-650180254.jpg")`},
-    {id: 2, itemName: "Lemon Chicken Gyro", url:`url("https://www.shutterstock.com/image-photo/greek-gyros-wrapped-pita-breads-600w-625236380.jpg")`},
-    {id: 3, itemName: "Veggie Gyro", url:`url("https://www.shutterstock.com/image-photo/pita-roasted-chicken-vegetables-cucumber-600w-2020615118.jpg")`},
-    {id: 4, itemName: "Meatball Gyro", url:`url("https://www.shutterstock.com/image-photo/meatballs-cabbage-pita-bread-on-600w-1737029006.jpg")`},
-]
-
-const extraList = [
-    {id: 1, itemName: "Hummus & Pita", url:`url("https://www.shutterstock.com/image-photo/hummus-plate-pita-bread-middle-600w-1737528299.jpg")`},
-    {id: 2, itemName: "Pita Bread", url:`url("https://www.shutterstock.com/image-photo/pita-bread-on-wooden-board-600w-257018629.jpg")`},
-    {id: 3, itemName: "2 Falafels", url:`url("https://www.shutterstock.com/image-photo/falafel-sandwich-on-black-background-600w-1544891525.jpg")`},
-    {id: 4, itemName: "2 Meatballs", url:`url("https://www.shutterstock.com/image-photo/baked-homemade-meatballs-isolated-on-600w-1800790381.jpg")`},
-    {id: 5, itemName: "Fries", url:`url("https://www.shutterstock.com/image-photo/french-fries-600w-510881971.jpg")`},
-    {id: 6, itemName: "Garlic Fries", url:`url("https://www.shutterstock.com/image-photo/garlic-parsley-french-fries-ketchup-600w-163845740.jpg")`},
-    {id: 7, itemName: "Extra Dressing", url:`url("https://www.shutterstock.com/image-photo/variety-homemade-sauces-salad-dressings-600w-571747333.jpg")`},
-    {id: 8, itemName: "Extra Hummus", url:`url("https://www.shutterstock.com/image-photo/hummus-olive-oil-paprika-lemon-600w-1412942363.jpg")`},
-    {id: 9, itemName: "Extra Protein", url:`url("https://www.shutterstock.com/image-photo/partially-sliced-grilled-chicken-breast-600w-504699331.jpg")`},
-]
-
-const drinkList = [
-    {id: 1, itemName: "Bottled Water", url:`url("https://www.shutterstock.com/image-photo/plastic-water-bottle-big-small-600w-1907885707.jpg")`},
-    {id: 2, itemName: "Fountain Drinks", url:`url("https://www.shutterstock.com/image-photo/soda-fountain-cup-isolated-on-600w-445209874.jpg")`},
-]
-
 const managerButtonList = [
     {id: 1, buttonName: "Statistics", linkName: "/statistics"},
     {id: 2, buttonName: "Inventory", linkName: "/inventory"},
     {id: 3, buttonName: "Edit Menu", linkName: "/editMenu"}
 ]
-
-function extraMenu() {
-    console.log("extra button clicked");
-}
-
-function drinkMenu() {
-    console.log("drink button clicked");
-}
 
 var counter = 0;
 
@@ -73,11 +34,18 @@ const CashierGUI = () => {
     const {lang, setLang} = useContext(LanguageContext)
 
     
-    const [results, setResults] = useState([...bowlList])
+    const [bowlList, setBowlList] = useState([]);
+    const [gyroList, setGyroList] = useState([]);
+    const [extraList, setExtraList] = useState([]);
+    const [drinkList, setDrinkList] = useState([]);
+    const [results, setResults] = useState([])
     const [receipt, setReceipt] = useState([])
     const [total, setTotal] = useState([])
     const [isLoading, setIsLoading] = useState(false);
     const [err, setErr] = useState('');
+
+    const { logout } = useAuth0() 
+    const [ role, setRole ] = useState('Employee')
 
     // TODO: IMPLEMENT LOGIC FOR SERVER VS MANAGER
     const [managerButtons, setManagerButtons] = useState([...managerButtonList])
@@ -93,28 +61,133 @@ const CashierGUI = () => {
         if (!isAuthenticated){
             navigate("/")
         }
-        //console.log(name, email)
+        
+        if ( email != undefined ){
+            axios.post("http://localhost:5000/employeeType", { pin:email })
+                .then(data => {
+                    setRole(data.data.role)
+                    console.log(data.data)
+                })
+        }
+        
+
+
     },[isAuthenticated])
 
-    function buttonMenu() {
-        setManagerButtons([...managerButtonList]);
-    }
+    useEffect(() =>{
+        if (role === "Customer"){
+            logout()
+        }
 
-    function bowlMenu() {
-        setResults([...bowlList]);
-    }
+        if (role === "Employee"){
+            setManagerButtons([...managerButtons].slice(0, managerButtons.length - 1))
+        }
 
-    function gyroMenu() {
+        if (role == "Manager"){
+            setManagerButtons([...managerButtonList])
+        }
         
-        setResults([...gyroList]);
+    },[role])
+
+    
+
+    const bowlMenu = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/getBowls', {
+                method: 'POST',
+                body: JSON.stringify(),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+        
+            const result = await response.json();
+            console.log(result);
+            setBowlList(result);
+        } catch (err) {
+        setResults([])
+            setErr(err.message);
+        }
+        // setResults([...bowlList]);
     }
 
-    function extraMenu() {
-        setResults([...extraList]);
+    const gyroMenu = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/getGyros', {
+                method: 'POST',
+                body: JSON.stringify(),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+        
+            const result = await response.json();
+            console.log(result);
+            setGyroList(result);
+        } catch (err) {
+        setResults(prevState => [])
+            setErr(err.message);
+        }
+        // setResults([...gyroList]);
+    }
+    const extraMenu = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/getExtras', {
+                method: 'POST',
+                body: JSON.stringify(),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+        
+            const result = await response.json();
+            console.log(result);
+            setExtraList(result);
+        } catch (err) {
+        setResults(prevState => [])
+            setErr(err.message);
+        }
+        // setResults([...extraList]);
     }
 
-    function drinkMenu() {
-        setResults([...drinkList]);
+    const drinkMenu = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/getDrinks', {
+                method: 'POST',
+                body: JSON.stringify(),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+        
+            const result = await response.json();
+            console.log(result);
+            setDrinkList(result);
+        } catch (err) {
+        setResults([])
+            setErr(err.message);
+        }
+        //setResults([...drinkList]);
     }
 
     const handleClick = async (item) => {
@@ -173,6 +246,22 @@ const CashierGUI = () => {
         }
     };
 
+    useEffect(() => {
+        setResults([...bowlList]);
+    },[bowlList])
+
+    useEffect(() => {
+        setResults([...gyroList]);
+    },[gyroList])
+
+    useEffect(() => {
+        setResults([...extraList]);
+    },[extraList])
+
+    useEffect(() => {
+        setResults([...drinkList]);
+    },[drinkList])
+
     const emptyReceipt = () => {
         setReceipt([]);
         counter = 0;
@@ -223,22 +312,23 @@ const CashierGUI = () => {
             </div>
             <div style = {{ minHeight: "80%", marginTop: "2.5%", padding: "2.5%", backgroundColor: "lightgrey" }}>
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} style={{ height: "100%" }}>
-                {results.map( elem => {
+                {results.length!==0 && results.map( elem => {
                      return (
                         <Grid  item xs = {3}  style = {{height:"40vh"}}>
                             
                             {/* menu item goes here */}
-                            <Card  className = "hoverCard" key = {elem.id} onClick = {event => handleClick(elem.itemName)} >
+                            <Card  className = "hoverCard" key = {elem.url} onClick = {event => handleClick(elem.name)} >
                                 <CardMedia
+                                    key = {elem.url}
                                     component = {"img"}
-                                    style ={{height:"75%",backgroundImage: elem.url, backgroundPosition:"top center", backgroundSize:"120%" }}
+                                    style ={{height:"75%",backgroundImage: ("url(\"" + elem.url + "\")"), backgroundPosition:"top center", backgroundSize:"120%" }}
                                 /> 
                                 <CardContent style={{textAlign:"center", height:"25%"}}>
-                                    <TranslatedText text = {elem.itemName} key = {lang + elem.url}/>
+                                    <TranslatedText text = {elem.name} key = {lang + elem.url}/>
                                 </CardContent>
                             </Card>
                             {/* <Button key = {elem.url} onClick = {event => handleClick(elem.itemName)} style = {{ backgroundColor: "blue", color: "white", width: "100%", height: "100%", backgroundSize: "160%",backgroundImage: elem.url, backgroundPosition:"top center" }}>
-                                <TranslatedText text = {elem.itemName} key = {lang}/>
+                                <TranslatedText text = {elem} key = {lang}/>
                             </Button> */}
                             {/* <Button onClick = {event => handleClick(elem.itemName)} style = {{ backgroundColor: "blue", color: "white", width: "100%", height: "100%" }}>{elem.itemName}</Button> */}
                         </Grid>
@@ -285,10 +375,11 @@ const CashierGUI = () => {
                             {managerButtons.map( elem => {
                                 return (
                                         <Link key = {elem.id} to={elem.linkName} style={{ textDecoration:"none" }}>
-                                            <Button style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "blue", color: "white" }}><TranslatedText text = {elem.buttonName} key = {lang}/></Button>
+                                            <Button style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "green", color: "white" }}><TranslatedText text = {elem.buttonName} key = {lang}/></Button>
                                         </Link>
                                     );
                                 })}
+                                
                         </div>
                     </div>
                    
