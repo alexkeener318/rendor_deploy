@@ -309,14 +309,23 @@ function roundTotal(num){
         big = false;
         for(let char of currNum){
             newNum += char;
+            //console.log(newNum);
             if(char == '.'){
                 hitDeci = true;
+                
             }
             if(hitDeci){
                 numDigs++;
             }
+            if(numDigs==3){
+                break;
+            }
         }
     }
+    // if(numDigs==2){
+    //     newNum+='0';
+    //     console.log(newNum);
+    // }
     return parseFloat(newNum);
 }
 
@@ -655,7 +664,7 @@ async function employeeType(email){
 //function for the statistics table takes in 2 dates and returns an object with the attributes
 //orders for the number of orders, credit for the sales made in credit band debit cards, 
 //dining for the revenue in meal swipes and grossRevenue for the total revenue for those dates
-statisticsTable("09-15-2022", "09-17-2022"); //example test run
+statisticsTable("09-20-2022", "10-05-2022"); //example test run
 async function statisticsTable(date1, date2){
     let stats={};
     totalRevenue = 0.0;
@@ -688,7 +697,7 @@ async function statisticsTable(date1, date2){
     stats.credit=roundTotal(creditRevenue);
     stats.grossRevenue=roundTotal(totalRevenue);
     stats.dining=roundTotal(diningRevenue);
-    console.log(stats.orders);
+    console.log(stats.credit);
    // console.log(stats.credit);
    // console.log(stats.dining);
     //console.log(stats.grossRevenue);
@@ -711,6 +720,35 @@ async function statisticsGraph(date1,date2){
     console.log(receiptsForGraph.length); //use receipts[index].total to get the revenue of the order
     return receiptsForGraph;
 }
+
+//order of items tomatoes, salt, lettuce, hummus, cheese, olives, onions, cucumbers, cauliflower, peppers, dressing
+// param= [1.0,2.0,3.0,2.0,1.0,1.0,2.0,1.0,1.0,1.0,1.0];
+// updateToppings(param);
+async function updateToppings(toppings){
+    items = ["Tomatoes", "Salt", "Lettuce", "Hummus", "Cheese", "Olives", "Onions", "Cucumbers", "Cauliflower", "Peppers", "Dressing"];
+    ingredients=[];
+    for(i = 0; i < items.length; i++){
+        quant=0;
+        quant_str = "";
+        query_str = "SELECT quantity FROM ingredients WHERE name ='" + items[i] +"';";
+        await pool
+            .query(query_str)
+            .then(query_res => {
+                for (let i = 0; i < query_res.rowCount; i++){
+                    quant_str=query_res.rows[i];
+                }});
+        quant=quant_str.quantity; //int
+        quant-=toppings[i]; //update
+        if(quant<0){
+            quant=0;
+        }
+
+        await pool
+            .query("UPDATE ingredients SET quantity = " + quant + " WHERE name = '" + items[i] +"';")
+    }
+}
+
+
 
 async function excessReport(dateOne, dateTwo){
     // get a list of all the menu items
