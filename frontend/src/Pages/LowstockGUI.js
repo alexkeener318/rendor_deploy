@@ -24,7 +24,7 @@ const LowstockGUI = ()=> {
     const [err, setErr] = useState('');
 
     useEffect(() => {
-        axios.get("http://localhost:5000/lowStock", {})
+        axios.get("https://project-3-6njq.onrender.com/lowStock", {})
           .then(data => {
             setStockItems(data.data)
           })
