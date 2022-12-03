@@ -26,6 +26,7 @@ import { UserContext } from "./contexts/user";
 import { LanguageContext } from "./contexts/language";
 import Auth0ProviderWithHistory from "./auth0ProviderWithHistory";
 import LowstockGUI from "./Pages/LowstockGUI";
+import UpdateInventory from "./Pages/UpdateInventory";
 
 
 
@@ -53,6 +54,7 @@ const App= ()=> {
             <Route path="/lowstockgui" element={<LowstockGUI />} />
             <Route path="/cashiergui" element={<CashierGUI />} />
             <Route path="/statistics" element={<Statistics />} />
+            <Route path="/updateinventory" element={<UpdateInventory />} />
             <Route path="/map" element={<Map />} />
 
             <Route path="/editMenu" element = {<EditMenu />} />
