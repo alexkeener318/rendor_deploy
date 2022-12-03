@@ -9,7 +9,7 @@ const TranslatedText=(props)=>{
 
     useEffect(()=>{
       const getTranslation= async ()=>{
-         const result = await axios.post("http://localhost:5000/translateText", { text: props.text, lang:lang})
+         const result = await axios.post("https://project-3-6njq.onrender.com/translateText", { text: props.text, lang:lang})
          
          setTranslation(result.data);
       }
