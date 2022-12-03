@@ -17,7 +17,12 @@ import { LanguageContext } from '../contexts/language';
 
 
 const UpdateInventory = () => {
-    
+    return (
+        <div>
+            <Header title = "Update Inventory" path = "/cashiergui"/>
+
+        </div>
+    );
 }
 
 export default UpdateInventory;

@@ -129,6 +129,7 @@ const Inventory = ()=> {
              </p>
           </div>
 
+
         </div>
 
       </div>
