@@ -30,20 +30,19 @@ const UpdateInventory = () => {
     const [cauliflower, setCauliflower] = useState();
     const [peppers, setPeppers] = useState();
     const [dressing, setDressing] = useState();
+    const [err, setErr] = useState('');
+
 
     useEffect(() =>{
         setIngredientList([tomato, salt, lettuce, hummus, cheese, olives, onions, cucumbers, cauliflower, peppers, dressing]);
     },[tomato, salt, lettuce, hummus, cheese, olives, onions, cucumbers, cauliflower, peppers, dressing])
 
     const updateIngredients = async (ingredientsList) => {
-        console.log("clicked");
-        console.log(name);
-        console.log(price);
-        console.log(ingredients);
+        console.log(ingredientsList);
         try {
-            const response = await fetch('http://localhost:5000/newItem', {
+            const response = await fetch('http://localhost:5000/updateTopping', {
                 method: 'POST',
-                body: JSON.stringify({ itemName: name, itemPrice: price, itemIngreds: ingredients, url: photoURL}),
+                body: JSON.stringify({ list: ingredientsList }),
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
@@ -98,7 +97,20 @@ const UpdateInventory = () => {
                 </div>
             </div>
             <div style = {{ height: "5%", width: "60%", marginLeft: "20%", paddingBottom: "2.5%", backgroundColor: "lightgrey" }}>
-                <Button style = {{ height: "100%", width: "20%", marginLeft: "40%", color: "white", backgroundColor: "blue" }}><TranslatedText text = "Update" key = {lang}/></Button>
+                <Button onClick = {event => 
+                    {updateIngredients(ingredientsList); 
+                        setTomato(""); 
+                        setSalt("");
+                        setLettuce("");
+                        setHummus("");
+                        setCheese("");
+                        setOlives("");
+                        setOnions("");
+                        setCucumber("");
+                        setCauliflower("");
+                        setPeppers("");
+                        setDressing("");
+                }} style = {{ height: "100%", width: "20%", marginLeft: "40%", color: "white", backgroundColor: "blue" }}><TranslatedText text = "Update" key = {lang}/></Button>
             </div>
         </div>
     );

@@ -1019,6 +1019,13 @@ async function main(){
         // res.send(employeeType(req.body.pin) );  
     })
 
+    app.post("/updateTopping",jsonParser,(req,res)=>{
+        (async ()=>{
+            let results = await updateToppings(req.body.list);
+            res.send(results);
+        })();
+    })
+
     app.listen(port,()=> console.log(`Listening to port ${port}`));
 }
 console.log("TESTING");
