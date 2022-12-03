@@ -45,7 +45,7 @@ const Pinpad = ()=> {
     }
 
     let role = "yoink"
-    await axios.post('http://localhost:5000/employeeType',{
+    await axios.post('https://project-3-6njq.onrender.com/employeeType',{
       pin: code 
     })
         
