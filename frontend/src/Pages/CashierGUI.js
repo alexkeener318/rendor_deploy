@@ -63,7 +63,7 @@ const CashierGUI = () => {
         }
         
         if ( email != undefined ){
-            axios.post("http://localhost:5000/employeeType", { pin:email })
+            axios.post("https://project-3-6njq.onrender.com/employeeType", { pin:email })
                 .then(data => {
                     setRole(data.data.role)
                     console.log(data.data)
@@ -93,7 +93,7 @@ const CashierGUI = () => {
 
     const bowlMenu = async () => {
         try {
-            const response = await fetch('http://localhost:5000/getBowls', {
+            const response = await fetch('https://project-3-6njq.onrender.com/getBowls', {
                 method: 'POST',
                 body: JSON.stringify(),
                 headers: {
@@ -118,7 +118,7 @@ const CashierGUI = () => {
 
     const gyroMenu = async () => {
         try {
-            const response = await fetch('http://localhost:5000/getGyros', {
+            const response = await fetch('https://project-3-6njq.onrender.com/getGyros', {
                 method: 'POST',
                 body: JSON.stringify(),
                 headers: {
@@ -142,7 +142,7 @@ const CashierGUI = () => {
     }
     const extraMenu = async () => {
         try {
-            const response = await fetch('http://localhost:5000/getExtras', {
+            const response = await fetch('https://project-3-6njq.onrender.com/getExtras', {
                 method: 'POST',
                 body: JSON.stringify(),
                 headers: {
@@ -167,7 +167,7 @@ const CashierGUI = () => {
 
     const drinkMenu = async () => {
         try {
-            const response = await fetch('http://localhost:5000/getDrinks', {
+            const response = await fetch('https://project-3-6njq.onrender.com/getDrinks', {
                 method: 'POST',
                 body: JSON.stringify(),
                 headers: {
