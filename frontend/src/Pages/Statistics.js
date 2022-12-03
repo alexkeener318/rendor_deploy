@@ -46,7 +46,7 @@ const Statistics = () => {
   }
 
   useEffect(() => {
-    axios.post("http://localhost:5000/statsTable", { startDate: startDate, endDate:endDate})
+    axios.post("https://project-3-6njq.onrender.com/statsTable", { startDate: startDate, endDate:endDate})
       .then(data => {
         setRevenue(data.data.grossRevenue);
         setCredit(data.data.credit);
@@ -54,7 +54,7 @@ const Statistics = () => {
         setOrders(data.data.orders);
       })
 
-    axios.post("http://localhost:5000/statsGraph", { startDate: startDate, endDate:endDate})
+    axios.post("https://project-3-6njq.onrender.com/statsGraph", { startDate: startDate, endDate:endDate})
       .then(retrievedData => {
         // console.log(retrievedData);
         // console.log("retrieved data: ", retrievedData);

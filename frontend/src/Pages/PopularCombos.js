@@ -44,7 +44,7 @@ const PopularCombos = ()=> {
   const [combos, setCombos] = useState([])
 
   useEffect(() => {
-    axios.post("http://localhost:5000/popCombos", { startDate: startDate, endDate:endDate})
+    axios.post("https://project-3-6njq.onrender.com/popCombos", { startDate: startDate, endDate:endDate})
       .then(data => {
         setCombos(data.data)
       })

@@ -9,19 +9,20 @@ const jsonParser = bodyParser.json();
 const app = express();
 const port = 5000;
 const cors = require("cors");
+const path = require("path");
 const { json } = require('body-parser');
 app.use(cors());
-
+app.use(express.static(path.join(__dirname + "/public")));
 
 const { generateRequestUrl, normaliseResponse } = require('google-translate-api-browser');
 const https = require('https');
 // Create pool
 const pool = new Pool({
-    user: process.env.PSQL_USER,
-    host: process.env.PSQL_HOST,
-    database: process.env.PSQL_DATABASE,
-    password: process.env.PSQL_PASSWORD,
-    port: process.env.PSQL_PORT,
+    user: "csce315_905_keener",
+    host: "csce-315-db.engr.tamu.edu",
+    database: "csce315_905_51",
+    password: "530003826",
+    port: "5432",
     ssl: {rejectUnauthorized: false}
 });
 
@@ -66,21 +67,17 @@ let allOrdered = [];
         .then(query_res => {
             for (let i = 0; i < query_res.rowCount; i++){
                 price = query_res.rows[i];
-                console.log(query_res.rows[i]);
             }})
         .then(()=>{
-            console.log("Finished Query");
             itemPrice = price.item_price;
-            rawPrice += itemPrice;
-            // calculate tax
-            //console.log("itemPrice: " + itemPrice);
-            let taxPrice = itemPrice * 0.0825;
+            rawPrice += roundTotal(itemPrice);
+            // calculate tax;
+            let taxPrice = roundTotal(itemPrice * 0.0825);
             // Update amount being paid in taxes
             tax += taxPrice;
             // calculate order total
             totalPrice += roundTotal(parseFloat(itemPrice) + parseFloat(taxPrice));
-            totalPrice = roundTotal(totalPrice);
-            console.log("totalPrice: " + totalPrice + "\n tax: " + tax);
+            roundTotal(totalPrice);
         });
     }
 
@@ -91,7 +88,6 @@ let allOrdered = [];
         .then(query_res => {
             for (let i = 0; i < query_res.rowCount; i++){
                 itemPrice = query_res.rows[i].item_price;
-                console.log(query_res.rows[i]);
             }})
         .then(()=>{
             let taxNum = roundTotal(parseFloat(itemPrice) * 0.0825);
@@ -145,8 +141,6 @@ let allOrdered = [];
             // execute query
             let orderQuer = "INSERT INTO orders values(" + orderID + "," + totalPrice + ",'" + updatedDate +"');";
             if(orderItems != ""){
-                console.log("HERE");
-                console.log(query);
                 pool.query(query)
                 .then(()=>{
                     pool.query(orderQuer);
@@ -201,8 +195,7 @@ async function addMenu(itemName, itemPrice, itemIngreds, url) {
     await getItemID()
     .then(()=>{
         // send in query
-        const query = "INSERT INTO menu VALUES(" +itemID + ",'" + itemName +"', " + itemPrice +", '" + itemIngreds + "', '" + url + "');";
-        console.log(query);
+        const query = "INSERT INTO menu VALUES(" +itemID + ",'" + itemName +"', " + itemPrice +", '" + itemIngreds + "');";
         pool.query(query);
     })
     
@@ -214,7 +207,6 @@ async function addMenu(itemName, itemPrice, itemIngreds, url) {
         await pool.query("SELECT EXISTS(SELECT FROM ingredients where name = '" + name + "');").then(query_res => {
             for (let i = 0; i < query_res.rowCount; i++){
                 exists = query_res.rows[i];
-                console.log(query_res.rows[i]);
             }
             if(!exists.exists){
                 addInventoryItem(name);
@@ -230,11 +222,9 @@ async function addInventoryItem(name){
     .then(query_res => {
         for(let i = 0; i < query_res.rowCount; i++){
             ID = query_res.rows[i].max;
-            console.log(ID);
         }
     }).then(()=>{
         let newID = ID + 1;
-        console.log("INSERT INTO ingredients VALUES(" + newID + ",'" + name + "', 150, 'servings', '2022-10-01');");
         pool.query("INSERT INTO ingredients VALUES(" + newID + ",'" + name + "', 150, 'servings', '2022-10-01');");
     });
 }
@@ -254,7 +244,6 @@ async function getItemID() {
     .then(query_res => {
         for (let i = 0; i < query_res.rowCount; i++){
             newID = query_res.rows[i];
-            console.log(query_res.rows[i]);
         }})
     .then(()=>{
         itemID = newID.max+1;
@@ -268,7 +257,6 @@ async function getID() {
     .then(query_res => {
         for (let i = 0; i < query_res.rowCount; i++){
             newID = query_res.rows[i];
-            console.log(query_res.rows[i]);
         }}).then(()=>{
             orderID = newID.max + 1;
             // return orderID;
@@ -288,7 +276,6 @@ async function checkStock(){
 
 function roundTotal(num){
     num.toFixed(2);
-    console.log("number before: " + num);
     let newNum = "";
     let currNum = "";
     currNum += num;
@@ -310,7 +297,6 @@ function roundTotal(num){
             break;
         }
     }
-    console.log("newNum b4 round: " + newNum);
     // Rounds if necessary
     newNum = parseFloat(newNum);
     if(big){
@@ -331,14 +317,11 @@ function roundTotal(num){
             }
         }
     }
-    console.log("newNum after round: " + newNum);
-    console.log("rounded number: " + parseFloat(newNum) + "\n");
     return parseFloat(newNum);
 }
 
 async function updateInventory(orderItems){
     items = orderItems.split(",");
-    console.log(items[0]);
     ingredients=[];
     for(i = 0; i < items.length; i++){
         await pool
@@ -346,34 +329,28 @@ async function updateInventory(orderItems){
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
                     ingredients.push(query_res.rows[i]);
-                    console.log(query_res.rows[i]);
                 }});
     }
     for(i = 0; i < ingredients.length; i++){
         ingredients_str=ingredients[i].ingredients_used;
-        console.log(ingredients_str);
         ingred=ingredients_str.split(",");
         for(j = 0; j < ingred.length; j++){
             // get current value of item
            quant_str = "";
-           console.log("Ingredient: ", ingred[j]);
            query_str = "SELECT quantity FROM ingredients WHERE name ='" + ingred[j] +"';";
            await pool
             .query(query_str)
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
                     quant_str=query_res.rows[i];
-                    console.log(query_res.rows[i]);
                 }});
             quant=quant_str.quantity; //int
             quant-=1; //update
             if(quant<0){
                 quant=0;
             }
-            console.log("quant: "+quant);
             // Update value of that item
             query_str = "UPDATE ingredients SET quantity = " + quant+ " WHERE name = '" + ingred[j] + "';";
-            console.log(query_str);
             await pool.query(query_str)
         }
     }
@@ -381,56 +358,70 @@ async function updateInventory(orderItems){
 
 //array of bowls
 async function bowlContent(){
-    let bowl;
-    bowls=[];
+    let item;
+    bowls =[];
     await pool
-            .query("SELECT item_name FROM menu WHERE item_name like '%Bowl%';")
+            .query("SELECT item_name,url FROM menu WHERE item_name like '%Bowl%';")
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
-                    bowl=query_res.rows[i];
+                    let bowl ={};
+                    item=query_res.rows[i];
                     console.log(query_res.rows[i]);
-                    bowls.push(bowl.item_name);
+                    bowl.name =item.item_name;
+                    bowl.url =item.url;
+                    bowls.push(bowl);
                 }});
-    //console.log(bowls[0])
     return bowls;
 }
 
 //array of gyros
 async function gyrosContent(){
-    let gyro;
+    let item;
     gyros=[];
     await pool
-            .query("SELECT item_name FROM menu WHERE item_name like '%Gyro%';")
+            .query("SELECT item_name, url FROM menu WHERE item_name like '%Gyro%';")
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
-                    gyro=query_res.rows[i];
+                    let gyro ={};
+                    item=query_res.rows[i];
                     console.log(query_res.rows[i]);
-                    gyros.push(gyro.item_name);
+                    gyro.name =item.item_name;
+                    gyro.url =item.url;
+                    gyros.push(gyro);
                 }});
-    //console.log(gyros[0])
     return gyros;
 }
 
 //array of drinks
 function drinksContent(){
-    drinks=["Fountain Drinks", "Bottled Water"];
+    let drink1={}; //water bottle
+    drink1.url=  "https://www.shutterstock.com/image-photo/plastic-water-bottle-big-small-600w-1907885707.jpg"
+    drink1.name = "Bottled Water"
+    let drink2={};//fountain drinks
+    drink2.url=  "https://www.shutterstock.com/image-photo/soda-fountain-cup-isolated-on-600w-445209874.jpg"
+    drink2.name = "Fountain Drinks"
+    drinks=[drink2, drink1];
+    //console.log(drinks[0].url);
     return drinks;
 }
 
 //array of extras
 async function extrasContent(){
     //extras=["2 Meatballs", "2 Falafels", "Fries", "Garlic Fries", "Hummus & Pita", "Extra Dressing", "Extra Hummus", "Extra Protein", "Pita Bread"];
-    let extra;
+    let item;
     extras=[];
     await pool
-            .query("SELECT item_name FROM menu WHERE item_name not like '%Gyro%' and item_name not like '%Bowl%' and item_name not like 'Bottled Water' and item_name not like 'Fountain Drinks';")
+            .query("SELECT item_name,url FROM menu WHERE item_name not like '%Gyro%' and item_name not like '%Bowl%' and item_name not like 'Bottled Water' and item_name not like 'Fountain Drinks';")
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
-                    extra=query_res.rows[i];
+                    let extra ={};
+                    item=query_res.rows[i];
                     console.log(query_res.rows[i]);
-                    extras.push(extra.item_name);
+                    extra.id = i;
+                    extra.name =item.item_name;
+                    extra.url =item.url;
+                    extras.push(extra);
                 }});
-    //console.log(extras[0])
     return extras;
 }
 
@@ -525,9 +516,7 @@ async function receipts(){
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
                     receipts.push(query_res.rows[i]);
-                    //console.log(query_res.rows[i]);
                 }});
-    //console.log(receipts[1])
     return receipts;
 }
 
@@ -540,9 +529,7 @@ async function getInventory(){
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
                     inventory.push(query_res.rows[i]);
-                    //console.log(query_res.rows[i]);
                 }});
-    //console.log(inventory[1])
     return inventory;
 }
 
@@ -555,9 +542,7 @@ async function getMenu(){
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
                     menuItems.push(query_res.rows[i]);
-                    //console.log(query_res.rows[i]);
                 }});
-    //console.log(menuItems[1])
     return menuItems;
 }
 
@@ -585,10 +570,8 @@ async function inventoryQuantity(item){
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
                     quantity_str=query_res.rows[i];
-                    console.log(query_res.rows[i]);
                 }});
     quantity=quantity_str.quan;
-    console.log(quantity)
     return quantity;
 }
 
@@ -617,10 +600,8 @@ async function getPrice(item){
             .then(query_res => {
                 for (let i = 0; i < query_res.rowCount; i++){
                     price_str=query_res.rows[i];
-                    console.log(query_res.rows[i]);
                 }});
     price=price_str.price;
-    //console.log(price)
     return price;
 }
 
@@ -641,27 +622,30 @@ async function getQuantity(item){
     return quantity;
 }
 
-//gets the email and returns a person with its name, email, and role(manager or employee)
-// manager emails: reaganreitmeyer@tamu.edu,davitasatr@tamu.edu 
-//employeeType("reaganreitmeyer@tamu.edu");
+//gets the pinpad entry and returns a person with its name, id(pinpad), and role(manager or employee)
+// manager IDs: 45678, 67890
 async function employeeType(email){
     let person ={};
     employee_name="";
-    query_str="SELECT employee_name from employees where employee_id = '"+ email +"';";
+    query_str="SELECT * from employees where employee_id = '"+ email +"';";
+    person.role = 'Customer'
+
     await pool
             .query(query_str)
             .then(query_res => {
-                for (let i = 0; i < query_res.rowCount; i++){
-                    employee_name=query_res.rows[i];
-                    console.log(query_res.rows[i]);
-                    person.name=employee_name.employee_name;
-                }});
-    person.email=email;
-    if(person.name =="Reagan R" || person.name =="David A" ){
-        person.role="Manager";
-    }else{
-        person.role="Employee";
-    }
+                
+                if (query_res.rows.length > 0){
+                    let sqlPerson = query_res.rows[0]
+                    person = sqlPerson
+                    console.log("person is ", person)
+                }
+
+            });
+    // if(person. =="Reagan R" || person.name =="David A" ){
+    //     person.role="Manager";
+    // }else{
+    //     person.role="Employee";
+    // }
     //  console.log(person.name);
     //  console.log(person.email);
     //  console.log(person.role);
@@ -785,11 +769,7 @@ async function excessReport(dateOne, dateTwo){
         })
         let percentage = numSold / (numSold + numLeft);
         if(percentage <= 0.10){
-            let object ={};
-            object.name = invItems[i].name;
-            object.quantity = numLeft;
-            object.sales = numSold;
-            returnItems.push(object);
+            returnItems.push(invItems[i].name);
         }
     }
     // return the list
@@ -798,23 +778,19 @@ async function excessReport(dateOne, dateTwo){
 
 async function main(){
     // updates price and orderitems
+
+    // updates price and orderitems
     app.post("/addItem",jsonParser,(req,res)=>{
-        console.log("Price Before: " + totalPrice);
         (async() => {
             addItem(req.body.itemName);
             await updatePrice(req.body.itemName);
-            console.log("totalPrice: " + totalPrice)
             res.json({"totalPrice" : totalPrice});
         })();
     })
 
     app.post("/removeItem",jsonParser,(req,res)=>{
         (async() => {
-            console.log("totalPrice b4: " + totalPrice);
-            console.log("orderItems b4: " + orderItems);
             await removeItem(req.body.itemID);
-            console.log("totalPrice after: " + totalPrice);
-            console.log("orderItems after: " + orderItems);
             res.json({"totalPrice" : totalPrice})
         })();
     })
@@ -829,7 +805,7 @@ async function main(){
 
     // Adds new menu items
     app.post("/newItem",jsonParser,(req,res)=>{
-        addMenu(req.body.itemName,req.body.itemPrice,req.body.itemIngreds)
+        addMenu(req.body.itemName,req.body.itemPrice,req.body.itemIngreds,req.body.url)
         .then(()=>{
             res.send("Successfully added new menu item");
         })

@@ -107,7 +107,7 @@ const CustomerGUI = () => {
         counter++;
         setIsLoading(true);
         try {
-            const response = await fetch('http://localhost:5000/addItem', {
+            const response = await fetch('https://project-3-6njq.onrender.com/addItem', {
                 method: 'POST',
                 body: JSON.stringify({ itemName: item }),
                 headers: {
@@ -136,7 +136,7 @@ const CustomerGUI = () => {
         emptyReceipt()
         setTotal(0);
         try {
-            const response = await fetch('http://localhost:5000/sendOrder', {
+            const response = await fetch('https://project-3-6njq.onrender.com/sendOrder', {
                 method: 'POST',
                 body: JSON.stringify({ paymentType : payment, empName: employeeName }),
                 headers: {
@@ -171,7 +171,7 @@ const CustomerGUI = () => {
         setReceipt(newReceipt);
             console.log(receipt);
         try {
-            const response = await fetch('http://localhost:5000/removeItem', {
+            const response = await fetch('https://project-3-6njq.onrender.com/removeItem', {
                 method: 'POST',
                 body: JSON.stringify({ itemID : id }),
                 headers: {

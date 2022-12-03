@@ -30,7 +30,7 @@ const Inventory = ()=> {
   const [err, setErr] = useState('');
 
   useEffect(()=>{
-    axios.get('http://localhost:5000/getInventory')
+    axios.get('https://project-3-6njq.onrender.com/getInventory')
       .then(res => {
         console.log(res.data)
         setData(res.data)
@@ -86,7 +86,6 @@ const Inventory = ()=> {
                 shrink: true,
                 }}
             />
-
             <TextField
                 id="date"
                 label="Ending Date"
@@ -144,7 +143,3 @@ const Inventory = ()=> {
 }
 
 export default Inventory;
-
-
-
-

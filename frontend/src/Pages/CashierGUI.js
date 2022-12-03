@@ -6,6 +6,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Button, TextField, Card, CardMedia, CardContent } from "@mui/material"
 import { Grid } from '@mui/material';
 import { useAuth0 } from "@auth0/auth0-react";
+import axios from 'axios'
 
 // components
 import TranslatedText from "../Components/TranslatedText";
@@ -43,6 +44,9 @@ const CashierGUI = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [err, setErr] = useState('');
 
+    const { logout } = useAuth0() 
+    const [ role, setRole ] = useState('Employee')
+
     // TODO: IMPLEMENT LOGIC FOR SERVER VS MANAGER
     const [managerButtons, setManagerButtons] = useState([...managerButtonList])
 
@@ -57,12 +61,35 @@ const CashierGUI = () => {
         if (!isAuthenticated){
             navigate("/")
         }
-        //console.log(name, email)
+        
+        if ( email != undefined ){
+            axios.post("http://localhost:5000/employeeType", { pin:email })
+                .then(data => {
+                    setRole(data.data.role)
+                    console.log(data.data)
+                })
+        }
+        
+
+
     },[isAuthenticated])
 
-    function buttonMenu() {
-        setManagerButtons([...managerButtonList]);
-    }
+    useEffect(() =>{
+        if (role === "Customer"){
+            logout()
+        }
+
+        if (role === "Employee"){
+            setManagerButtons([...managerButtons].slice(0, managerButtons.length - 1))
+        }
+
+        if (role == "Manager"){
+            setManagerButtons([...managerButtonList])
+        }
+        
+    },[role])
+
+    
 
     const bowlMenu = async () => {
         try {
@@ -168,7 +195,7 @@ const CashierGUI = () => {
         counter++;
         setIsLoading(true);
         try {
-            const response = await fetch('http://localhost:5000/addItem', {
+            const response = await fetch('https://project-3-6njq.onrender.com/addItem', {
                 method: 'POST',
                 body: JSON.stringify({ itemName: item }),
                 headers: {
@@ -196,7 +223,7 @@ const CashierGUI = () => {
         emptyReceipt()
         setTotal(0);
         try {
-            const response = await fetch('http://localhost:5000/sendOrder', {
+            const response = await fetch('https://project-3-6njq.onrender.com/sendOrder', {
                 method: 'POST',
                 body: JSON.stringify({ paymentType : payment, empName: employeeName }),
                 headers: {
@@ -247,7 +274,7 @@ const CashierGUI = () => {
         setReceipt(newReceipt);
             console.log(receipt);
         try {
-            const response = await fetch('http://localhost:5000/removeItem', {
+            const response = await fetch('https://project-3-6njq.onrender.com/removeItem', {
                 method: 'POST',
                 body: JSON.stringify({ itemID : id }),
                 headers: {
@@ -285,18 +312,19 @@ const CashierGUI = () => {
             </div>
             <div style = {{ minHeight: "80%", marginTop: "2.5%", padding: "2.5%", backgroundColor: "lightgrey" }}>
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} style={{ height: "100%" }}>
-                {results.map( elem => {
+                {results.length!==0 && results.map( elem => {
                      return (
                         <Grid  item xs = {3}  style = {{height:"40vh"}}>
                             
                             {/* menu item goes here */}
-                            <Card  className = "hoverCard" key = {elem.id} onClick = {event => handleClick(elem.itemName)} >
+                            <Card  className = "hoverCard" key = {elem.url} onClick = {event => handleClick(elem.name)} >
                                 <CardMedia
+                                    key = {elem.url}
                                     component = {"img"}
-                                    style ={{height:"75%",backgroundImage: elem.url, backgroundPosition:"top center", backgroundSize:"120%" }}
+                                    style ={{height:"75%",backgroundImage: ("url(\"" + elem.url + "\")"), backgroundPosition:"top center", backgroundSize:"120%" }}
                                 /> 
                                 <CardContent style={{textAlign:"center", height:"25%"}}>
-                                    <TranslatedText text = {elem.itemName} key = {lang + elem.url}/>
+                                    <TranslatedText text = {elem.name} key = {lang + elem.url}/>
                                 </CardContent>
                             </Card>
                             {/* <Button key = {elem.url} onClick = {event => handleClick(elem.itemName)} style = {{ backgroundColor: "blue", color: "white", width: "100%", height: "100%", backgroundSize: "160%",backgroundImage: elem.url, backgroundPosition:"top center" }}>
@@ -347,10 +375,11 @@ const CashierGUI = () => {
                             {managerButtons.map( elem => {
                                 return (
                                         <Link key = {elem.id} to={elem.linkName} style={{ textDecoration:"none" }}>
-                                            <Button style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "blue", color: "white" }}><TranslatedText text = {elem.buttonName} key = {lang}/></Button>
+                                            <Button style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "green", color: "white" }}><TranslatedText text = {elem.buttonName} key = {lang}/></Button>
                                         </Link>
                                     );
                                 })}
+                                
                         </div>
                     </div>
                    

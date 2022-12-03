@@ -21,6 +21,7 @@ const EditMenu = () => {
 
     const [newItemName, setNewItemName] = useState();
     const [newItemPrice, setNewItemPrice] = useState();
+    const [newItemURL, setNewItemURL] = useState();
     const [itemToDelete, setItemToDelete] = useState();
     const [itemToChange, setItemToChange] = useState();
     const [newPrice, setNewPrice] = useState();
@@ -28,15 +29,15 @@ const EditMenu = () => {
     const [err, setErr] = useState('');
 
 
-    const addNewItem = async (name, price, ingredients) => {
+    const addNewItem = async (name, price, ingredients, photoURL) => {
         console.log("clicked");
         console.log(name);
         console.log(price);
         console.log(ingredients);
         try {
-            const response = await fetch('http://localhost:5000/newItem', {
+            const response = await fetch('https://project-3-6njq.onrender.com/newItem', {
                 method: 'POST',
-                body: JSON.stringify({ itemName: name, itemPrice: price, itemIngreds: ingredients }),
+                body: JSON.stringify({ itemName: name, itemPrice: price, itemIngreds: ingredients, url: photoURL}),
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
@@ -57,7 +58,7 @@ const EditMenu = () => {
     const deleteItem = async (name) => {
         console.log("clicked");
         try {
-            const response = await fetch('http://localhost:5000/deleteItem', {
+            const response = await fetch('https://project-3-6njq.onrender.com/deleteItem', {
                 method: 'POST',
                 body: JSON.stringify({ item: name }),
                 headers: {
@@ -80,7 +81,7 @@ const EditMenu = () => {
     const changePrice = async (itemName, newPrice) => {
         console.log("clicked");
         try {
-            const response = await fetch('http://localhost:5000/updateItem', {
+            const response = await fetch('https://project-3-6njq.onrender.com/updateItem', {
                 method: 'POST',
                 body: JSON.stringify({ item: itemName, price: newPrice }),
                 headers: {
@@ -106,7 +107,7 @@ const EditMenu = () => {
 
             <div style = {{ height: "90%", paddingBottom: "2.5%" }}>
 
-                <div className="addItem" style = {{ height: "30%", width: "80%", marginLeft: "10%", marginTop: "2.5%", backgroundColor: "lightgrey"}}>
+                <div className="addItem" style = {{ height: "37.5%", width: "80%", marginLeft: "10%", marginTop: "2.5%", backgroundColor: "lightgrey"}}>
                     <h2 style = {{ paddingTop: ".75%", textAlign: "center" }}><TranslatedText text = "Add Item" key = {lang}/></h2>
                     <span style = {{ display: "flex"}}>
                         <div style = {{ width: "60%", height: "70%", marginLeft: "10%"}}>
@@ -120,9 +121,10 @@ const EditMenu = () => {
                                     }}
                                     style = {{ width: "30%", marginRight: "5%", backgroundColor: "white"}} />
                             </article>
-                            <TextField onChange = { ( event ) => setNewItemIngredients(event.target.value)} value={newItemIngredients} size="small" label="Ingredients of Item" variant="filled" style = {{ width: "95%", marginRight: "5%", backgroundColor: "white"}}/>
+                            <TextField onChange = { ( event ) => setNewItemIngredients(event.target.value)} value={newItemIngredients} size="small" label="Ingredients of Item" variant="filled" style = {{ width: "95%", marginRight: "5%", marginBottom: "2%", backgroundColor: "white"}}/>
+                            <TextField onChange = { ( event ) => setNewItemURL(event.target.value)} value={newItemURL} size="small" label="Photo URL" variant="filled" style = {{ width: "95%", marginRight: "5%", backgroundColor: "white"}}/>
                         </div>
-                        <Button onClick = {event => {addNewItem(newItemName, newItemPrice, newItemIngredients); setNewItemName(""); setNewItemPrice(""); setNewItemIngredients("")}} style = {{ height: "7.5%", width: "10%", marginLeft: "5%", marginTop: "4%", color: "white", backgroundColor: "blue" }}><TranslatedText text = "Add Item" key = {lang}/></Button>
+                        <Button onClick = {event => {addNewItem(newItemName, newItemPrice, newItemIngredients, newItemURL); setNewItemName(""); setNewItemPrice(""); setNewItemIngredients(""); setNewItemURL("")}} style = {{ height: "7.5%", width: "10%", marginLeft: "5%", marginTop: "7%", color: "white", backgroundColor: "blue" }}><TranslatedText text = "Add Item" key = {lang}/></Button>
                     </span>
                 </div>
 
