@@ -3,7 +3,6 @@ import { useContext, useEffect, useState } from "react";
 
 // external imports
 import { TextField,Button } from "@mui/material";
-import InputAdornment from '@mui/material/InputAdornment';
 
 // components
 import Header from "../Components/Header";
@@ -12,7 +11,6 @@ import TranslatedText from "../Components/TranslatedText";
 // pages
 
 // contexts
-import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
 
 
@@ -66,23 +64,23 @@ const UpdateInventory = () => {
 
             <div style = {{ display: "flex", height: "90%", width: "60%", marginTop: "2%", marginLeft: "20%", backgroundColor: "lightgrey" }}>
                 <div className = "itemNameColumn" style = {{ height: "100%", width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
-                    <h1 style = {{ marginTop: "2.5%", backgroundColor: "lightgrey" }}>Item</h1>
-                    <h3 style = {{ height: "6%", marginTop: "6%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>Tomatoes</h3>
-                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>Salt</h3>
-                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>Lettuce</h3>
-                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>Hummus</h3>
-                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>Cheese</h3>
-                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>Olives</h3>
-                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>Onions</h3>
-                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>Cucumbers</h3>
-                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>Cauliflower</h3>
-                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>Peppers</h3>
-                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>Dressing</h3>
+                    <h1 style = {{ marginTop: "2.5%", backgroundColor: "lightgrey" }}><TranslatedText text = "Item" key = {lang}/></h1>
+                    <h3 style = {{ height: "6%", marginTop: "6%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Tomatoes" key = {lang}/></h3>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Salt" key = {lang}/></h3>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Lettuce" key = {lang}/></h3>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Hummus" key = {lang}/></h3>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Cheese" key = {lang}/></h3>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Olives" key = {lang}/></h3>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Onions" key = {lang}/></h3>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Cucumbers" key = {lang}/></h3>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Cauliflowers" key = {lang}/></h3>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Peppers" key = {lang}/></h3>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Dressing" key = {lang}/></h3>
 
                 </div>
 
                 <div className = "quantityColumn" style = {{ height: "100%", width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
-                    <h1 style = {{ marginTop: "2.5%", backgroundColor: "lightgrey"}} >Quantity Used</h1>
+                    <h1 style = {{ marginTop: "2.5%", backgroundColor: "lightgrey"}} ><TranslatedText text = "Quantity Used" key = {lang}/></h1>
                     <TextField onChange = { ( event ) => setTomato(event.target.value)} value={tomato} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "5%", marginRight: "5%", backgroundColor: "white"}}/>
                     <TextField onChange = { ( event ) => setSalt(event.target.value)} value={salt} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
                     <TextField onChange = { ( event ) => setLettuce(event.target.value)} value={lettuce} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
