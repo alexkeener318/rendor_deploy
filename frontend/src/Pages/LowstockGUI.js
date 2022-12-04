@@ -32,7 +32,7 @@ const LowstockGUI = ()=> {
 
     return (
         <div style={{ height: "100%"}}>
-            <Header title = "Low Stock" path = "/lowstockgui"/>
+            <Header title = "Low Stock" path = "/cashiergui"/>
             <div style={{maxHeight:"1000px", overflowY:"scroll", border:"solid", borderWidth:2, borderColor:"blue", backgroundColor:"blue", marginTop:20, marginLeft: "20%", marginRight: "20%", fontSize: "30px"}}>
                 <div style={{borderBottom:'solid white 3px', position:"sticky",  top:0}}>
                     <OneColRow item = {"Items Low on Stock"} />
