@@ -12,7 +12,7 @@ const cors = require("cors");
 const path = require("path");
 const { json } = require('body-parser');
 app.use(cors());
-app.use(express.static(path.join(__dirname + "/public")));
+// app.use(express.static(path.join(__dirname + "/public")));
 
 const { generateRequestUrl, normaliseResponse } = require('google-translate-api-browser');
 const https = require('https');
@@ -275,26 +275,29 @@ async function checkStock(){
 }
 
 function roundTotal(num){
-    num.toFixed(2);
-    let newNum = "";
-    let currNum = "";
-    currNum += num;
-    let numDigs = 0;
-    let hitDeci = false;
-    let big = false;
-    for(let char of currNum){
-        newNum += char;
-        if(char == '.'){
-            hitDeci = true;
-        }
-        if(hitDeci){
-            numDigs++;
-        }
-        if(numDigs > 2){
-            break;
-        }
-    }
-    return parseFloat(newNum);
+    console.log("num: " + num);
+    num = parseFloat(num).toFixed(2);
+    console.log("num after: " + num);
+    // let newNum = "";
+    // let currNum = "";
+    // currNum += num;
+    // let numDigs = 0;
+    // let hitDeci = false;
+    // let big = false;
+    // for(let char of currNum){
+    //     newNum += char;
+    //     if(char == '.'){
+    //         hitDeci = true;
+    //     }
+    //     if(hitDeci){
+    //         numDigs++;
+    //     }
+    //     if(numDigs > 2){
+    //         break;
+    //     }
+    // }
+    // return parseFloat(newNum);
+    return num;
 }
 
 async function updateInventory(orderItems){
@@ -1001,4 +1004,5 @@ async function main(){
     app.listen(port,()=> console.log(`Listening to port ${port}`));
 }
 console.log("TESTING");
+roundTotal(10.1239183713193219800000000000000000123);
 main();
