@@ -62,8 +62,117 @@ const UpdateInventory = () => {
         <div style = {{ height: "100%", paddingBottom: "10%" }}>
             <Header title = "Update Inventory" path = "/cashiergui"></Header>  
 
-            <div style = {{ display: "flex", height: "90%", width: "60%", marginTop: "2%", marginLeft: "20%", backgroundColor: "lightgrey" }}>
-                <div className = "itemNameColumn" style = {{ height: "100%", width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+            <div style = {{  width: "60%", marginTop: "2%", marginLeft: "20%", backgroundColor: "lightgrey" }}>
+
+                <div style = {{display:"flex"}}>
+                    <div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                        <h1 style = {{ marginTop: "2.5%", backgroundColor: "lightgrey" }}><TranslatedText text = "Item" key = {lang}/></h1>
+                    </div>
+                    <div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                        <h1 style = {{ marginTop: "2.5%", backgroundColor: "lightgrey"}} ><TranslatedText text = "Quantity Used" key = {lang}/></h1>
+                    </div>
+                </div>
+
+                <div style = {{display:"flex"}}>
+                    <div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <h3 style = {{ height: "6%", marginTop: "6%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Tomatoes" key = {lang}/></h3>
+                    </div>
+                    <div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <TextField onChange = { ( event ) => setTomato(event.target.value)} value={tomato} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    </div>
+                </div>
+
+                <div style = {{display:"flex"}}>
+                    <div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Salt" key = {lang}/></h3>
+                    </div>
+                    <div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <TextField onChange = { ( event ) => setSalt(event.target.value)} value={salt} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    </div>
+                </div>
+
+                <div style = {{display:"flex"}}>
+                    <div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Lettuce" key = {lang}/></h3>
+                    </div>
+                    <div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <TextField onChange = { ( event ) => setLettuce(event.target.value)} value={lettuce} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    </div>
+                </div>
+
+                <div style = {{display:"flex"}}>
+                    <div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Hummus" key = {lang}/></h3>
+                    </div>
+                    <div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <TextField onChange = { ( event ) => setHummus(event.target.value)} value={hummus} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    </div>
+                </div>
+
+                <div style = {{display:"flex"}}>
+                    <div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Cheese" key = {lang}/></h3>
+                    </div>
+                    <div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <TextField onChange = { ( event ) => setCheese(event.target.value)} value={cheese} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    </div>
+                </div>
+
+                <div style = {{display:"flex"}}>
+                    <div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Olives" key = {lang}/></h3>
+                    </div>
+                    <div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <TextField onChange = { ( event ) => setOlives(event.target.value)} value={olives} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    </div>
+                </div>
+
+                <div style = {{display:"flex"}}>
+                    <div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Onions" key = {lang}/></h3>
+                    </div>
+                    <div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <TextField onChange = { ( event ) => setOnions(event.target.value)} value={onions} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    </div>
+                </div>
+
+                <div style = {{display:"flex"}}>
+                    <div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Cucumbers" key = {lang}/></h3>
+                    </div>
+                    <div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <TextField onChange = { ( event ) => setCucumber(event.target.value)} value={cucumbers} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    </div>
+                </div>
+
+                <div style = {{display:"flex"}}>
+                    <div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Cauliflowers" key = {lang}/></h3>
+                    </div>
+                    <div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <TextField onChange = { ( event ) => setCauliflower(event.target.value)} value={cauliflower} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    </div>
+                </div>
+
+                <div style = {{display:"flex"}}>
+                    <div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Peppers" key = {lang}/></h3>
+                    </div>
+                    <div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <TextField onChange = { ( event ) => setPeppers(event.target.value)} value={peppers} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    </div>
+                </div>
+
+                <div style = {{display:"flex"}}>
+                    <div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Dressing" key = {lang}/></h3>
+                    </div>
+                    <div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    <TextField onChange = { ( event ) => setDressing(event.target.value)} value={dressing} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    </div>
+                </div>
+
+                {/* <div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
                     <h1 style = {{ marginTop: "2.5%", backgroundColor: "lightgrey" }}><TranslatedText text = "Item" key = {lang}/></h1>
                     <h3 style = {{ height: "6%", marginTop: "6%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Tomatoes" key = {lang}/></h3>
                     <h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}><TranslatedText text = "Salt" key = {lang}/></h3>
@@ -79,7 +188,7 @@ const UpdateInventory = () => {
 
                 </div>
 
-                <div className = "quantityColumn" style = {{ height: "100%", width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                <div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
                     <h1 style = {{ marginTop: "2.5%", backgroundColor: "lightgrey"}} ><TranslatedText text = "Quantity Used" key = {lang}/></h1>
                     <TextField onChange = { ( event ) => setTomato(event.target.value)} value={tomato} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "5%", marginRight: "5%", backgroundColor: "white"}}/>
                     <TextField onChange = { ( event ) => setSalt(event.target.value)} value={salt} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
@@ -92,7 +201,7 @@ const UpdateInventory = () => {
                     <TextField onChange = { ( event ) => setCauliflower(event.target.value)} value={cauliflower} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
                     <TextField onChange = { ( event ) => setPeppers(event.target.value)} value={peppers} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
                     <TextField onChange = { ( event ) => setDressing(event.target.value)} value={dressing} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
-                </div>
+                </div> */}
             </div>
             <div style = {{ height: "5%", width: "60%", marginLeft: "20%", paddingBottom: "2.5%", backgroundColor: "lightgrey" }}>
                 <Button onClick = {event => 
@@ -108,7 +217,7 @@ const UpdateInventory = () => {
                         setCauliflower("");
                         setPeppers("");
                         setDressing("");
-                }} style = {{ height: "100%", width: "20%", marginLeft: "40%", color: "white", backgroundColor: "blue" }}><TranslatedText text = "Update" key = {lang}/></Button>
+                }} style = {{ height: "100%", width: "20%", marginLeft: "40%", marginTop:20,color: "white", backgroundColor: "blue" }}><TranslatedText text = "Update" key = {lang}/></Button>
             </div>
         </div>
     );
