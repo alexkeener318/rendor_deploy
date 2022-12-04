@@ -8,6 +8,9 @@ import TranslatedText from "./TranslatedText";
 
 import { LanguageContext } from "../contexts/language";
 
+import ReactCountryFlag from "react-country-flag"
+
+
 
 const LanguagePicker = (props) => {
   const {lang,setLang} = useContext(LanguageContext)
@@ -31,11 +34,26 @@ const LanguagePicker = (props) => {
               label="Age"
               onChange = {changeLanguage}
             >
-              <MenuItem value = "en">English</MenuItem>
-              <MenuItem value = "fr">Français</MenuItem>
-              <MenuItem value = "de">Deutsch</MenuItem>
-              <MenuItem value = "hy">Հայերեն</MenuItem>
-              <MenuItem value = "es">Español</MenuItem>
+
+              <MenuItem value = "en">English  &nbsp;                        
+              <ReactCountryFlag countryCode="US" svg />
+              </MenuItem>
+
+              <MenuItem value = "fr">Français &nbsp;
+              <ReactCountryFlag countryCode="FR" svg />
+              </MenuItem>
+
+              <MenuItem value = "de">Deutsch &nbsp;
+              <ReactCountryFlag countryCode="DE" svg />
+              </MenuItem>
+
+              <MenuItem value = "hy">Հայերեն &nbsp;
+              <ReactCountryFlag countryCode="AM" svg />
+              </MenuItem>
+
+              <MenuItem value = "es">Español &nbsp;
+              <ReactCountryFlag countryCode="ES" svg />
+              </MenuItem>
 
             </Select>
           </FormControl>
