@@ -145,6 +145,8 @@ const CashierGUI = () => {
     const extraMenu = async () => {
         try {
             const response = await fetch('https://project-3-6njq.onrender.com/getExtras', {
+            // const response = await fetch('http://localhost:5000/getExtras', {
+
                 method: 'POST',
                 body: JSON.stringify(),
                 headers: {
