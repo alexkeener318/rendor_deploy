@@ -145,6 +145,8 @@ const CashierGUI = () => {
     const extraMenu = async () => {
         try {
             const response = await fetch('https://project-3-6njq.onrender.com/getExtras', {
+            // const response = await fetch('http://localhost:5000/getExtras', {
+
                 method: 'POST',
                 body: JSON.stringify(),
                 headers: {
@@ -377,7 +379,7 @@ const CashierGUI = () => {
                             {managerButtons.map( elem => {
                                 return (
                                         <Link key = {elem.id} to={elem.linkName} style={{ textDecoration:"none" }}>
-                                            <Button style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "green", color: "white" }}><TranslatedText text = {elem.buttonName} key = {lang}/></Button>
+                                            <Button key = {elem.buttonName} style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "green", color: "white" }}><TranslatedText text = {elem.buttonName} key = {lang}/></Button>
                                         </Link>
                                     );
                                 })}
