@@ -12,7 +12,7 @@ const cors = require("cors");
 const path = require("path");
 const { json } = require('body-parser');
 app.use(cors());
-// app.use(express.static(path.join(__dirname + "/public")));
+app.use(express.static(path.join(__dirname + "/public")));
 
 const { generateRequestUrl, normaliseResponse } = require('google-translate-api-browser');
 const https = require('https');
