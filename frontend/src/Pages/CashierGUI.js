@@ -26,6 +26,11 @@ const managerButtonList = [
     {id: 3, buttonName: "Edit Menu", linkName: "/editMenu"}
 ]
 
+const employeeButtonList = [
+    {id: 1, buttonName: "Low Stock", linkName: "/lowstockgui"},
+    {id: 2, buttonName: "Update Inventory", linkName: "/updateinventory"},
+]
+
 var counter = 0;
 
 const CashierGUI = () => {
@@ -78,7 +83,8 @@ const CashierGUI = () => {
         }
 
         if (role === "Employee"){
-            setManagerButtons([...managerButtons].slice(0, managerButtons.length - 1))
+            //setManagerButtons([...managerButtons].slice(0, managerButtons.length - 1))
+            setManagerButtons([...employeeButtonList])
         }
 
         if (role == "Manager"){
