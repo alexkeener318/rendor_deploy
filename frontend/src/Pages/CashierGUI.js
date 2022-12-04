@@ -69,8 +69,6 @@ const CashierGUI = () => {
                     console.log(data.data)
                 })
         }
-        
-
 
     },[isAuthenticated])
 
@@ -88,8 +86,6 @@ const CashierGUI = () => {
         }
         
     },[role])
-
-    
 
     const bowlMenu = async () => {
         try {
