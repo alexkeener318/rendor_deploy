@@ -77,7 +77,7 @@ let allOrdered = [];
             tax += taxPrice;
             // calculate order total
             totalPrice += roundTotal(parseFloat(itemPrice) + parseFloat(taxPrice));
-            roundTotal(totalPrice);
+            totalPrice = roundTotal(totalPrice);
         });
     }
 
