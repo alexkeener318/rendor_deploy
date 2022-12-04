@@ -290,33 +290,10 @@ function roundTotal(num){
         if(hitDeci){
             numDigs++;
         }
-        // if(numDigs == 3){
-        //     if(parseInt(char) > 4){
-        //         big = true;
-        //     }
-        //     break;
-        // }
+        if(numDigs > 2){
+            break;
+        }
     }
-    // Rounds if necessary
-    // newNum = parseFloat(newNum);
-    // if(big){
-    //     num += 0.01;
-    //     newNum = "";
-    //     currNum = "";
-    //     currNum += num;
-    //     numDigs = 0;
-    //     hitDeci = false;
-    //     big = false;
-    //     for(let char of currNum){
-    //         newNum += char;
-    //         if(char == '.'){
-    //             hitDeci = true;
-    //         }
-    //         if(hitDeci){
-    //             numDigs++;
-    //         }
-    //     }
-    // }
     return parseFloat(newNum);
 }
 
