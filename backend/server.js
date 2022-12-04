@@ -190,12 +190,12 @@ function getName() {
 
 // adding new items to menu
 let itemID;
-//addMenu("tomato salad", 2.00, "Tomatoes,Dressing", "www.urmom.com");
+//addMenu("test", 2.00, "Tomatoes,Dressing", "www.urmom.com");
 async function addMenu(itemName, itemPrice, itemIngreds, url) {
     await getItemID()
     .then(()=>{
         // send in query
-        const query = "INSERT INTO menu VALUES(" +itemID + ",'" + itemName +"', " + itemPrice +", '" + itemIngreds + "');";
+        const query = "INSERT INTO menu VALUES(" +itemID + ",'" + itemName +"', " + itemPrice +", '" + itemIngreds + "', '" + url + "');";
         pool.query(query);
     })
     

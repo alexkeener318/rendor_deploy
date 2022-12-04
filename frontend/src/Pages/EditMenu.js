@@ -33,7 +33,7 @@ const EditMenu = () => {
         console.log("clicked");
         console.log(name);
         console.log(price);
-        console.log(ingredients);
+        console.log(photoURL);
         try {
             const response = await fetch('https://project-3-6njq.onrender.com/newItem', {
                 method: 'POST',

@@ -95,7 +95,8 @@ const CashierGUI = () => {
 
     const bowlMenu = async () => {
         try {
-            const response = await fetch('https://project-3-6njq.onrender.com/getBowls', {
+            // const response = await fetch('https://project-3-6njq.onrender.com/getBowls', {
+            const response = await fetch('http://localhost:5000/getBowls', {
                 method: 'POST',
                 body: JSON.stringify(),
                 headers: {
@@ -339,7 +340,7 @@ const CashierGUI = () => {
                 </Grid>
             </div>
             <div style = {{ display: "flex", minHeight: "30%", marginTop: "2.5%", marginBottom: "5%", paddingTop: "2.5%", paddingBottom: "2.5%", backgroundColor: "lightgrey" }}>
-                <div style = {{ minHeight: "90%", width: "45%", marginLeft: "2.5%", backgroundColor: "whitesmoke" }}>
+                <div style = {{ overflowY: "scroll", height: "300px", width: "45%", marginLeft: "2.5%", backgroundColor: "whitesmoke" }}>
                     <p style = {{ fontWeight: "bold", marginBottom: "1%", marginLeft: "1%", marginTop: "1%" }}>
                         
                         <TranslatedText text = {"Itemized Receipt"} key = {lang}/>
