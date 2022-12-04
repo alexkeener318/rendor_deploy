@@ -297,7 +297,7 @@ function roundTotal(num){
     //     }
     // }
     // return parseFloat(newNum);
-    return num;
+    return parseFloat(num);
 }
 
 async function updateInventory(orderItems){
