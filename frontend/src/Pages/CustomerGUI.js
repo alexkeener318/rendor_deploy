@@ -264,9 +264,6 @@ const CustomerGUI = () => {
                         </div>
                     </div>
                     
-                    {/* <Link to="/pinpad" style={{ textDecoration:"none" }}>
-                        <Button style = {{ maxHeight: "25%", width: "60%", marginTop: "2.5%", marginLeft: "20%", backgroundColor: "red", color: "white" }}><TranslatedText text = {"Sign In"} key = {lang}/></Button>
-                    </Link> */}
                 </div>
             </div>
 

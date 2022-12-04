@@ -41,7 +41,7 @@ const Inventory = ()=> {
   const lowStock = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/lowStock', {
+      const response = await fetch('https://project-3-6njq.onrender.com/lowStock', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

@@ -290,41 +290,32 @@ function roundTotal(num){
         if(hitDeci){
             numDigs++;
         }
-        if(numDigs == 3){
-            if(parseInt(char) > 4){
-                big = true;
-            }
-            break;
-        }
+        // if(numDigs == 3){
+        //     if(parseInt(char) > 4){
+        //         big = true;
+        //     }
+        //     break;
+        // }
     }
     // Rounds if necessary
-    newNum = parseFloat(newNum);
-    if(big){
-        num += 0.01;
-        newNum = "";
-        currNum = "";
-        currNum += num;
-        numDigs = 0;
-        hitDeci = false;
-        big = false;
-        for(let char of currNum){
-            newNum += char;
-            //console.log(newNum);
-            if(char == '.'){
-                hitDeci = true;
-                
-            }
-            if(hitDeci){
-                numDigs++;
-            }
-            if(numDigs==3){
-                break;
-            }
-        }
-    }
-    // if(numDigs==2){
-    //     newNum+='0';
-    //     console.log(newNum);
+    // newNum = parseFloat(newNum);
+    // if(big){
+    //     num += 0.01;
+    //     newNum = "";
+    //     currNum = "";
+    //     currNum += num;
+    //     numDigs = 0;
+    //     hitDeci = false;
+    //     big = false;
+    //     for(let char of currNum){
+    //         newNum += char;
+    //         if(char == '.'){
+    //             hitDeci = true;
+    //         }
+    //         if(hitDeci){
+    //             numDigs++;
+    //         }
+    //     }
     // }
     return parseFloat(newNum);
 }
@@ -807,7 +798,11 @@ async function excessReport(dateOne, dateTwo){
         })
         let percentage = numSold / (numSold + numLeft);
         if(percentage <= 0.10){
-            returnItems.push(invItems[i].name);
+            let object ={};
+            object.name = invItems[i].name;
+            object.quantity = numLeft;
+            object.sales = numSold;
+            returnItems.push(object);
         }
     }
     // return the list

@@ -48,7 +48,7 @@ const ExcessReport = () => {
     const [excessReportData, setExcessReportData] = useState([]);
 
     useEffect(() => {
-      axios.post("http://localhost:5000/excessReport", { dateOne: startDate, dateTwo:endDate})
+      axios.post("https://project-3-6njq.onrender.com/excessReport", { dateOne: startDate, dateTwo:endDate})
         .then(data => {
           setExcessReportData(data.data)
           console.log(data.data)
