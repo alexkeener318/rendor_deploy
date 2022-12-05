@@ -1,3 +1,7 @@
+/**
+* This class displays a map that shows the user where Pom & Honey is located
+* @author   David Asatryan
+*/
 // react
 import { useState, useEffect, useContext } from "react";
 
@@ -14,7 +18,6 @@ import translate, { setCORS } from "google-translate-api-browser";
 // contexts
 import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
-
 
 
 const Map = ()=> {

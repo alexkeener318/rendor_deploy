@@ -1,3 +1,7 @@
+/**
+* This class displays a table of all of the items that are currently low on stock
+* @author   Emily Ha
+*/
 // react
 import { useState, useEffect, useContext } from "react";
 

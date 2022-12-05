@@ -17,10 +17,8 @@ import ThreeColRow from "../Components/ThreeColRow";
 import { useContext, useEffect, useState } from "react";
 import axios from 'axios'
 
-
 // contexts
 import { LanguageContext } from '../contexts/language';
-
 
 const ExcessReport = () => {
     const [startDate, setStartDate] = useState("2022-09-20");
@@ -31,7 +29,6 @@ const ExcessReport = () => {
       axios.post("https://project-3-6njq.onrender.com/excessReport", { dateOne: startDate, dateTwo:endDate})
         .then(data => {
           setExcessReportData(data.data)
-          console.log(data.data)
         })
     },[startDate,endDate])
 

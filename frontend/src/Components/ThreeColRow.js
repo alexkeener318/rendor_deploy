@@ -1,9 +1,11 @@
-import { Button } from "@mui/material"
+/**
+* This component serves as a three column row, useful for creating tables
+* @author   David Asatryan
+*/
 import { useContext } from "react";
 import TranslatedText from "./TranslatedText";
 
 import { LanguageContext } from '../contexts/language';
-
 
 const ThreeColRow = (props) => {
     const {lang, setLang } = useContext(LanguageContext)

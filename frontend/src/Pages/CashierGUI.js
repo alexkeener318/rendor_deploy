@@ -40,7 +40,6 @@ var counter = 0;
 
 const CashierGUI = () => {
     
-   // const {user,setUser} = useContext(UserContext)
     const {lang, setLang} = useContext(LanguageContext)
 
     
@@ -75,7 +74,6 @@ const CashierGUI = () => {
             axios.post("https://project-3-6njq.onrender.com/employeeType", { pin:email })
                 .then(data => {
                     setRole(data.data.role)
-                    console.log(data.data)
                 })
         }
 
@@ -144,7 +142,6 @@ const CashierGUI = () => {
             }
         
             const result = await response.json();
-            console.log(result);
             setGyroList(result);
         } catch (err) {
         setResults(prevState => [])
@@ -379,7 +376,7 @@ const CashierGUI = () => {
                         return (
                             <div key = { elem.id } onClick = {() => removeItem(elem.id)}>
                                 <p style = {{ marginLeft: "1%" }}> 
-                                    { elem.name } 
+                                <TranslatedText text = {elem.name} key = {lang}/>
                                 </p>
                             </div>
                         )

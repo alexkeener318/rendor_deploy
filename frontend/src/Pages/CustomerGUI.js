@@ -332,7 +332,7 @@ const CustomerGUI = () => {
                         return (
                             <div key = { elem.id } onClick = {() => removeItem(elem.id)}>
                                 <p style = {{ marginLeft: "1%" }}> 
-                                    { elem.name } 
+                                    <TranslatedText text = {elem.name} key = {lang}/>
                                 </p>
                             </div>
                         )
