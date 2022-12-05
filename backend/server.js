@@ -189,6 +189,7 @@ let allOrdered = [];
     /**
     * This function returns a random integer between 0 and the integer passed in
     * @param {number} max an integer that holds the top of the range to determine a random integer
+    * @returns {number} a random integer between 0 and the integer passed in
     */
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -198,6 +199,7 @@ function getRandomInt(max) {
     * This function creates a random card number for use in an order
     * 
     * @param {number} cardlen an integer that holds the length of the card number to be returned
+    * @returns {string} random card number
     */
 function cardNumberGenerator(cardlen){
     cardNumber = "\'"
@@ -211,6 +213,7 @@ function cardNumberGenerator(cardlen){
 
     /**
     * This function makes a random customer name for the current order
+    * @returns {string} a random customer name
     */
 function getName() {
     let numFirst = getRandomInt(firstName.length)
@@ -345,6 +348,7 @@ async function checkStock(){
 * This function takes in a float and rounds it to two decimals
 * 
 * @param {number} item a float containing the number to be rounded
+* @returns {number} the rounded number
 */
 function roundTotal(num){
     num = parseFloat(num).toFixed(2);
@@ -395,6 +399,7 @@ async function updateInventory(orderItems){
 /**
 * This function access' the database and returns the current menu items that fit into
 * the bowl category
+* @returns {string[]} array of menu items that are bowls
 */
 async function bowlContent(){
     let item;
@@ -416,6 +421,7 @@ async function bowlContent(){
 /**
 * This function access' the database and returns the current menu items that fit into
 * the gyro category
+* @returns {string[]} array of menu items that are gyros
 */
 async function gyrosContent(){
     let item;
@@ -437,6 +443,7 @@ async function gyrosContent(){
 /**
 * This function access' the database and returns the current menu items that fit into
 * the drinks category
+* @returns {string[]} array of menu items that are drinks
 */
 function drinksContent(){
     let drink1={}; //water bottle
@@ -453,6 +460,7 @@ function drinksContent(){
 /**
 * This function access' the database and returns the current menu items that weren't in any of the previously
 * mentioned categories.
+* @returns {string[]} array of menu items that are extras
 */
 async function extrasContent(){
     //extras=["2 Meatballs", "2 Falafels", "Fries", "Garlic Fries", "Hummus & Pita", "Extra Dressing", "Extra Hummus", "Extra Protein", "Pita Bread"];
@@ -480,6 +488,7 @@ async function extrasContent(){
 * 
 * @param {string} date1 a string containing the first date of the date range
 * @param {string} date2 a string containing the second date of the date range
+* @returns {string[]} array of order items
 */
 async function reportContent(date1, date2){ //params are item name the first date and the second date all strings
     quantity_str="";
@@ -501,6 +510,7 @@ async function reportContent(date1, date2){ //params are item name the first dat
 * 
 * @param {string} date1 a string containing the first date of the date range
 * @param {string} date2 a string containing the second date of the date range
+* @returns {string[]} array of pairs
 */
 async function popCombos(date1, date2) {
     let keyList = [];
@@ -566,6 +576,7 @@ async function popCombos(date1, date2) {
 }
 /**
     * This function gets all the ingredients from inventory in id order
+    * @returns {string[]} array of ingredients
     */
 async function getInventory(){
     query_str = "SELECT * FROM ingredients ORDER BY ingredient_id;";
@@ -581,7 +592,7 @@ async function getInventory(){
 
 /**
     * This function gets all the menu items in id order
-    *
+    * @returns {string[]} array of menu items
     */
 async function getMenu(){
     query_str = "SELECT * FROM menu ORDER BY item_id;";
@@ -600,6 +611,7 @@ async function getMenu(){
     * this is used to differentiate employees, customers, and managers
     *
     * @param {string} email the string representing the email of the person logging in
+    * @returns {Object} person object
     */
 async function employeeType(email){
     let person ={};
@@ -631,6 +643,7 @@ async function employeeType(email){
     *
     * @param {string} date1 the string that holds the first date to take the data from
     * @param {string} date2 the string that holds the ending date to take the data from
+    * @returns {Object} statistics object
     */
 async function statisticsTable(date1, date2){
     let stats={};
@@ -674,6 +687,7 @@ async function statisticsTable(date1, date2){
     *
     * @param {string} date1 the string that holds the first date to take the data from
     * @param {string} date2 the string that holds the ending date to take the data from
+    * @returns {string[]} array of receipts
     */
 async function statisticsGraph(date1,date2){
     query_str = "SELECT * FROM receipts where timestamp between '"+date1+" "+"00:00:00' and '"+date2+" "+"00:00:00'";
@@ -728,6 +742,7 @@ async function updateToppings(toppings){
     *
     * @param {string} dateOne the string that holds the first date to take the data from
     * @param {string} dateTwo the string that holds the ending date to take the data from
+    * @returns {Object} excess report object
     */
 async function excessReport(dateOne, dateTwo){
     // get a list of all the menu items
