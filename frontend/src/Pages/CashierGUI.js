@@ -1,3 +1,10 @@
+/**
+* This class holds all the functions needed for the cashier GUI to communicate
+* with the backend 
+* @author   David Asatryan
+* @author   Emily Ha
+* @author   Sry Hak
+*/
 // react
 import { useContext, useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
@@ -10,16 +17,13 @@ import axios from 'axios'
 
 // components
 import TranslatedText from "../Components/TranslatedText";
-import LanguagePicker from "../Components/LanguagePicker";
 import Header from "../Components/Header";
 
 // pages
 
 // contexts
-import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
 import ReactCountryFlag from "react-country-flag";
-
 
 const managerButtonList = [
     {id: 1, buttonName: "Statistics", linkName: "/statistics"},
@@ -53,7 +57,6 @@ const CashierGUI = () => {
     const { logout } = useAuth0() 
     const [ role, setRole ] = useState('Employee')
 
-    // TODO: IMPLEMENT LOGIC FOR SERVER VS MANAGER
     const [managerButtons, setManagerButtons] = useState([...managerButtonList])
 
     const { isAuthenticated } = useAuth0()
@@ -119,7 +122,6 @@ const CashierGUI = () => {
         setResults([])
             setErr(err.message);
         }
-        // setResults([...bowlList]);
     }
 
     /**
@@ -148,7 +150,6 @@ const CashierGUI = () => {
         setResults(prevState => [])
             setErr(err.message);
         }
-        // setResults([...gyroList]);
     }
 
     /**
@@ -179,7 +180,6 @@ const CashierGUI = () => {
         setResults(prevState => [])
             setErr(err.message);
         }
-        // setResults([...extraList]);
     }
 
     /**
@@ -208,7 +208,6 @@ const CashierGUI = () => {
         setResults([])
             setErr(err.message);
         }
-        //setResults([...drinkList]);
     }
 
     /**
@@ -302,7 +301,7 @@ const CashierGUI = () => {
 
     /**
     * Removes a specified item from the itemized receipt
-    * @param {int} id       contains the id of the item to be removed
+    * @param {number} id       contains the id of the item to be removed
     */
     const removeItem = async (id) => {
         const newReceipt = receipt.filter(
@@ -364,10 +363,7 @@ const CashierGUI = () => {
                                     <TranslatedText text = {elem.name} key = {lang + elem.url}/>
                                 </CardContent>
                             </Card>
-                            {/* <Button key = {elem.url} onClick = {event => handleClick(elem.itemName)} style = {{ backgroundColor: "blue", color: "white", width: "100%", height: "100%", backgroundSize: "160%",backgroundImage: elem.url, backgroundPosition:"top center" }}>
-                                <TranslatedText text = {elem} key = {lang}/>
-                            </Button> */}
-                            {/* <Button onClick = {event => handleClick(elem.itemName)} style = {{ backgroundColor: "blue", color: "white", width: "100%", height: "100%" }}>{elem.itemName}</Button> */}
+            
                         </Grid>
                         );
                     })}
@@ -394,10 +390,6 @@ const CashierGUI = () => {
                         <TranslatedText text = {"Total"} key = {lang}/>
                         : $ { total }
                     </div>
-                    {/* <div style = {{ height: "20%", width: "100%", marginTop: "20%", backgroundColor: "whitesmoke" }} >
-                        <TranslatedText text = {"Employee ID"} key = {lang}/>
-                        : {(user.id ?? 'w')}
-                    </div> */}
                     <div style = {{ height: "20%", width: "100%", backgroundColor: "whitesmoke" , paddingBottom:20}} >
                         <TranslatedText text = {"Employee Name"} key = {lang}/>
                         : {( user?.name ?? 'w')}

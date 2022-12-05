@@ -1,39 +1,21 @@
+/**
+* This class creates the UI that reports to the user items that are commonly 
+* purchased together
+* @author   Sry Hak
+*/
 // react
 import { useState, useContext, useEffect } from "react";
 
 // external imports
 import axios from 'axios'
 import { TextField } from "@mui/material";
-import { DataGrid } from '@mui/x-data-grid';
-import { createTheme, ThemeProvider } from "@mui/material";
 
 // components
 import Header from "../Components/Header"
-import FiveColRow from "../Components/FiveColRow";
 import ThreeColRow from "../Components/ThreeColRow";
-import TranslatedText from "../Components/TranslatedText";
-
-// pages
 
 // contexts
-import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
-
-
-
-const rows = [
-  {id: 1, item: "Butter Chicken",  quantity:"French Fries", price: "30"},
-  {id: 2, item: "Butter Chicken",  quantity:"French Fries", price: "30"},
-  {id: 3, item: "Butter Chicken",  quantity:"French Fries", price: "30"},
-  {id: 4, item: "Butter Chicken",  quantity:"French Fries", price: "30"},
-  {id: 5, item: "Butter Chicken",  quantity:"French Fries", price: "30"},
-  {id: 6, item: "Butter Chicken",  quantity:"French Fries", price: "30"},
-  {id: 7, item: "Butter Chicken",  quantity:"French Fries", price: "30"},
-  {id: 8, item: "Butter Chicken",  quantity:"French Fries", price: "30"},
-  {id: 9, item: "Butter Chicken",  quantity:"French Fries", price: "30"},
-  {id: 10, item: "Butter Chicken",  quantity:"French Fries", price: "30"},
-]
-
 
 
 const PopularCombos = ()=> {
@@ -91,7 +73,6 @@ const PopularCombos = ()=> {
             />
           </div>
 
-          {/* Start table here */}
           <div style={{height:"500px", overflowY:"scroll", border:"solid", borderWidth:2, borderColor:"blue", backgroundColor:"blue", marginTop:20}}>
 
             <div style={{borderBottom:'solid white 3px', position:"sticky",  top:0}}>

@@ -1,3 +1,10 @@
+/**
+* This class holds all the functions needed for the customer GUI to communicate
+* with the backend 
+* @author   David Asatryan
+* @author   Emily Ha
+* @author   Sry Hak
+*/
 // react
 import { Link, useNavigate } from "react-router-dom";
 import React, { createContext, useContext, useState, useEffect } from "react";
@@ -8,50 +15,11 @@ import { Grid } from '@mui/material';
 import { useAuth0 } from "@auth0/auth0-react";
 
 // components
-import LanguagePicker from "../Components/LanguagePicker";
 import TranslatedText from "../Components/TranslatedText";
 import Header from "../Components/Header";
 
-// pages
-import Checkout from './Checkout'
-
 // contexts
-import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
-
-
-
-// const bowlList = [
-//     {id: 1, itemName: "Butter Chicken Bowl", url:`url("https://www.shutterstock.com/image-photo/chicken-over-rice-new-york-600w-2214082787.jpg")`},
-//     {id: 2, itemName: "Lemon Chicken Bowl", url:`url("https://www.shutterstock.com/image-photo/mediterranean-chicken-shawarma-rice-bowl-600w-1198272178.jpg")`},
-//     {id: 3, itemName: "Veggie Bowl", url:`url("https://www.shutterstock.com/image-photo/healthy-quinoa-bowl-duck-avocado-600w-1934068175.jpg")`},
-//     {id: 4, itemName: "Seasoned Meat Bowl", url: `url("https://www.shutterstock.com/image-photo/halal-food-gyro-chicken-platter-600w-1108805390.jpg")`},
-//     {id: 5, itemName: "Meatball Bowl", url:`url("https://www.shutterstock.com/image-photo/baked-quinoa-meatballs-vegetable-salad-600w-543170401.jpg")`}
-// ]
-
-// const gyroList = [
-//     {id: 1, itemName: "Seasoned Meat Gyro", url:`url("https://www.shutterstock.com/image-photo/greek-lamb-meat-gyros-tzatziki-600w-650180254.jpg")`},
-//     {id: 2, itemName: "Lemon Chicken Gyro", url:`url("https://www.shutterstock.com/image-photo/greek-gyros-wrapped-pita-breads-600w-625236380.jpg")`},
-//     {id: 3, itemName: "Veggie Gyro", url:`url("https://www.shutterstock.com/image-photo/pita-roasted-chicken-vegetables-cucumber-600w-2020615118.jpg")`},
-//     {id: 4, itemName: "Meatball Gyro", url:`url("https://www.shutterstock.com/image-photo/meatballs-cabbage-pita-bread-on-600w-1737029006.jpg")`},
-// ]
-
-// const extraList = [
-//     {id: 1, itemName: "Hummus & Pita", url:`url("https://www.shutterstock.com/image-photo/hummus-plate-pita-bread-middle-600w-1737528299.jpg")`},
-//     {id: 2, itemName: "Pita Bread", url:`url("https://www.shutterstock.com/image-photo/pita-bread-on-wooden-board-600w-257018629.jpg")`},
-//     {id: 3, itemName: "2 Falafels", url:`url("https://www.shutterstock.com/image-photo/falafel-sandwich-on-black-background-600w-1544891525.jpg")`},
-//     {id: 4, itemName: "2 Meatballs", url:`url("https://www.shutterstock.com/image-photo/baked-homemade-meatballs-isolated-on-600w-1800790381.jpg")`},
-//     {id: 5, itemName: "Fries", url:`url("https://www.shutterstock.com/image-photo/french-fries-600w-510881971.jpg")`},
-//     {id: 6, itemName: "Garlic Fries", url:`url("https://www.shutterstock.com/image-photo/garlic-parsley-french-fries-ketchup-600w-163845740.jpg")`},
-//     {id: 7, itemName: "Extra Dressing", url:`url("https://www.shutterstock.com/image-photo/variety-homemade-sauces-salad-dressings-600w-571747333.jpg")`},
-//     {id: 8, itemName: "Extra Hummus", url:`url("https://www.shutterstock.com/image-photo/hummus-olive-oil-paprika-lemon-600w-1412942363.jpg")`},
-//     {id: 9, itemName: "Extra Protein", url:`url("https://www.shutterstock.com/image-photo/partially-sliced-grilled-chicken-breast-600w-504699331.jpg")`},
-// ]
-
-// const drinkList = [
-//     {id: 1, itemName: "Bottled Water", url:`url("https://www.shutterstock.com/image-photo/plastic-water-bottle-big-small-600w-1907885707.jpg")`},
-//     {id: 2, itemName: "Fountain Drinks", url:`url("https://www.shutterstock.com/image-photo/soda-fountain-cup-isolated-on-600w-445209874.jpg")`},
-// ]
 
 var counter = 0;
 
@@ -106,7 +74,6 @@ const CustomerGUI = () => {
         setResults([])
             setErr(err.message);
         }
-        // setResults([...bowlList]);
     }
 
     /**
@@ -135,7 +102,6 @@ const CustomerGUI = () => {
         setResults(prevState => [])
             setErr(err.message);
         }
-        // setResults([...gyroList]);
     }
 
     /**
@@ -166,7 +132,6 @@ const CustomerGUI = () => {
         setResults(prevState => [])
             setErr(err.message);
         }
-        // setResults([...extraList]);
     }
 
     /**
@@ -195,7 +160,6 @@ const CustomerGUI = () => {
         setResults([])
             setErr(err.message);
         }
-        //setResults([...drinkList]);
     }
 
      /**
@@ -274,7 +238,7 @@ const CustomerGUI = () => {
 
     /**
     * Removes a specified item from the itemized receipt
-    * @param {int} id       contains the id of the item to be removed
+    * @param {number} id       contains the id of the item to be removed
     */
     const removeItem = async (id) => {
         const newReceipt = receipt.filter(
