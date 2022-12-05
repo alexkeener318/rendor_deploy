@@ -84,7 +84,6 @@ const CashierGUI = () => {
         }
 
         if (role === "Employee"){
-            //setManagerButtons([...managerButtons].slice(0, managerButtons.length - 1))
             setManagerButtons([...employeeButtonList])
         }
 
@@ -94,6 +93,10 @@ const CashierGUI = () => {
         
     },[role])
 
+    /**
+    * Retrieves the list of bowl menu items from the database
+    * uses this information to populate the Bowl tab for the menu 
+    */
     const bowlMenu = async () => {
         try {
             const response = await fetch('https://project-3-6njq.onrender.com/getBowls', {
@@ -119,6 +122,10 @@ const CashierGUI = () => {
         // setResults([...bowlList]);
     }
 
+    /**
+    * Retrieves the list of gyro menu items from the database
+    * uses this information to populate the Gyro tab for the menu 
+    */
     const gyroMenu = async () => {
         try {
             const response = await fetch('https://project-3-6njq.onrender.com/getGyros', {
@@ -143,6 +150,11 @@ const CashierGUI = () => {
         }
         // setResults([...gyroList]);
     }
+
+    /**
+    * Retrieves the list of extra menu items from the database
+    * uses this information to populate the Extra tab for the menu 
+    */
     const extraMenu = async () => {
         try {
             const response = await fetch('https://project-3-6njq.onrender.com/getExtras', {
@@ -170,6 +182,10 @@ const CashierGUI = () => {
         // setResults([...extraList]);
     }
 
+    /**
+    * Retrieves the list of drink menu items from the database
+    * uses this information to populate the Drink tab for the menu 
+    */
     const drinkMenu = async () => {
         try {
             const response = await fetch('https://project-3-6njq.onrender.com/getDrinks', {
@@ -195,6 +211,10 @@ const CashierGUI = () => {
         //setResults([...drinkList]);
     }
 
+    /**
+    * Takes the menu item selected by the user and adds it to the itemized receipt
+    * @param {string} item       the string of the menu item that was clicked by the user
+    */
     const handleClick = async (item) => {
         setReceipt([...receipt,{id:counter, name:item}]);
         counter++;
@@ -223,6 +243,11 @@ const CashierGUI = () => {
         }
     };
 
+    /**
+    * Checkouts customer order and sends order including items ordered, payment type, and employee to the database 
+    * @param {string} payment       the string that holds the current employee name
+    * @param {string} employeeName   the string that holds the current employee id
+    */
     const handleCheckout = async (payment, employeeName) => {
         setIsLoading(true);
         emptyReceipt()
@@ -267,11 +292,18 @@ const CashierGUI = () => {
         setResults([...drinkList]);
     },[drinkList])
 
+    /**
+    * Clears the itemized receipt
+    */
     const emptyReceipt = () => {
         setReceipt([]);
         counter = 0;
     };
 
+    /**
+    * Removes a specified item from the itemized receipt
+    * @param {int} id       contains the id of the item to be removed
+    */
     const removeItem = async (id) => {
         const newReceipt = receipt.filter(
             (receipt) => receipt.id !== id

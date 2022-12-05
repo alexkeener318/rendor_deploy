@@ -29,6 +29,13 @@ const EditMenu = () => {
     const [err, setErr] = useState('');
 
 
+    /**
+    * Sends information about new item to the backend so that it can be added to the database
+    * @param {string} name       contains the name of the new item
+    * @param {float} price       contains the price of the new item
+    * @param {string} ingredients       contains the list of ingredients for the new item
+    * @param {string} photoURL       contains the URL to the photo representing the new item
+    */
     const addNewItem = async (name, price, ingredients, photoURL) => {
         console.log("clicked");
         console.log(name);
@@ -55,6 +62,10 @@ const EditMenu = () => {
         }
     }
 
+    /**
+    * Removes a specified item from the database
+    * @param {string} name       contains the name of the item to be removed from the database
+    */
     const deleteItem = async (name) => {
         console.log("clicked");
         try {
@@ -78,6 +89,11 @@ const EditMenu = () => {
         }
     }
 
+    /**
+    * Changes the price of the specified item
+    * @param {string} itemName       contains the name of the item that is to be changed
+    * @param {float} newPrice       contains the price of the new item
+    */
     const changePrice = async (itemName, newPrice) => {
         console.log("clicked");
         try {

@@ -28,7 +28,7 @@ const columns = [
     {field: 'sales', headerName: 'Sales', flex: 1}
   ]
   
-  const rows = [
+const rows = [
     {id:1, item: "Butter Chicken", quantity: 20, sales: 30},
     {id:2, item: "Butter Chicken", quantity: 20, sales: 30},
     {id:3, item: "Butter Chicken", quantity: 20, sales: 30},

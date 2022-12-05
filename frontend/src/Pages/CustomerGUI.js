@@ -21,46 +21,37 @@ import { LanguageContext } from '../contexts/language';
 
 
 
-const bowlList = [
-    {id: 1, itemName: "Butter Chicken Bowl", url:`url("https://www.shutterstock.com/image-photo/chicken-over-rice-new-york-600w-2214082787.jpg")`},
-    {id: 2, itemName: "Lemon Chicken Bowl", url:`url("https://www.shutterstock.com/image-photo/mediterranean-chicken-shawarma-rice-bowl-600w-1198272178.jpg")`},
-    {id: 3, itemName: "Veggie Bowl", url:`url("https://www.shutterstock.com/image-photo/healthy-quinoa-bowl-duck-avocado-600w-1934068175.jpg")`},
-    {id: 4, itemName: "Seasoned Meat Bowl", url: `url("https://www.shutterstock.com/image-photo/halal-food-gyro-chicken-platter-600w-1108805390.jpg")`},
-    {id: 5, itemName: "Meatball Bowl", url:`url("https://www.shutterstock.com/image-photo/baked-quinoa-meatballs-vegetable-salad-600w-543170401.jpg")`}
-]
+// const bowlList = [
+//     {id: 1, itemName: "Butter Chicken Bowl", url:`url("https://www.shutterstock.com/image-photo/chicken-over-rice-new-york-600w-2214082787.jpg")`},
+//     {id: 2, itemName: "Lemon Chicken Bowl", url:`url("https://www.shutterstock.com/image-photo/mediterranean-chicken-shawarma-rice-bowl-600w-1198272178.jpg")`},
+//     {id: 3, itemName: "Veggie Bowl", url:`url("https://www.shutterstock.com/image-photo/healthy-quinoa-bowl-duck-avocado-600w-1934068175.jpg")`},
+//     {id: 4, itemName: "Seasoned Meat Bowl", url: `url("https://www.shutterstock.com/image-photo/halal-food-gyro-chicken-platter-600w-1108805390.jpg")`},
+//     {id: 5, itemName: "Meatball Bowl", url:`url("https://www.shutterstock.com/image-photo/baked-quinoa-meatballs-vegetable-salad-600w-543170401.jpg")`}
+// ]
 
-const gyroList = [
-    {id: 1, itemName: "Seasoned Meat Gyro", url:`url("https://www.shutterstock.com/image-photo/greek-lamb-meat-gyros-tzatziki-600w-650180254.jpg")`},
-    {id: 2, itemName: "Lemon Chicken Gyro", url:`url("https://www.shutterstock.com/image-photo/greek-gyros-wrapped-pita-breads-600w-625236380.jpg")`},
-    {id: 3, itemName: "Veggie Gyro", url:`url("https://www.shutterstock.com/image-photo/pita-roasted-chicken-vegetables-cucumber-600w-2020615118.jpg")`},
-    {id: 4, itemName: "Meatball Gyro", url:`url("https://www.shutterstock.com/image-photo/meatballs-cabbage-pita-bread-on-600w-1737029006.jpg")`},
-]
+// const gyroList = [
+//     {id: 1, itemName: "Seasoned Meat Gyro", url:`url("https://www.shutterstock.com/image-photo/greek-lamb-meat-gyros-tzatziki-600w-650180254.jpg")`},
+//     {id: 2, itemName: "Lemon Chicken Gyro", url:`url("https://www.shutterstock.com/image-photo/greek-gyros-wrapped-pita-breads-600w-625236380.jpg")`},
+//     {id: 3, itemName: "Veggie Gyro", url:`url("https://www.shutterstock.com/image-photo/pita-roasted-chicken-vegetables-cucumber-600w-2020615118.jpg")`},
+//     {id: 4, itemName: "Meatball Gyro", url:`url("https://www.shutterstock.com/image-photo/meatballs-cabbage-pita-bread-on-600w-1737029006.jpg")`},
+// ]
 
-const extraList = [
-    {id: 1, itemName: "Hummus & Pita", url:`url("https://www.shutterstock.com/image-photo/hummus-plate-pita-bread-middle-600w-1737528299.jpg")`},
-    {id: 2, itemName: "Pita Bread", url:`url("https://www.shutterstock.com/image-photo/pita-bread-on-wooden-board-600w-257018629.jpg")`},
-    {id: 3, itemName: "2 Falafels", url:`url("https://www.shutterstock.com/image-photo/falafel-sandwich-on-black-background-600w-1544891525.jpg")`},
-    {id: 4, itemName: "2 Meatballs", url:`url("https://www.shutterstock.com/image-photo/baked-homemade-meatballs-isolated-on-600w-1800790381.jpg")`},
-    {id: 5, itemName: "Fries", url:`url("https://www.shutterstock.com/image-photo/french-fries-600w-510881971.jpg")`},
-    {id: 6, itemName: "Garlic Fries", url:`url("https://www.shutterstock.com/image-photo/garlic-parsley-french-fries-ketchup-600w-163845740.jpg")`},
-    {id: 7, itemName: "Extra Dressing", url:`url("https://www.shutterstock.com/image-photo/variety-homemade-sauces-salad-dressings-600w-571747333.jpg")`},
-    {id: 8, itemName: "Extra Hummus", url:`url("https://www.shutterstock.com/image-photo/hummus-olive-oil-paprika-lemon-600w-1412942363.jpg")`},
-    {id: 9, itemName: "Extra Protein", url:`url("https://www.shutterstock.com/image-photo/partially-sliced-grilled-chicken-breast-600w-504699331.jpg")`},
-]
+// const extraList = [
+//     {id: 1, itemName: "Hummus & Pita", url:`url("https://www.shutterstock.com/image-photo/hummus-plate-pita-bread-middle-600w-1737528299.jpg")`},
+//     {id: 2, itemName: "Pita Bread", url:`url("https://www.shutterstock.com/image-photo/pita-bread-on-wooden-board-600w-257018629.jpg")`},
+//     {id: 3, itemName: "2 Falafels", url:`url("https://www.shutterstock.com/image-photo/falafel-sandwich-on-black-background-600w-1544891525.jpg")`},
+//     {id: 4, itemName: "2 Meatballs", url:`url("https://www.shutterstock.com/image-photo/baked-homemade-meatballs-isolated-on-600w-1800790381.jpg")`},
+//     {id: 5, itemName: "Fries", url:`url("https://www.shutterstock.com/image-photo/french-fries-600w-510881971.jpg")`},
+//     {id: 6, itemName: "Garlic Fries", url:`url("https://www.shutterstock.com/image-photo/garlic-parsley-french-fries-ketchup-600w-163845740.jpg")`},
+//     {id: 7, itemName: "Extra Dressing", url:`url("https://www.shutterstock.com/image-photo/variety-homemade-sauces-salad-dressings-600w-571747333.jpg")`},
+//     {id: 8, itemName: "Extra Hummus", url:`url("https://www.shutterstock.com/image-photo/hummus-olive-oil-paprika-lemon-600w-1412942363.jpg")`},
+//     {id: 9, itemName: "Extra Protein", url:`url("https://www.shutterstock.com/image-photo/partially-sliced-grilled-chicken-breast-600w-504699331.jpg")`},
+// ]
 
-const drinkList = [
-    {id: 1, itemName: "Bottled Water", url:`url("https://www.shutterstock.com/image-photo/plastic-water-bottle-big-small-600w-1907885707.jpg")`},
-    {id: 2, itemName: "Fountain Drinks", url:`url("https://www.shutterstock.com/image-photo/soda-fountain-cup-isolated-on-600w-445209874.jpg")`},
-]
-
-
-function extraMenu() {
-    console.log("extra button clicked");
-}
-
-function drinkMenu() {
-    console.log("drink button clicked");
-}
+// const drinkList = [
+//     {id: 1, itemName: "Bottled Water", url:`url("https://www.shutterstock.com/image-photo/plastic-water-bottle-big-small-600w-1907885707.jpg")`},
+//     {id: 2, itemName: "Fountain Drinks", url:`url("https://www.shutterstock.com/image-photo/soda-fountain-cup-isolated-on-600w-445209874.jpg")`},
+// ]
 
 var counter = 0;
 
@@ -69,8 +60,11 @@ export const globalTotal = React.createContext()
 const CustomerGUI = () => {
     const {lang, setLang} = useContext(LanguageContext)
 
-
-    const [results, setResults] = useState([...bowlList])
+    const [bowlList, setBowlList] = useState([]);
+    const [gyroList, setGyroList] = useState([]);
+    const [extraList, setExtraList] = useState([]);
+    const [drinkList, setDrinkList] = useState([]);
+    const [results, setResults] = useState([])
     const [receipt, setReceipt] = useState([])
     const [total, setTotal] = useState(0)
     const [isLoading, setIsLoading] = useState(false);
@@ -86,22 +80,128 @@ const CustomerGUI = () => {
         }
     },[isAuthenticated])
 
-    function bowlMenu() {
-        setResults([...bowlList]);
+    /**
+    * Retrieves the list of bowl menu items from the database
+    * uses this information to populate the Bowl tab for the menu 
+    */
+     const bowlMenu = async () => {
+        try {
+            const response = await fetch('https://project-3-6njq.onrender.com/getBowls', {
+                method: 'POST',
+                body: JSON.stringify(),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+        
+            const result = await response.json();
+            console.log(result);
+            setBowlList(result);
+        } catch (err) {
+        setResults([])
+            setErr(err.message);
+        }
+        // setResults([...bowlList]);
     }
 
-    function gyroMenu() {
-        setResults([...gyroList]);
+    /**
+    * Retrieves the list of gyro menu items from the database
+    * uses this information to populate the Gyro tab for the menu 
+    */
+    const gyroMenu = async () => {
+        try {
+            const response = await fetch('https://project-3-6njq.onrender.com/getGyros', {
+                method: 'POST',
+                body: JSON.stringify(),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+        
+            const result = await response.json();
+            console.log(result);
+            setGyroList(result);
+        } catch (err) {
+        setResults(prevState => [])
+            setErr(err.message);
+        }
+        // setResults([...gyroList]);
     }
 
-    function extraMenu() {
-        setResults([...extraList]);
+    /**
+    * Retrieves the list of extra menu items from the database
+    * uses this information to populate the Extra tab for the menu 
+    */
+    const extraMenu = async () => {
+        try {
+            const response = await fetch('https://project-3-6njq.onrender.com/getExtras', {
+            // const response = await fetch('http://localhost:5000/getExtras', {
+
+                method: 'POST',
+                body: JSON.stringify(),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+        
+            const result = await response.json();
+            console.log(result);
+            setExtraList(result);
+        } catch (err) {
+        setResults(prevState => [])
+            setErr(err.message);
+        }
+        // setResults([...extraList]);
     }
 
-    function drinkMenu() {
-        setResults([...drinkList]);
+    /**
+    * Retrieves the list of drink menu items from the database
+    * uses this information to populate the Drink tab for the menu 
+    */
+    const drinkMenu = async () => {
+        try {
+            const response = await fetch('https://project-3-6njq.onrender.com/getDrinks', {
+                method: 'POST',
+                body: JSON.stringify(),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+        
+            const result = await response.json();
+            console.log(result);
+            setDrinkList(result);
+        } catch (err) {
+        setResults([])
+            setErr(err.message);
+        }
+        //setResults([...drinkList]);
     }
 
+     /**
+    * Takes the menu item selected by the user and adds it to the itemized receipt
+    * @param {string} item     the string of the menu item that was clicked by the user
+    */
     const handleClick = async (item) => {
         setReceipt([...receipt,{id:counter, name:item}]);
         counter++;
@@ -131,6 +231,11 @@ const CustomerGUI = () => {
         }
     };
 
+    /**
+    * Checkouts customer order and sends order including items ordered, payment type, and employee to the database 
+    * @param {string} payment       the string that holds the current employee name
+    * @param {string} employeeName   the string that holds the current employee id
+    */
     const handleCheckout = async (payment, employeeName) => {
         setIsLoading(true);
         emptyReceipt()
@@ -159,11 +264,18 @@ const CustomerGUI = () => {
         }
     };
 
+    /**
+    * Clears the itemized receipt
+    */
     const emptyReceipt = () => {
         setReceipt([]);
         counter = 0;
     };
 
+    /**
+    * Removes a specified item from the itemized receipt
+    * @param {int} id       contains the id of the item to be removed
+    */
     const removeItem = async (id) => {
         const newReceipt = receipt.filter(
             (receipt) => receipt.id !== id
@@ -195,6 +307,22 @@ const CustomerGUI = () => {
         }
     };
 
+    useEffect(() => {
+        setResults([...bowlList]);
+    },[bowlList])
+
+    useEffect(() => {
+        setResults([...gyroList]);
+    },[gyroList])
+
+    useEffect(() => {
+        setResults([...extraList]);
+    },[extraList])
+
+    useEffect(() => {
+        setResults([...drinkList]);
+    },[drinkList])
+
     return (
         <div style = {{ width: "90%", height: "100%", marginLeft: "5%" }}>
             <Header title = "Pom & Honey" path = "none"/>
@@ -213,24 +341,19 @@ const CustomerGUI = () => {
             </div>
             <div style = {{ minHeight: "80%", marginTop: "2.5%", padding: "2.5%", backgroundColor: "lightgrey" }}>
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} style={{ height: "100%" }}>
-                {results.map( elem => {
+                {results.length!==0 && results.map( elem => {
                      return (
                         <Grid  item xs = {3}  style = {{height:"40vh"}}>
-                            
-                            {/* menu item goes here */}
-                            <Card  className = "hoverCard" key = {elem.id} onClick = {event => handleClick(elem.itemName)} >
+                            <Card  className = "hoverCard" key = {elem.url} onClick = {event => handleClick(elem.name)} >
                                 <CardMedia
+                                    key = {elem.url}
                                     component = {"img"}
-                                    style ={{height:"75%",backgroundImage: elem.url, backgroundPosition:"top center", backgroundSize:"120%" }}
+                                    style ={{height:"75%",backgroundImage: ("url(\"" + elem.url + "\")"), backgroundPosition:"top center", backgroundSize:"120%" }}
                                 /> 
                                 <CardContent style={{textAlign:"center", height:"25%"}}>
-                                    <TranslatedText text = {elem.itemName} key = {lang + elem.url}/>
+                                    <TranslatedText text = {elem.name} key = {lang + elem.url}/>
                                 </CardContent>
                             </Card>
-                            {/* <Button key = {elem.url} onClick = {event => handleClick(elem.itemName)} style = {{ backgroundColor: "blue", color: "white", width: "100%", height: "100%", backgroundSize: "160%",backgroundImage: elem.url, backgroundPosition:"top center" }}>
-                                <TranslatedText text = {elem.itemName} key = {lang}/>
-                            </Button> */}
-                            {/* <Button onClick = {event => handleClick(elem.itemName)} style = {{ backgroundColor: "blue", color: "white", width: "100%", height: "100%" }}>{elem.itemName}</Button> */}
                         </Grid>
                         );
                     })}
