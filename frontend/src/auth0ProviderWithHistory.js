@@ -14,6 +14,10 @@ const Auth0ProviderWithHistory = ({ children }) => {
         console.log(clientId)
     },[])
 
+    /**
+    * Redirects the user to a callback link provided by the auth0 API
+    * @param {Object} appstate an object provided by auth0 which contains the callback link
+    */
     const onRedirectCallback = (appstate) => {
         navigate(appstate?.returnTo || window.location.pathname)
     }

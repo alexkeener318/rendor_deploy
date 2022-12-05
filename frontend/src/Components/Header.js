@@ -26,10 +26,12 @@ const AuthNav = () => {
 const Header = (props) => {
   const {lang,setLang} = useContext(LanguageContext)
 
-
+    /**
+    * Changes the language of the website
+    * @param {Object} event contains the event that occured when a different language is chosen
+    */
     const changeLanguage = (event) =>{
       setLang(event.target.value)
-      console.log("lang is", lang)
     }
 
     return (
@@ -58,11 +60,8 @@ const Header = (props) => {
           
           <div style={{display:"flex", alignItems:"center"}}>
             <AuthNav/>
-          </div>
-
-            
+          </div>   
         </div>
-
         <hr/>
       </div>
     );

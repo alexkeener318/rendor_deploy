@@ -4,7 +4,6 @@ import TranslatedText from "./TranslatedText";
 
 import { LanguageContext } from '../contexts/language';
 
-
 const ThreeColRow = (props) => {
     const {lang, setLang } = useContext(LanguageContext)
 

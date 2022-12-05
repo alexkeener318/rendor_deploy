@@ -13,18 +13,13 @@ const TranslatedText=(props)=>{
          
          setTranslation(result.data);
       }
-      // only translate if the text is not a number
-     // if (isNaN(parseFloat(props.text))){
+      
       if (lang !=="en"){
         getTranslation()
       }
       else {
         setTranslation(props.text)
       }
-      // }
-      // else {
-      //   setTranslation(props.text)
-      // }
     
     },[])
     

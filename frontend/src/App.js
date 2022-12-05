@@ -6,12 +6,10 @@ import {useState, useContext} from 'react'
 import { Button } from "@mui/material";
 
 // components
-import ProtectedRoute from "./Components/ProtectedRoute";
 
 // pages
 import Checkout from "./Pages/Checkout";
 import Inventory from "./Pages/Inventory";
-import Pinpad from "./Pages/Pinpad";
 import PopularCombos from "./Pages/PopularCombos";
 import POSReport from "./Pages/POSReport";
 import CustomerGUI from "./Pages/CustomerGUI";
@@ -44,12 +42,10 @@ const App= ()=> {
 
             {/* <Route path="/" element={<Pinpad />} /> */}
             <Route path="/posreport" element={<POSReport />} />
-            <Route path="/pinpad" element={<Pinpad />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/popularcombos" element={<PopularCombos />} />
             <Route path="/excessreport" element={<ExcessReport />} />
-            {/* <Route path="/customergui" element={<CustomerGUI />} /> */}
             <Route path="/" element={<CustomerGUI />} />
             <Route path="/lowstockgui" element={<LowstockGUI />} />
             <Route path="/cashiergui" element={<CashierGUI />} />

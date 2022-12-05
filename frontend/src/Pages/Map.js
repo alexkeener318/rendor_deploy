@@ -16,7 +16,6 @@ import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
 
 
-
 const Map = ()=> {
   const {lang, setLang} = useContext(LanguageContext)
 
