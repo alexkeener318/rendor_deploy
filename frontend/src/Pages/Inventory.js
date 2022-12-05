@@ -1,3 +1,8 @@
+/**
+* This class displays the current inventory of all of ingredients at the store
+* @author   David Asatryan
+*/
+
 // react
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";

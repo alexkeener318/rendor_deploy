@@ -1,3 +1,7 @@
+/**
+* This class displays a map that shows the user where Pom & Honey is located
+* @author   David Asatryan
+*/
 // react
 import { useState, useEffect, useContext } from "react";
 

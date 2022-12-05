@@ -1,6 +1,8 @@
+/**
+* This component serves as a header which most pages will use to display a title or navigate to other pages
+* @author   David Asatryan
+*/
 import { Button, Select, FormControl, MenuItem } from "@mui/material"
-// import FormControl from '@mui/material/FormControl';
-// import Select from '@mui/material/Select';
 
 import { useState, useContext } from "react";
 import { Link } from "react-router-dom";

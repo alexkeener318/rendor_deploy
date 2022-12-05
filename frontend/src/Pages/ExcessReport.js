@@ -1,3 +1,7 @@
+/**
+* This class creates the UI that reports to the user items that haven't sold a lot of stock
+* @author   Sry Hak
+*/
 // react
 // external imports
 import { TextField } from "@mui/material";
@@ -8,39 +12,13 @@ import { DataGrid } from '@mui/x-data-grid';
 // components
 import Header from "../Components/Header";
 import ThreeColRow from "../Components/ThreeColRow";
-import TranslatedText from "../Components/TranslatedText";
 
 // pages
 import { useContext, useEffect, useState } from "react";
 import axios from 'axios'
 
-
 // contexts
-import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
-
-
-
-const columns = [
-    {field: 'id', headerName: 'ID', flex: 1, hide:true},
-    {field: 'item', headerName: 'Item', flex: 1},
-    {field: 'quantity', headerName: 'Quantity', flex: 1},
-    {field: 'sales', headerName: 'Sales', flex: 1}
-  ]
-  
-  const rows = [
-    {id:1, item: "Butter Chicken", quantity: 20, sales: 30},
-    {id:2, item: "Butter Chicken", quantity: 20, sales: 30},
-    {id:3, item: "Butter Chicken", quantity: 20, sales: 30},
-    {id:4, item: "Butter Chicken", quantity: 20, sales: 40},
-    {id:5, item: "Butter Chicken", quantity: 20, sales: 40},
-    {id:6, item: "Butter Chicken", quantity: 20, sales: 40},
-    {id:7, item: "Butter Chicken", quantity: 20, sales: 40},
-    {id:8, item: "Butter Chicken", quantity: 20, sales: 40},
-    {id:9, item: "Butter Chicken", quantity: 20, sales: 40},
-    {id:10, item: "Butter Chicken", quantity: 20, sales: 30}
-  ]
-  
 
 const ExcessReport = () => {
     const [startDate, setStartDate] = useState("2022-09-20");
@@ -51,7 +29,6 @@ const ExcessReport = () => {
       axios.post("https://project-3-6njq.onrender.com/excessReport", { dateOne: startDate, dateTwo:endDate})
         .then(data => {
           setExcessReportData(data.data)
-          console.log(data.data)
         })
     },[startDate,endDate])
 

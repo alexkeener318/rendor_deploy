@@ -1,3 +1,7 @@
+/**
+* This class contains all of the routing for our web app, and dictates what page will be displayed first
+* @author   David Asatryan
+*/
 // react
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import {useState, useContext} from 'react'
@@ -8,7 +12,6 @@ import { Button } from "@mui/material";
 // components
 
 // pages
-import Checkout from "./Pages/Checkout";
 import Inventory from "./Pages/Inventory";
 import PopularCombos from "./Pages/PopularCombos";
 import POSReport from "./Pages/POSReport";
@@ -42,7 +45,6 @@ const App= ()=> {
 
             {/* <Route path="/" element={<Pinpad />} /> */}
             <Route path="/posreport" element={<POSReport />} />
-            <Route path="/checkout" element={<Checkout />} />
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/popularcombos" element={<PopularCombos />} />
             <Route path="/excessreport" element={<ExcessReport />} />

@@ -1,10 +1,10 @@
-import { Button, Select, FormControl, MenuItem } from "@mui/material"
-// import FormControl from '@mui/material/FormControl';
-// import Select from '@mui/material/Select';
+/**
+* This component serves as a dropdown which will allow the user to change the current language of the website
+* @author   David Asatryan
+*/
+import { Select, FormControl, MenuItem } from "@mui/material"
 
-import { useState, useContext } from "react";
-import { Link } from "react-router-dom";
-import TranslatedText from "./TranslatedText";
+import { useContext } from "react";
 
 import { LanguageContext } from "../contexts/language";
 

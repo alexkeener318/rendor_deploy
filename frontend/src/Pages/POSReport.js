@@ -1,3 +1,8 @@
+/**
+* This class displays a point of sales report between any two given dates
+* @author   David Asatryan
+*/
+
 // react
 import { useEffect, useState, useContext } from "react";
 
@@ -15,7 +20,6 @@ import TranslatedText from "../Components/TranslatedText";
 // pages
 
 // contexts
-import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
 
 const POSReport = ()=> {

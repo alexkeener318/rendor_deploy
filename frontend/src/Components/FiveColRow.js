@@ -1,3 +1,8 @@
+/**
+* This component serves as a row with 5 columns, which can be chained to create a table
+* @author   David Asatryan
+*/
+
 import { Button } from "@mui/material"
 import TranslatedText from "./TranslatedText";
 import { LanguageContext } from '../contexts/language';

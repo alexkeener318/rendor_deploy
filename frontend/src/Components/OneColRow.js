@@ -1,3 +1,7 @@
+/**
+* This component serves as a single column row, useful for creating tables
+* @author   Emily Ha
+*/
 import { useContext } from "react";
 import TranslatedText from "./TranslatedText";
 

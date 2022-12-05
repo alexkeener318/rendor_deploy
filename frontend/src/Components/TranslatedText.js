@@ -1,3 +1,8 @@
+/**
+* This component receives text and returns a translated version of the same text
+* @author   David Asatryan
+*/
+
 import axios from 'axios'
 
 import { useState, useEffect, useContext } from "react";
