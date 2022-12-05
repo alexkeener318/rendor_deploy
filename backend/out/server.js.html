@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: server.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: server.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* This class holds all the functions necessary in order to populate the database and
+* create each UI for the point of sales system.
+* 
+* @author   Alex Keener
+* @author   David Asatryan
+* @author   Emily Ha
+* @author   Reagan Reitmeyer
+* @author   Sry Hak
+*/
+// connect to the database
+const { query } = require('express');
+const express = require('../node_modules/express');
+const { Pool } = require('../node_modules/pg');
+const dotenv = require('../node_modules/dotenv').config();
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
+// Create express app
+const app = express();
+const port = 5000;
+const cors = require("cors");
+const path = require("path");
+const { json } = require('body-parser');
+app.use(cors());
+app.use(express.static(path.join(__dirname + "/public")));
+
+const { generateRequestUrl, normaliseResponse } = require('google-translate-api-browser');
+const https = require('https');
+// Create pool
+const pool = new Pool({
+    user: "csce315_905_keener",
+    host: "csce-315-db.engr.tamu.edu",
+    database: "csce315_905_51",
+    password: "530003826",
+    port: "5432",
+    ssl: {rejectUnauthorized: false}
+});
+
+// Names for orders
+firstName = ["\'Bob","\'Dylan","\'Brother","\'Bear","\'Guy","\'Ur","\'My","\'Same","\'Kim","\'Light","\'Queen","\'Waltuh"];
+lastName =  ["Smith\'","Williams\'","Lopez\'","Keener\'","Petras\'","Brown\'","Ashtray\'","Asatryan\'",
+            "Reitmeyer\'","Ha\'","Hak\'","Hawk\'","Mmmmmmmm\'","White\'","Mom\'"];
+
+    // Attributes for the Order
+    let orderItems = "";
+    let rawPrice = 0.00;
+    let tax = 0.00;
+    let totalPrice = 0.00;
+    let orderID;
+    const customerName = getName();
+
+// items low on stock
+let lowStock = [];
+
+// all items ordered
+let allOrdered = [];
+
+
+// ***************** Functions directly related to the current Order *****************
+    /**
+    * Adds a new item to the item list attribute of the current order
+    * @param {string} itemName the string that holds the name of the item to add to the order
+    */
+    async function addItem(itemName){
+        allOrdered.push(itemName);
+        if(orderItems == ""){
+            orderItems += itemName;
+        }else{
+            orderItems += "," + itemName;
+        }
+    }
+
+    /**
+    * Fetches the price of an newly added item, calculates the tax, and adds
+    * the total to the current order total
+    * * @param {string} itemName the string that holds the name of the item to fetch the price for
+    */
+    async function updatePrice(itemName) {
+        // calculate item total
+        let itemPrice = 0.00;
+        // get new order item's price from database
+        let price;
+       await pool
+        .query("SELECT item_price FROM menu WHERE item_name ='" + itemName + "';")
+        .then(query_res => {
+            for (let i = 0; i &lt; query_res.rowCount; i++){
+                price = query_res.rows[i];
+            }})
+        .then(()=>{
+            itemPrice = price.item_price;
+            rawPrice += roundTotal(itemPrice);
+            // calculate tax;
+            let taxPrice = roundTotal(itemPrice * 0.0825);
+            // Update amount being paid in taxes
+            tax += taxPrice;
+            // calculate order total
+            totalPrice += roundTotal(parseFloat(itemPrice) + parseFloat(taxPrice));
+            totalPrice = roundTotal(totalPrice);
+        });
+    }
+
+    /**
+    * This function removes an item from the current order and updates
+    * the price and order items list to reflect that removal
+    * @param {number} itemID an integer that holds the ID of the item to be removed
+    */
+    async function removeItem(itemID){
+        // get the price of the item
+        let itemPrice = 0.00;
+        await pool.query("SELECT item_price FROM menu WHERE item_name ='" + allOrdered[itemID] + "';")
+        .then(query_res => {
+            for (let i = 0; i &lt; query_res.rowCount; i++){
+                itemPrice = query_res.rows[i].item_price;
+            }})
+        .then(()=>{
+            let taxNum = roundTotal(parseFloat(itemPrice) * 0.0825);
+            totalPrice -= roundTotal(parseFloat(itemPrice) + taxNum);
+            tax -= taxNum;
+            totalPrice = roundTotal(totalPrice);
+            roundTotal(tax);
+        })
+
+        orderItems = "";
+        // add every item back into the string
+        for(let i = 0; i &lt; allOrdered.length; i++){
+            if(i != itemID &amp;&amp; allOrdered[i] != ""){
+                if(orderItems == ""){
+                    orderItems += allOrdered[i];
+                }else{
+                    orderItems += "," + allOrdered[i];
+                }
+            }else{
+                allOrdered[i] = "";
+            }
+        }
+        if(orderItems == ""){
+            totalPrice = 0.00;
+            tax = 0.00;
+        }
+    }
+
+    /**
+    * This function takes all the order attributes and formats them in a query
+    * to send to the database. Also resets the order attributes afterwards.
+    * @param {string} paymentType    a string that holds the type of payment the customer selected
+    * @param {string} empName        a string that holds the name of the employee taking the order
+    */
+    async function sendOrder(paymentType, empName){
+        // get time
+        let date = new Date().toLocaleDateString();
+        let time = new Date().toLocaleTimeString();
+        time = time.substring(0, 8);
+        let updatedDate = date + " " + time;
+        cardNum = cardNumberGenerator(12);
+        custName = getName();
+        // resets allOrdered
+        allOrdered = [];
+
+        await getID().then(()=>{
+            let query = "INSERT INTO receipts values(" + orderID + ",'" + paymentType + "'," + totalPrice + ",'" + updatedDate + "','" + orderItems + "'," 
+                                                    + custName + "," + cardNum + ",'" + empName + "');";
+            // execute query
+            let orderQuer = "INSERT INTO orders values(" + orderID + "," + totalPrice + ",'" + updatedDate +"');";
+            if(orderItems != ""){
+                pool.query(query)
+                .then(()=>{
+                    pool.query(orderQuer);
+                })
+                .then(()=>{
+                    // Subtracts inventory items used up in this order
+                    updateInventory(orderItems);
+                    // Resets order attributes
+                    totalPrice = 0.00;
+                    orderItems = "";
+                    tax = 0.00;
+                    return 1;
+                })
+            }
+            console.log("Uploaded Order");
+        });
+        return 0;
+    }
+
+
+    
+// *************************************************************************************
+
+
+    /**
+    * This function returns a random integer between 0 and the integer passed in
+    * @param {number} max an integer that holds the top of the range to determine a random integer
+    * @returns {number} a random integer between 0 and the integer passed in
+    */
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+
+/**
+    * This function creates a random card number for use in an order
+    * 
+    * @param {number} cardlen an integer that holds the length of the card number to be returned
+    * @returns {string} random card number
+    */
+function cardNumberGenerator(cardlen){
+    cardNumber = "\'"
+    for (let i = 0; i &lt; cardlen; i++){
+        cardNumber += getRandomInt(10) 
+    }
+    cardNumber += "\'"
+
+    return cardNumber
+}
+
+    /**
+    * This function makes a random customer name for the current order
+    * @returns {string} a random customer name
+    */
+function getName() {
+    let numFirst = getRandomInt(firstName.length)
+    let numLast = getRandomInt(lastName.length)
+    let fullName = firstName[numFirst] + " " + lastName[numLast];
+
+    return fullName;
+}
+
+// adding new items to menu
+let itemID;
+/**
+    * This function adds a new menu item to be added to orders. If the item uses new ingredients
+    * that aren't currently in the database, these new ingredients are added.
+    * 
+    * @param {string} itemName a string that contains the name of the item to add
+    * @param {number} itemPrice a float that contains the price of the item to add
+    * @param {string} itemIngreds a string containing the list of the ingredients used in the new item
+    * @param {string} url a string that contains a url for the image to be displayed for the new item
+    */
+async function addMenu(itemName, itemPrice, itemIngreds, url) {
+    await getItemID()
+    .then(()=>{
+        // send in query
+        const query = "INSERT INTO menu VALUES(" +itemID + ",'" + itemName +"', " + itemPrice +", '" + itemIngreds + "', '" + url + "');";
+        pool.query(query);
+    })
+    
+    // check if each item ingredient exists in the database
+    let individuals = itemIngreds.split(',');
+    for(let i = 0; i &lt; individuals.length; i++){
+        let name = individuals[i];
+        let exists;
+        await pool.query("SELECT EXISTS(SELECT FROM ingredients where name = '" + name + "');").then(query_res => {
+            for (let i = 0; i &lt; query_res.rowCount; i++){
+                exists = query_res.rows[i];
+            }
+            if(!exists.exists){
+                addInventoryItem(name);
+            }
+        });
+    }
+    
+}
+
+/**
+    * This function adds an inventory item into the ingredients table in the database
+    * 
+    * @param {string} name a string containing the name of the ingredient
+    */
+async function addInventoryItem(name){
+    // get newID for item
+    let ID;
+    await pool.query("SELECT max(ingredient_id) FROM ingredients;")
+    .then(query_res => {
+        for(let i = 0; i &lt; query_res.rowCount; i++){
+            ID = query_res.rows[i].max;
+        }
+    }).then(()=>{
+        let newID = ID + 1;
+        pool.query("INSERT INTO ingredients VALUES(" + newID + ",'" + name + "', 150, 'servings', '2022-10-01');");
+    });
+}
+
+/**
+* This function removes an current menu item by removing it from the
+* database
+* 
+* @param {string} item a string containing the name of the item to be removed from the menu
+*/
+function deleteMenu(item){
+    pool.query("DELETE FROM menu WHERE item_name = '" + item + "';");
+}
+
+/**
+* This function updates the price of a current menu item
+*
+* @param {string} item a string containing the name of the menu item
+* @param {number} price a float containing the new price of the menu item
+*/
+function updateMenu(item, price){
+    pool.query("UPDATE menu SET item_price = " + price + " WHERE item_name = '" + item + "';");
+}
+
+/**
+* This function access' the database and returns the next ID for a new item to be added
+*/
+async function getItemID() {
+    let newID;
+    await pool
+    .query("SELECT max(item_id) FROM menu;")
+    .then(query_res => {
+        for (let i = 0; i &lt; query_res.rowCount; i++){
+            newID = query_res.rows[i];
+        }})
+    .then(()=>{
+        itemID = newID.max+1;
+    }) 
+}
+
+/**
+* This function access' the database and returns the next ID for a new order
+*/
+async function getID() {
+    let newID;
+    await pool
+    .query("SELECT max(order_id) FROM receipts;")
+    .then(query_res => {
+        for (let i = 0; i &lt; query_res.rowCount; i++){
+            newID = query_res.rows[i];
+        }}).then(()=>{
+            orderID = newID.max + 1;
+            // return orderID;
+        });
+}
+
+/**
+* This function gets a list of the current ingredient items that are low on stock
+*/
+async function checkStock(){
+    lowStock = [];
+    let items = await getInventory();
+
+    for(let i = 0; i &lt; items.length; i++){
+        if(items[i].quantity &lt;= 30){
+            lowStock.push(items[i].name);
+        }
+    }
+}
+
+/**
+* This function takes in a float and rounds it to two decimals
+* 
+* @param {number} item a float containing the number to be rounded
+* @returns {number} the rounded number
+*/
+function roundTotal(num){
+    num = parseFloat(num).toFixed(2);
+    return parseFloat(num);
+}
+
+/**
+* This function updates the inventory of the items used in the order just sent to the database.
+* 
+* @param {string} orderItems a string containing the list of items in the order that was just finalized
+*/
+async function updateInventory(orderItems){
+    items = orderItems.split(",");
+    ingredients=[];
+    for(i = 0; i &lt; items.length; i++){
+        await pool
+            .query('SELECT ingredients_used FROM menu WHERE item_name = \'' +items[i] +'\';')
+            .then(query_res => {
+                for (let i = 0; i &lt; query_res.rowCount; i++){
+                    ingredients.push(query_res.rows[i]);
+                }});
+    }
+    for(i = 0; i &lt; ingredients.length; i++){
+        ingredients_str=ingredients[i].ingredients_used;
+        ingred=ingredients_str.split(",");
+        for(j = 0; j &lt; ingred.length; j++){
+            // get current value of item
+           quant_str = "";
+           query_str = "SELECT quantity FROM ingredients WHERE name ='" + ingred[j] +"';";
+           await pool
+            .query(query_str)
+            .then(query_res => {
+                for (let i = 0; i &lt; query_res.rowCount; i++){
+                    quant_str=query_res.rows[i];
+                }});
+            quant=quant_str.quantity; //int
+            quant-=1; //update
+            if(quant&lt;0){
+                quant=0;
+            }
+            // Update value of that item
+            query_str = "UPDATE ingredients SET quantity = " + quant+ " WHERE name = '" + ingred[j] + "';";
+            await pool.query(query_str)
+        }
+    }
+}
+
+/**
+* This function access' the database and returns the current menu items that fit into
+* the bowl category
+* @returns {string[]} array of menu items that are bowls
+*/
+async function bowlContent(){
+    let item;
+    bowls =[];
+    await pool
+            .query("SELECT item_name,url FROM menu WHERE item_name like '%Bowl%';")
+            .then(query_res => {
+                for (let i = 0; i &lt; query_res.rowCount; i++){
+                    let bowl ={};
+                    item=query_res.rows[i];
+                    console.log(query_res.rows[i]);
+                    bowl.name =item.item_name;
+                    bowl.url =item.url;
+                    bowls.push(bowl);
+                }});
+    return bowls;
+}
+
+/**
+* This function access' the database and returns the current menu items that fit into
+* the gyro category
+* @returns {string[]} array of menu items that are gyros
+*/
+async function gyrosContent(){
+    let item;
+    gyros=[];
+    await pool
+            .query("SELECT item_name, url FROM menu WHERE item_name like '%Gyro%';")
+            .then(query_res => {
+                for (let i = 0; i &lt; query_res.rowCount; i++){
+                    let gyro ={};
+                    item=query_res.rows[i];
+                    console.log(query_res.rows[i]);
+                    gyro.name =item.item_name;
+                    gyro.url =item.url;
+                    gyros.push(gyro);
+                }});
+    return gyros;
+}
+
+/**
+* This function access' the database and returns the current menu items that fit into
+* the drinks category
+* @returns {string[]} array of menu items that are drinks
+*/
+function drinksContent(){
+    let drink1={}; //water bottle
+    drink1.url=  "https://www.shutterstock.com/image-photo/plastic-water-bottle-big-small-600w-1907885707.jpg"
+    drink1.name = "Bottled Water"
+    let drink2={};//fountain drinks
+    drink2.url=  "https://www.shutterstock.com/image-photo/soda-fountain-cup-isolated-on-600w-445209874.jpg"
+    drink2.name = "Fountain Drinks"
+    drinks=[drink2, drink1];
+    //console.log(drinks[0].url);
+    return drinks;
+}
+
+/**
+* This function access' the database and returns the current menu items that weren't in any of the previously
+* mentioned categories.
+* @returns {string[]} array of menu items that are extras
+*/
+async function extrasContent(){
+    //extras=["2 Meatballs", "2 Falafels", "Fries", "Garlic Fries", "Hummus &amp; Pita", "Extra Dressing", "Extra Hummus", "Extra Protein", "Pita Bread"];
+    let item;
+    extras=[];
+    await pool
+            .query("SELECT item_name,url FROM menu WHERE item_name not like '%Gyro%' and item_name not like '%Bowl%' and item_name not like 'Bottled Water' and item_name not like 'Fountain Drinks';")
+            .then(query_res => {
+                for (let i = 0; i &lt; query_res.rowCount; i++){
+                    let extra ={};
+                    item=query_res.rows[i];
+                    console.log(query_res.rows[i]);
+                    extra.id = i;
+                    extra.name =item.item_name;
+                    extra.url =item.url;
+                    extras.push(extra);
+                }});
+    return extras;
+}
+
+
+/**
+* This function checks the database for orders between the two passed in dates to return
+* a list of the order items ordered between those dates.
+* 
+* @param {string} date1 a string containing the first date of the date range
+* @param {string} date2 a string containing the second date of the date range
+* @returns {string[]} array of order items
+*/
+async function reportContent(date1, date2){ //params are item name the first date and the second date all strings
+    quantity_str="";
+    query_str ="SELECT order_items FROM receipts where timestamp between '"+date1+" "+"00:00:00' and '"+date2+" "+"00:00:00';";
+    // query_str ="SELECT count(order_items) AS quantity FROM receipts where timestamp between '"+date1+" "+"00:00:00' and '"+date2+" "+"00:00:00';";
+    let data = [1]
+    await new Promise((resolve,reject) =>{
+        pool.query(query_str, (error, result) =>{
+            data = result
+            resolve()
+        })
+        
+    })
+    return data     
+}
+
+/**
+* This function finds the most ordered together items in a certain date range, stores them in a list, and return it
+* 
+* @param {string} date1 a string containing the first date of the date range
+* @param {string} date2 a string containing the second date of the date range
+* @returns {string[]} array of pairs
+*/
+async function popCombos(date1, date2) {
+    let keyList = [];
+    let valueList = [];
+    let topTenItems = [];
+    const matchCounter = new Map();
+    
+    await pool.query("SELECT * FROM receipts where timestamp between '" + date1 + " " +"00:00:00' and '" + date2 + " 00:00:00';")
+    .then(query_res => {
+        for (let row = 0; row &lt; query_res.rowCount; ++row) {
+            //create list of all ordered items in that one order
+            let orderItems = [];
+            if (query_res.rows[row].order_items == "") {
+                continue;
+            }
+            orderItems = query_res.rows[row].order_items.split(",");
+
+            //create all possible pairs and use hashmap to keep track of counts
+            if (orderItems.length == 1) {
+                continue;
+            }
+
+            for(let i = 0; i &lt; orderItems.length; ++i) {
+                for (let j = i + 1; j &lt; orderItems.length; ++j) {
+                    let word = orderItems[i] + "," + orderItems[j];
+                    keyList.push(word);
+                    if (matchCounter.has(word)) {
+                        matchCounter.set(word, matchCounter.get(word) + 1);
+                    } else {
+                        matchCounter.set(word, 1);
+                    }
+                }
+            }
+        }
+    })
+    //creating list of counts for the combos
+    for (let i = 0; i &lt; keyList.length; ++i) {
+        valueList.push(matchCounter.get(keyList[i]));
+    }
+    //sorting valueList in descending order
+    valueList.sort(function(a, b){return (b - a)});
+    //removing duplicates in list
+    let uniqueList = [...new Set(valueList)];
+    //creating top10 list of combos
+    let matchingList = [];
+    for (let i = 0; i &lt; uniqueList.length; ++i) {
+        //list of the pairs with value given
+        for (let [key, value] of matchCounter.entries()) {
+            if (value === uniqueList[i]) {
+                let pair = key.split(",");
+                let one = pair[0];
+                let two = pair[1];
+                matchingList.push({first: one, second: two, value: uniqueList[i]});
+            }
+        }
+    }
+    for (let i = 0; i &lt; 10; ++i) {
+        topTenItems.push(matchingList[i]);
+        topTenItems[i].id = i
+    }
+
+    return topTenItems;
+}
+/**
+    * This function gets all the ingredients from inventory in id order
+    * @returns {string[]} array of ingredients
+    */
+async function getInventory(){
+    query_str = "SELECT * FROM ingredients ORDER BY ingredient_id;";
+    inventory=[];
+    await pool
+            .query(query_str)
+            .then(query_res => {
+                for (let i = 0; i &lt; query_res.rowCount; i++){
+                    inventory.push(query_res.rows[i]);
+                }});
+    return inventory;
+}
+
+/**
+    * This function gets all the menu items in id order
+    * @returns {string[]} array of menu items
+    */
+async function getMenu(){
+    query_str = "SELECT * FROM menu ORDER BY item_id;";
+    menuItems=[];
+    await pool
+            .query(query_str)
+            .then(query_res => {
+                for (let i = 0; i &lt; query_res.rowCount; i++){
+                    menuItems.push(query_res.rows[i]);
+                }});
+    return menuItems;
+}
+
+/**
+    * This function returns a person object with the attributes name, email, and role
+    * this is used to differentiate employees, customers, and managers
+    *
+    * @param {string} email the string representing the email of the person logging in
+    * @returns {Object} person object
+    */
+async function employeeType(email){
+    let person ={};
+    employee_name="";
+    query_str="SELECT * from employees where employee_id = '"+ email +"';";
+    person.role = 'Customer'
+
+    await pool
+            .query(query_str)
+            .then(query_res => {
+                
+                if (query_res.rows.length > 0){
+                    let sqlPerson = query_res.rows[0]
+                    person = sqlPerson
+                    console.log("person is ", person)
+                }
+
+            });
+    return person;
+}
+
+//function for the statistics table takes in 2 dates and returns an object with the attributes
+//orders for the number of orders, credit for the sales made in credit band debit cards, 
+//dining for the revenue in meal swipes and grossRevenue for the total revenue for those dates
+//statisticsTable("09-20-2022", "10-05-2022"); //example test run
+/**
+    * This function gets the data between two dates to display for the statistics table
+    * it returns an item with the amount spent on credit, dining, and the total revenue and the number of orders sent
+    *
+    * @param {string} date1 the string that holds the first date to take the data from
+    * @param {string} date2 the string that holds the ending date to take the data from
+    * @returns {Object} statistics object
+    */
+async function statisticsTable(date1, date2){
+    let stats={};
+    totalRevenue = 0.0;
+    creditRevenue = 0.0;
+    diningRevenue = 0.0;
+    orders = 0;
+
+    query_str = "SELECT * FROM receipts where timestamp between '"+date1+" "+"00:00:00' and '"+date2+" "+"00:00:00'";
+    receiptsStats=[];
+    await pool
+            .query(query_str)
+            .then(query_res => {
+                for (let i = 0; i &lt; query_res.rowCount; i++){
+                    receiptsStats.push(query_res.rows[i]);
+                    //console.log(query_res.rows[i]);
+                }});
+
+    for (let i = 0; i &lt; receiptsStats.length; i++){
+        if(receiptsStats[i].payment_type == "Debit Card" || receiptsStats[i].payment_type == "Credit Card"){
+            creditRevenue+=receiptsStats[i].total;
+            totalRevenue+=receiptsStats[i].total;
+        }else if(receiptsStats[i].payment_type == "Meal Swipes"){
+            diningRevenue+=receiptsStats[i].total;
+            totalRevenue+=receiptsStats[i].total;
+        }
+    }
+    orders=receiptsStats.length;
+    stats.orders=orders;
+    stats.credit=roundTotal(creditRevenue);
+    stats.grossRevenue=roundTotal(totalRevenue);
+    stats.dining=roundTotal(diningRevenue);
+    return stats;
+}
+
+//returns array of the receipts in a specified timeframe
+//use receipts[index].total to get the revenue of each order
+//statisticsGraph("09-15-2022", "09-17-2022"); //example test run
+/**
+    * This function gets the data between two dates to display for the statistics graph
+    *
+    * @param {string} date1 the string that holds the first date to take the data from
+    * @param {string} date2 the string that holds the ending date to take the data from
+    * @returns {string[]} array of receipts
+    */
+async function statisticsGraph(date1,date2){
+    query_str = "SELECT * FROM receipts where timestamp between '"+date1+" "+"00:00:00' and '"+date2+" "+"00:00:00'";
+    receiptsForGraph=[];
+    await pool
+            .query(query_str)
+            .then(query_res => {
+                for (let i = 0; i &lt; query_res.rowCount; i++){
+                    receiptsForGraph.push(query_res.rows[i]);
+                    //console.log(query_res.rows[i]);
+                }});
+    console.log(receiptsForGraph.length); //use receipts[index].total to get the revenue of the order
+    return receiptsForGraph;
+}
+
+// param= [1.0,2.0,3.0,2.0,1.0,1.0,2.0,1.0,1.0,1.0,1.0];
+// updateToppings(param);
+/**
+    * This function updates the inventory for the toppings after the employee puts in how many bags of each topping were 
+    * used throughout the day
+    *
+    * @param {number[]} toppings an array of the amount of bags used of each toppings after one day as inputted by the employee
+    */
+async function updateToppings(toppings){
+    items = ["Tomatoes", "Salt", "Lettuce", "Hummus", "Cheese", "Olives", "Onions", "Cucumbers", "Cauliflower", "Peppers", "Dressing"];
+    ingredients=[];
+    for(i = 0; i &lt; items.length; i++){
+        quant=0;
+        quant_str = "";
+        query_str = "SELECT quantity FROM ingredients WHERE name ='" + items[i] +"';";
+        await pool
+            .query(query_str)
+            .then(query_res => {
+                for (let i = 0; i &lt; query_res.rowCount; i++){
+                    quant_str=query_res.rows[i];
+                }});
+        quant=quant_str.quantity; //int
+        quant-=toppings[i]; //update
+        if(quant&lt;0){
+            quant=0;
+        }
+
+        await pool
+            .query("UPDATE ingredients SET quantity = " + quant + " WHERE name = '" + items[i] +"';")
+    }
+}
+
+/**
+    * Runs the query to get the data for the amount of orders of every menu item
+    * Then it checks which of the items have an excess amount based off of how much was ordered 
+    * and how much inventory it had
+    *
+    * @param {string} dateOne the string that holds the first date to take the data from
+    * @param {string} dateTwo the string that holds the ending date to take the data from
+    * @returns {Object} excess report object
+    */
+async function excessReport(dateOne, dateTwo){
+    // get a list of all the menu items
+    let menuItems = [];
+    menuItems = await getMenu();
+    // will keep count of each item sold between the dates
+    let counts = [];
+
+    let returnItems = [];
+
+    // get the total sold for each menu item
+    for(let i = 0; i &lt; menuItems.length; i++){
+        let count = 0;
+        await pool.query("SELECT count(order_items) AS quantity FROM receipts where order_items like'%"+ menuItems[i].item_name +"%'and timestamp between '"+ dateOne +" "+"00:00:00' and '" + dateTwo +" 00:00:00';")
+        .then(query_res => {
+            for(let i = 0; i &lt; query_res.rowCount; i++){
+                counts.push(query_res.rows[i].quantity);
+            }
+        })
+    }
+    let invItems = [];
+    invItems = await getInventory();
+    // Populate hashmap for each inventory item
+    const invCount = new Map();
+    for(let i = 0; i &lt; invItems.length; i++){
+        invCount.set(invItems[i].name,0);
+    }
+    // iterate through each menu item, add the count num to the correct position in hashmap
+    for(let i = 0; i &lt; menuItems.length; i++){
+        let ingredients = "";
+        // get ingredients involved in the menu item
+        await pool.query("SELECT ingredients_used FROM menu WHERE item_name = '" + menuItems[i].item_name + "';")
+        .then(query_res => {
+            for(let i = 0; i &lt; query_res.rowCount; i++){
+                ingredients = query_res.rows[i].ingredients_used;
+            }
+        })
+        // iterate through those ingredients
+        let ingredList = ingredients.split(",");
+        for(let j = 0; j &lt; ingredList.length; j++){
+            let num = invCount.get(ingredList[j]);
+            invCount.set(ingredList[j], parseInt(num) + parseInt(counts[i]));
+        }
+    }
+    // compare counts in hashmap to total items, add items that are less than 10% to a list
+    for(let i = 0; i &lt; invItems.length; i++){
+        let numSold = invCount.get(invItems[i].name);
+        let numLeft;
+        // get current inventory
+        await pool.query("SELECT quantity FROM ingredients WHERE name = '" + invItems[i].name + "';")
+        .then(query_res => {
+            for(let i = 0; i &lt; query_res.rowCount; i++){
+                numLeft = query_res.rows[i].quantity;
+
+            }
+        })
+        let percentage = numSold / (numSold + numLeft);
+        if(percentage &lt;= 0.10){
+            let object ={};
+            object.name = invItems[i].name;
+            object.quantity = numLeft;
+            object.sales = numSold;
+            returnItems.push(object);
+        }
+    }
+    // return the list
+    return returnItems;
+}
+
+async function main(){
+    // updates price and orderitems
+
+    // updates price and orderitems
+    app.post("/addItem",jsonParser,(req,res)=>{
+        (async() => {
+            addItem(req.body.itemName);
+            await updatePrice(req.body.itemName);
+            res.json({"totalPrice" : totalPrice});
+        })();
+    })
+
+    app.post("/removeItem",jsonParser,(req,res)=>{
+        (async() => {
+            await removeItem(req.body.itemID);
+            res.json({"totalPrice" : totalPrice})
+        })();
+    })
+
+    // sends final order in to database
+    app.post("/sendOrder",jsonParser,(req,res)=> {
+        sendOrder(req.body.paymentType, req.body.empName)
+        .then(() => {
+            res.send("Order has been sent to the database");
+        })
+    })
+
+    // Adds new menu items
+    app.post("/newItem",jsonParser,(req,res)=>{
+        addMenu(req.body.itemName,req.body.itemPrice,req.body.itemIngreds,req.body.url)
+        .then(()=>{
+            res.send("Successfully added new menu item");
+        })
+    })
+
+    // Deletes menu item
+    app.post("/deleteItem",jsonParser,(req,res)=>{
+        deleteMenu(req.body.item);
+        res.send("Deleted " + req.body.item);
+    })
+
+    // Updates menu item price
+    app.post("/updateItem",jsonParser,(req,res)=>{
+        updateMenu(req.body.item, req.body.price);
+        res.send("Updated price of " + req.body.item + " to " + req.body.price);
+    })
+
+
+    // Returns type of employee
+    app.post("/employeeType",jsonParser,(req,res)=>{
+        console.log(req.body.pin)
+        employeeType(req.body.pin).then( data => {
+            res.send(data)
+            console.log("data sent", data)
+        }) 
+        // res.send(employeeType(req.body.pin) );  
+    })
+
+    app.get("/getInventory",jsonParser,(req,res)=>{
+        getInventory().then( data => {
+            res.send(data)
+            console.log("data sent", data)
+        }) 
+        // res.send(employeeType(req.body.pin) );  
+    })
+
+    // checks for low stock of current inventory
+    app.get("/lowStock",jsonParser,(req,res)=>{
+        (async() => {
+            await checkStock();
+            res.send(lowStock);
+        })();
+        
+    })
+
+    app.post("/getBowls", jsonParser,(req,res)=>{
+        (async() =>{
+            let bowls = await bowlContent();
+            res.send(bowls);
+        })();
+    })
+
+    app.post("/getGyros", jsonParser,(req,res)=>{
+        (async() =>{
+            let gyros = await gyrosContent();
+            res.send(gyros);
+        })();
+    })
+
+    app.post("/getDrinks", jsonParser,(req,res)=>{
+        (async() =>{
+            let drinks = await drinksContent();
+            res.send(drinks);
+        })();
+    })
+
+    app.post("/getExtras", jsonParser,(req,res)=>{
+        (async() =>{
+            let bowls = await extrasContent();
+            res.send(extras);
+        })();
+    })
+
+    app.post("/posreport",jsonParser,(req,res)=>{
+            
+        let returnData = []
+        console.log(req.body)
+        
+        reportContent(req.body.startDate, req.body.endDate).then( data =>{
+            getMenu().then( menuData =>{ 
+                const itemMap = new Map()
+                data = data.rows
+                for (let i = 0 ; i &lt; data.length ; i++){
+                    let items = data[i].order_items.split(',')
+                
+
+                    for (let j = 0 ; j &lt; items.length ; j++){
+                        items[j] = items[j].trim()
+                        if (itemMap.get(items[j]) === undefined){
+                            itemMap.set(items[j], 0)
+                        }
+                        let amt = itemMap.get(items[j])
+                        itemMap.set(items[j], amt + 1)
+                    }
+                }
+
+                console.log(menuData)
+
+
+                let counterPOS = 0
+                for (let [key, value] of itemMap){
+                    console.log(key,value)
+
+                    let price = 0
+
+                    for (let j = 0 ; j &lt; menuData.length ; j++){
+                        console.log(menuData[j])
+                        if (menuData[j].item_name === key){
+                            console.log("item found")
+                            price = Math.floor(menuData[j].item_price * value * 100) / 100
+                        }
+                    }
+                    returnData.push({id: counterPOS, itemName: key, quantity: value, sales: price})
+                    counterPOS += 1
+                }
+
+                res.send(returnData)
+                })
+        })
+
+    })
+
+    //popular combos information
+    app.post("/popCombos", jsonParser, (req, res)=> {
+        popCombos(req.body.startDate, req.body.endDate).then( data => {
+            res.send(data)
+            console.log("data sent", data)
+        })
+    })
+
+    // sends information for statistics table
+    app.post("/statsTable",jsonParser,(req,res)=>{
+        statisticsTable(req.body.startDate, req.body.endDate).then( data => {
+            res.send(data)
+            console.log("data sent", data)
+        }) 
+    })
+
+    // sends information for statistics graph
+    app.post("/statsGraph",jsonParser,(req,res)=>{
+        statisticsGraph(req.body.startDate, req.body.endDate).then( data => {
+            res.send(data)
+            console.log("data sent", data)
+        }) 
+    })
+
+    app.post("/excessReport",jsonParser,(req,res)=>{
+        (async ()=>{
+            let results = await excessReport(req.body.dateOne, req.body.dateTwo);
+            res.send(results);
+        })();
+    })
+
+    app.post("/translateText",jsonParser,(req,res)=>{
+        console.log(req.body.lang)
+        console.log(req.body.text)
+
+        const url = generateRequestUrl(req.body.text, { to: req.body.lang });
+
+        https.get(url, (resp) => {
+        let data = '';
+
+        resp.on('data', (chunk) => {
+            data += chunk;
+        });
+
+        resp.on('end', () => {
+            res.send(normaliseResponse(JSON.parse(data)).text);
+        });
+        }).on("error", (err) => {
+            console.log("Error: " + err.message);
+        });
+        // res.send(employeeType(req.body.pin) );  
+    })
+
+    app.post("/updateTopping",jsonParser,(req,res)=>{
+        (async ()=>{
+            let results = await updateToppings(req.body.list);
+            res.send(results);
+        })();
+    })
+
+    app.listen(port,()=> console.log(`Listening to port ${port}`));
+}
+console.log("TESTING");
+main();</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addInventoryItem">addInventoryItem</a></li><li><a href="global.html#addItem">addItem</a></li><li><a href="global.html#addMenu">addMenu</a></li><li><a href="global.html#bowlContent">bowlContent</a></li><li><a href="global.html#cardNumberGenerator">cardNumberGenerator</a></li><li><a href="global.html#checkStock">checkStock</a></li><li><a href="global.html#deleteMenu">deleteMenu</a></li><li><a href="global.html#drinksContent">drinksContent</a></li><li><a href="global.html#employeeType">employeeType</a></li><li><a href="global.html#excessReport">excessReport</a></li><li><a href="global.html#extrasContent">extrasContent</a></li><li><a href="global.html#getID">getID</a></li><li><a href="global.html#getInventory">getInventory</a></li><li><a href="global.html#getItemID">getItemID</a></li><li><a href="global.html#getMenu">getMenu</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getRandomInt">getRandomInt</a></li><li><a href="global.html#gyrosContent">gyrosContent</a></li><li><a href="global.html#popCombos">popCombos</a></li><li><a href="global.html#removeItem">removeItem</a></li><li><a href="global.html#reportContent">reportContent</a></li><li><a href="global.html#roundTotal">roundTotal</a></li><li><a href="global.html#sendOrder">sendOrder</a></li><li><a href="global.html#statisticsGraph">statisticsGraph</a></li><li><a href="global.html#statisticsTable">statisticsTable</a></li><li><a href="global.html#updateInventory">updateInventory</a></li><li><a href="global.html#updateMenu">updateMenu</a></li><li><a href="global.html#updatePrice">updatePrice</a></li><li><a href="global.html#updateToppings">updateToppings</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Sun Dec 04 2022 19:17:01 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
