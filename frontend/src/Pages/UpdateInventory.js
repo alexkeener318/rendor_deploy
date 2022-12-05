@@ -38,7 +38,7 @@ const UpdateInventory = () => {
     const updateIngredients = async (ingredientsList) => {
         console.log(ingredientsList);
         try {
-            const response = await fetch('http://localhost:5000/updateTopping', {
+            const response = await fetch('https://project-3-6njq.onrender.com/updateTopping', {
                 method: 'POST',
                 body: JSON.stringify({ list: ingredientsList }),
                 headers: {

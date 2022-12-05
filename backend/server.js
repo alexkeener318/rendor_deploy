@@ -166,7 +166,7 @@ let allOrdered = [];
                     return 1;
                 })
             }
-            console.log("Uploaded Order");
+            //console.log("Uploaded Order");
         });
         return 0;
     }
@@ -395,7 +395,7 @@ async function bowlContent(){
                 for (let i = 0; i < query_res.rowCount; i++){
                     let bowl ={};
                     item=query_res.rows[i];
-                    console.log(query_res.rows[i]);
+                    //console.log(query_res.rows[i]);
                     bowl.name =item.item_name;
                     bowl.url =item.url;
                     bowls.push(bowl);
@@ -416,7 +416,7 @@ async function gyrosContent(){
                 for (let i = 0; i < query_res.rowCount; i++){
                     let gyro ={};
                     item=query_res.rows[i];
-                    console.log(query_res.rows[i]);
+                    //console.log(query_res.rows[i]);
                     gyro.name =item.item_name;
                     gyro.url =item.url;
                     gyros.push(gyro);
@@ -454,7 +454,7 @@ async function extrasContent(){
                 for (let i = 0; i < query_res.rowCount; i++){
                     let extra ={};
                     item=query_res.rows[i];
-                    console.log(query_res.rows[i]);
+                    //console.log(query_res.rows[i]);
                     extra.id = i;
                     extra.name =item.item_name;
                     extra.url =item.url;
@@ -604,7 +604,7 @@ async function employeeType(email){
                 if (query_res.rows.length > 0){
                     let sqlPerson = query_res.rows[0]
                     person = sqlPerson
-                    console.log("person is ", person)
+                    //console.log("person is ", person)
                 }
 
             });
@@ -675,7 +675,7 @@ async function statisticsGraph(date1,date2){
                     receiptsForGraph.push(query_res.rows[i]);
                     //console.log(query_res.rows[i]);
                 }});
-    console.log(receiptsForGraph.length); //use receipts[index].total to get the revenue of the order
+    //console.log(receiptsForGraph.length); //use receipts[index].total to get the revenue of the order
     return receiptsForGraph;
 }
 
@@ -702,6 +702,7 @@ async function updateToppings(toppings){
                 }});
         quant=quant_str.quantity; //int
         quant-=toppings[i]; //update
+        quant = roundTotal(quant);
         if(quant<0){
             quant=0;
         }
@@ -837,10 +838,10 @@ async function main(){
 
     // Returns type of employee
     app.post("/employeeType",jsonParser,(req,res)=>{
-        console.log(req.body.pin)
+        //console.log(req.body.pin)
         employeeType(req.body.pin).then( data => {
             res.send(data)
-            console.log("data sent", data)
+            //console.log("data sent", data)
         }) 
         // res.send(employeeType(req.body.pin) );  
     })
@@ -848,7 +849,7 @@ async function main(){
     app.get("/getInventory",jsonParser,(req,res)=>{
         getInventory().then( data => {
             res.send(data)
-            console.log("data sent", data)
+            //console.log("data sent", data)
         }) 
         // res.send(employeeType(req.body.pin) );  
     })
@@ -893,7 +894,7 @@ async function main(){
     app.post("/posreport",jsonParser,(req,res)=>{
             
         let returnData = []
-        console.log(req.body)
+        //console.log(req.body)
         
         reportContent(req.body.startDate, req.body.endDate).then( data =>{
             getMenu().then( menuData =>{ 
@@ -913,19 +914,19 @@ async function main(){
                     }
                 }
 
-                console.log(menuData)
+                //console.log(menuData)
 
 
                 let counterPOS = 0
                 for (let [key, value] of itemMap){
-                    console.log(key,value)
+                    //console.log(key,value)
 
                     let price = 0
 
                     for (let j = 0 ; j < menuData.length ; j++){
-                        console.log(menuData[j])
+                        //console.log(menuData[j])
                         if (menuData[j].item_name === key){
-                            console.log("item found")
+                            //console.log("item found")
                             price = Math.floor(menuData[j].item_price * value * 100) / 100
                         }
                     }
@@ -943,7 +944,7 @@ async function main(){
     app.post("/popCombos", jsonParser, (req, res)=> {
         popCombos(req.body.startDate, req.body.endDate).then( data => {
             res.send(data)
-            console.log("data sent", data)
+            //console.log("data sent", data)
         })
     })
 
@@ -951,7 +952,7 @@ async function main(){
     app.post("/statsTable",jsonParser,(req,res)=>{
         statisticsTable(req.body.startDate, req.body.endDate).then( data => {
             res.send(data)
-            console.log("data sent", data)
+            //console.log("data sent", data)
         }) 
     })
 
@@ -959,7 +960,7 @@ async function main(){
     app.post("/statsGraph",jsonParser,(req,res)=>{
         statisticsGraph(req.body.startDate, req.body.endDate).then( data => {
             res.send(data)
-            console.log("data sent", data)
+            //console.log("data sent", data)
         }) 
     })
 
@@ -971,8 +972,8 @@ async function main(){
     })
 
     app.post("/translateText",jsonParser,(req,res)=>{
-        console.log(req.body.lang)
-        console.log(req.body.text)
+        // console.log(req.body.lang)
+        // console.log(req.body.text)
 
         const url = generateRequestUrl(req.body.text, { to: req.body.lang });
 
@@ -987,7 +988,7 @@ async function main(){
             res.send(normaliseResponse(JSON.parse(data)).text);
         });
         }).on("error", (err) => {
-            console.log("Error: " + err.message);
+            //console.log("Error: " + err.message);
         });
         // res.send(employeeType(req.body.pin) );  
     })
