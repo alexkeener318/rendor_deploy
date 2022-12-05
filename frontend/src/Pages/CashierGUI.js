@@ -96,8 +96,7 @@ const CashierGUI = () => {
 
     const bowlMenu = async () => {
         try {
-            // const response = await fetch('https://project-3-6njq.onrender.com/getBowls', {
-            const response = await fetch('http://localhost:5000/getBowls', {
+            const response = await fetch('https://project-3-6njq.onrender.com/getBowls', {
                 method: 'POST',
                 body: JSON.stringify(),
                 headers: {
