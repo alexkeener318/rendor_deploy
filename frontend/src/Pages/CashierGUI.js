@@ -18,6 +18,7 @@ import Header from "../Components/Header";
 // contexts
 import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
+import ReactCountryFlag from "react-country-flag";
 
 
 const managerButtonList = [
@@ -341,7 +342,7 @@ const CashierGUI = () => {
                 </Grid>
             </div>
             <div style = {{ display: "flex", minHeight: "30%", marginTop: "2.5%", marginBottom: "5%", paddingTop: "2.5%", paddingBottom: "2.5%", backgroundColor: "lightgrey" }}>
-                <div style = {{ minHeight: "90%", width: "45%", marginLeft: "2.5%", backgroundColor: "whitesmoke" }}>
+                <div style = {{ overflowY: "scroll", height: "300px", width: "45%", marginLeft: "2.5%", backgroundColor: "whitesmoke" }}>
                     <p style = {{ fontWeight: "bold", marginBottom: "1%", marginLeft: "1%", marginTop: "1%" }}>
                         
                         <TranslatedText text = {"Itemized Receipt"} key = {lang}/>

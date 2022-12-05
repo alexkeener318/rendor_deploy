@@ -129,13 +129,6 @@ let allOrdered = [];
         }
     }
 
-    //reset all the prices for the itemized receipt to zero
-    function resetTotal(){
-        totalPrice=0.00;
-        rawPrice=0.00;
-        tax=0.00;
-    }
-
     /**
     * This function takes all the order attributes and formats them in a query
     * to send to the database. Also resets the order attributes afterwards.
@@ -232,7 +225,7 @@ async function addMenu(itemName, itemPrice, itemIngreds, url) {
     await getItemID()
     .then(()=>{
         // send in query
-        const query = "INSERT INTO menu VALUES(" +itemID + ",'" + itemName +"', " + itemPrice +", '" + itemIngreds + "');";
+        const query = "INSERT INTO menu VALUES(" +itemID + ",'" + itemName +"', " + itemPrice +", '" + itemIngreds + "', '" + url + "');";
         pool.query(query);
     })
     
@@ -250,6 +243,7 @@ async function addMenu(itemName, itemPrice, itemIngreds, url) {
             }
         });
     }
+    
 }
 
 /**
@@ -560,22 +554,9 @@ async function popCombos(date1, date2) {
 
     return topTenItems;
 }
-
-
-//all receipts
-async function receipts(){
-    query_str = "SELECT * FROM receipts;";
-    receipts=[];
-    await pool
-            .query(query_str)
-            .then(query_res => {
-                for (let i = 0; i < query_res.rowCount; i++){
-                    receipts.push(query_res.rows[i]);
-                }});
-    return receipts;
-}
-
-//get all the ingredients in id order
+/**
+    * This function gets all the ingredients from inventory in id order
+    */
 async function getInventory(){
     query_str = "SELECT * FROM ingredients ORDER BY ingredient_id;";
     inventory=[];
@@ -588,7 +569,10 @@ async function getInventory(){
     return inventory;
 }
 
-//get all the menu items in id order
+/**
+    * This function gets all the menu items in id order
+    *
+    */
 async function getMenu(){
     query_str = "SELECT * FROM menu ORDER BY item_id;";
     menuItems=[];
@@ -601,84 +585,12 @@ async function getMenu(){
     return menuItems;
 }
 
-//get all the receipts between two dates
-async function combosData(date1, date2){
-    query_str = "SELECT * FROM receipts where timestamp between '"+date1+" "+"00:00:00' and '"+date2+" "+"00:00:00';";
-    combosReceipts=[];
-    await pool
-            .query(query_str)
-            .then(query_res => {
-                for (let i = 0; i < query_res.rowCount; i++){
-                    combosReceipts.push(query_res.rows[i]);
-                    //console.log(query_res.rows[i]);
-                }});
-    //console.log(combosReceipts[1])
-    return combosReceipts;
-}
-
-//gets the quantity in the inventory of a particular item
-async function inventoryQuantity(item){
-    quantity_str="";
-    query_str ="SELECT quantity as quan FROM ingredients where name = '"+item+"';";
-    await pool
-            .query(query_str)
-            .then(query_res => {
-                for (let i = 0; i < query_res.rowCount; i++){
-                    quantity_str=query_res.rows[i];
-                }});
-    quantity=quantity_str.quan;
-    return quantity;
-}
-
-//get the ingredients used of a specific item
-async function ingredientsUsed(item){
-    ingredients_str="";
-    query_str ="SELECT ingredients_used FROM menu WHERE item_name ='" + item +"';";
-    await pool
-            .query(query_str)
-            .then(query_res => {
-                for (let i = 0; i < query_res.rowCount; i++){
-                    ingredients_str=query_res.rows[i];
-                    //console.log(query_res.rows[i]);
-                }});
-    ingredients=ingredients_str.ingredients_used;
-   // console.log(ingredients)
-    return ingredients;
-}
-
-//get the price of an item, returns price as an int
-async function getPrice(item){
-    query_str = "select item_price AS price from menu where item_name= '"+item+"';";
-    price_str="";
-    await pool
-            .query(query_str)
-            .then(query_res => {
-                for (let i = 0; i < query_res.rowCount; i++){
-                    price_str=query_res.rows[i];
-                }});
-    price=price_str.price;
-    return price;
-}
-
-//get the quantity of an item from ingredients, returns quantity as an int
-async function getQuantity(item){
-    query_str = "SELECT quantity as quan FROM ingredients where name = '"+item+"';";
-    quantity_str="";
-    query_str ="SELECT count(order_items) AS quantity FROM receipts where order_items like'%"+item +"%'and timestamp between '"+date1+" "+"00:00:00' and '"+date2+" "+"00:00:00'";
-    await pool
-            .query(query_str)
-            .then(query_res => {
-                for (let i = 0; i < query_res.rowCount; i++){
-                    quantity_str=query_res.rows[i];
-                    console.log(query_res.rows[i]);
-                }});
-    quantity=quantity_str.quan;
-    //console.log(quantity)
-    return quantity;
-}
-
-//gets the pinpad entry and returns a person with its name, id(pinpad), and role(manager or employee)
-// manager IDs: 45678, 67890
+/**
+    * This function returns a person object with the attributes name, email, and role
+    * this is used to differentiate employees, customers, and managers
+    *
+    * @param email the string representing the email of the person logging in
+    */
 async function employeeType(email){
     let person ={};
     employee_name="";
@@ -696,21 +608,20 @@ async function employeeType(email){
                 }
 
             });
-    // if(person. =="Reagan R" || person.name =="David A" ){
-    //     person.role="Manager";
-    // }else{
-    //     person.role="Employee";
-    // }
-    //  console.log(person.name);
-    //  console.log(person.email);
-    //  console.log(person.role);
     return person;
 }
 
 //function for the statistics table takes in 2 dates and returns an object with the attributes
 //orders for the number of orders, credit for the sales made in credit band debit cards, 
 //dining for the revenue in meal swipes and grossRevenue for the total revenue for those dates
-statisticsTable("09-20-2022", "10-05-2022"); //example test run
+//statisticsTable("09-20-2022", "10-05-2022"); //example test run
+/**
+    * This function gets the data between two dates to display for the statistics table
+    * it returns an item with the amount spent on credit, dining, and the total revenue and the number of orders sent
+    *
+    * @param date1    the string that holds the first date to take the data from
+    * @param date2    the string that holds the ending date to take the data from
+    */
 async function statisticsTable(date1, date2){
     let stats={};
     totalRevenue = 0.0;
@@ -737,22 +648,23 @@ async function statisticsTable(date1, date2){
             totalRevenue+=receiptsStats[i].total;
         }
     }
-    console.log(receiptsStats[3]);
     orders=receiptsStats.length;
     stats.orders=orders;
     stats.credit=roundTotal(creditRevenue);
     stats.grossRevenue=roundTotal(totalRevenue);
     stats.dining=roundTotal(diningRevenue);
-    console.log(stats.credit);
-   // console.log(stats.credit);
-   // console.log(stats.dining);
-    //console.log(stats.grossRevenue);
     return stats;
 }
 
 //returns array of the receipts in a specified timeframe
 //use receipts[index].total to get the revenue of each order
-statisticsGraph("09-15-2022", "09-17-2022"); //example test run
+//statisticsGraph("09-15-2022", "09-17-2022"); //example test run
+/**
+    * This function gets the data between two dates to display for the statistics graph
+    *
+    * @param date1    the string that holds the first date to take the data from
+    * @param date2    the string that holds the ending date to take the data from
+    */
 async function statisticsGraph(date1,date2){
     query_str = "SELECT * FROM receipts where timestamp between '"+date1+" "+"00:00:00' and '"+date2+" "+"00:00:00'";
     receiptsForGraph=[];
@@ -767,9 +679,14 @@ async function statisticsGraph(date1,date2){
     return receiptsForGraph;
 }
 
-//order of items tomatoes, salt, lettuce, hummus, cheese, olives, onions, cucumbers, cauliflower, peppers, dressing
 // param= [1.0,2.0,3.0,2.0,1.0,1.0,2.0,1.0,1.0,1.0,1.0];
 // updateToppings(param);
+/**
+    * This function updates the inventory for the toppings after the employee puts in how many bags of each topping were 
+    * used throughout the day
+    *
+    * @param toppings  an array of the amount of bags used of each toppings after one day as inputted by the employee
+    */
 async function updateToppings(toppings){
     items = ["Tomatoes", "Salt", "Lettuce", "Hummus", "Cheese", "Olives", "Onions", "Cucumbers", "Cauliflower", "Peppers", "Dressing"];
     ingredients=[];
@@ -794,8 +711,14 @@ async function updateToppings(toppings){
     }
 }
 
-
-
+/**
+    * Runs the query to get the data for the amount of orders of every menu item
+    * Then it checks which of the items have an excess amount based off of how much was ordered 
+    * and how much inventory it had
+    *
+    * @param dateOne    the string that holds the first date to take the data from
+    * @param dateTwo    the string that holds the ending date to take the data from
+    */
 async function excessReport(dateOne, dateTwo){
     // get a list of all the menu items
     let menuItems = [];
