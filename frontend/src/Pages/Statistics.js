@@ -1,3 +1,8 @@
+/**
+* This class creates the UI that reports to the user sales information
+* during a specified time frame
+* @author   Sry Hak
+*/
 // react
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -6,7 +11,6 @@ import { Link } from "react-router-dom";
 import { useTheme } from '@mui/material/styles';
 import { Button } from "@mui/material"
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
-import { margin, width } from "@mui/system";
 import { TextField } from "@mui/material";
 import axios from 'axios'
 
@@ -14,16 +18,14 @@ import axios from 'axios'
 import Header from "../Components/Header";
 import TranslatedText from "../Components/TranslatedText";
 
-// pages
-import ExcessReport from "./ExcessReport";
-import PopularCombos from "./PopularCombos";
-import POSReport from "./POSReport";
-
 // contexts
-import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
 
-
+/**
+* Creates datapoint objects for the statistics graph
+* @param {string} time       contains the timestamp for the x axis
+* @param {number} amount       contains the gross revenue for the y axis
+*/
 function createData(time, amount) {
     return { time, amount };
 }
@@ -40,9 +42,13 @@ const Statistics = () => {
   const [orders, setOrders] = useState();
   const [graphData, setGraphData] = useState([]);
 
+/**
+* Updates/rerenders the graph
+* @param {string} time       contains the timestamp for the x axis
+* @param {number} amount       contains the gross revenue for the y axis
+*/
   function updateState( time, total) {
     setGraphData(graphData => [...graphData, createData(time, total)]);
-
   }
 
   useEffect(() => {
@@ -56,8 +62,6 @@ const Statistics = () => {
 
     axios.post("https://project-3-6njq.onrender.com/statsGraph", { startDate: startDate, endDate:endDate})
       .then(retrievedData => {
-        // console.log(retrievedData);
-        // console.log("retrieved data: ", retrievedData);
         setGraphData([]);
         let numElements = retrievedData.data.length-1; 
 
@@ -72,15 +76,9 @@ const Statistics = () => {
                     breakpointTotal += retrievedData.data[elemIndex].total;
                     elemIndex++;
                 }
-                console.log("timestamp: ", retrievedData.data[elemIndex].timestamp);
-                console.log("total: ", breakpointTotal);
                 updateState(retrievedData.data[elemIndex].timestamp, breakpointTotal);
-                //setGraphData(graphData => [...graphData, createData(retrievedData.data[elemIndex].timestamp, breakpointTotal)]);
             }
         }
-        // {(retrievedData.data ?? []).map( (elem) => {
-        //     setGraphData(graphData => [...graphData, createData(elem.timestamp, elem.total)]);
-        // })}
       })
   },[startDate,endDate])
 
