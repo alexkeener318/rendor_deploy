@@ -47,6 +47,10 @@ let allOrdered = [];
 
 
 // ***************** Functions directly related to the current Order *****************
+    /**
+    * Adds a new item to the item list attribute of the current order
+    * @param itemName    the string that holds the name of the item to add to the order
+    */
     async function addItem(itemName){
         allOrdered.push(itemName);
         if(orderItems == ""){
@@ -56,7 +60,11 @@ let allOrdered = [];
         }
     }
 
-    // get price and tax details
+    /**
+    * Fetches the price of an newly added item, calculates the tax, and adds
+    * the total to the current order total
+    * * @param itemName    the string that holds the name of the item to fetch the price for
+    */
     async function updatePrice(itemName) {
         // calculate item total
         let itemPrice = 0.00;
@@ -81,6 +89,11 @@ let allOrdered = [];
         });
     }
 
+    /**
+    * This function removes an item from the current order and updates
+    * the price and order items list to reflect that removal
+    * @param itemID    an integer that holds the ID of the item to be removed
+    */
     async function removeItem(itemID){
         // get the price of the item
         let itemPrice = 0.00;
@@ -123,7 +136,12 @@ let allOrdered = [];
         tax=0.00;
     }
 
-    // send orders to database
+    /**
+    * This function takes all the order attributes and formats them in a query
+    * to send to the database. Also resets the order attributes afterwards.
+    * @param paymentType    a string that holds the type of payment the customer selected
+    * @param empName        a string that holds the name of the employee taking the order
+    */
     async function sendOrder(paymentType, empName){
         // get time
         let date = new Date().toLocaleDateString();
@@ -165,11 +183,19 @@ let allOrdered = [];
 // *************************************************************************************
 
 
-
+    /**
+    * This function returns a random integer between 0 and the integer passed in
+    * @param max    an integer that holds the top of the range to determine a random integer
+    */
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
+/**
+    * This function creates a random card number for use in an order
+    * 
+    * @param cardlen    an integer that holds the length of the card number to be returned
+    */
 function cardNumberGenerator(cardlen){
     cardNumber = "\'"
     for (let i = 0; i < cardlen; i++){
@@ -180,6 +206,9 @@ function cardNumberGenerator(cardlen){
     return cardNumber
 }
 
+    /**
+    * This function makes a random customer name for the current order
+    */
 function getName() {
     let numFirst = getRandomInt(firstName.length)
     let numLast = getRandomInt(lastName.length)
@@ -190,7 +219,15 @@ function getName() {
 
 // adding new items to menu
 let itemID;
-//addMenu("tomato salad", 2.00, "Tomatoes,Dressing", "www.urmom.com");
+/**
+    * This function adds a new menu item to be added to orders. If the item uses new ingredients
+    * that aren't currently in the database, these new ingredients are added.
+    * 
+    * @param itemName   a string that contains the name of the item to add
+    * @param itemPrice  a float that contains the price of the item to add
+    * @param itemIngreds a string containing the list of the ingredients used in the new item
+    * @param url        a string that contains a url for the image to be displayed for the new item
+    */
 async function addMenu(itemName, itemPrice, itemIngreds, url) {
     await getItemID()
     .then(()=>{
@@ -215,6 +252,11 @@ async function addMenu(itemName, itemPrice, itemIngreds, url) {
     }
 }
 
+/**
+    * This function adds an inventory item into the ingredients table in the database
+    * 
+    * @param name    a string containing the name of the ingredient
+    */
 async function addInventoryItem(name){
     // get newID for item
     let ID;
@@ -229,14 +271,29 @@ async function addInventoryItem(name){
     });
 }
 
+/**
+* This function removes an current menu item by removing it from the
+* database
+* 
+* @param item   a string containing the name of the item to be removed from the menu
+*/
 function deleteMenu(item){
     pool.query("DELETE FROM menu WHERE item_name = '" + item + "';");
 }
 
+/**
+* This function updates the price of a current menu item
+*
+* @param item    a string containing the name of the menu item
+* @param price   a float containing the new price of the menu item
+*/
 function updateMenu(item, price){
     pool.query("UPDATE menu SET item_price = " + price + " WHERE item_name = '" + item + "';");
 }
 
+/**
+* This function access' the database and returns the next ID for a new item to be added
+*/
 async function getItemID() {
     let newID;
     await pool
@@ -250,6 +307,9 @@ async function getItemID() {
     }) 
 }
 
+/**
+* This function access' the database and returns the next ID for a new order
+*/
 async function getID() {
     let newID;
     await pool
@@ -263,6 +323,9 @@ async function getID() {
         });
 }
 
+/**
+* This function gets a list of the current ingredient items that are low on stock
+*/
 async function checkStock(){
     lowStock = [];
     let items = await getInventory();
@@ -274,32 +337,21 @@ async function checkStock(){
     }
 }
 
+/**
+* This function takes in a float and rounds it to two decimals
+* 
+* @param item   a float containing the number to be rounded
+*/
 function roundTotal(num){
-    console.log("num: " + num);
     num = parseFloat(num).toFixed(2);
-    console.log("num after: " + num);
-    // let newNum = "";
-    // let currNum = "";
-    // currNum += num;
-    // let numDigs = 0;
-    // let hitDeci = false;
-    // let big = false;
-    // for(let char of currNum){
-    //     newNum += char;
-    //     if(char == '.'){
-    //         hitDeci = true;
-    //     }
-    //     if(hitDeci){
-    //         numDigs++;
-    //     }
-    //     if(numDigs > 2){
-    //         break;
-    //     }
-    // }
-    // return parseFloat(newNum);
     return parseFloat(num);
 }
 
+/**
+* This function updates the inventory of the items used in the order just sent to the database.
+* 
+* @param orderItems   a string containing the list of items in the order that was just finalized
+*/
 async function updateInventory(orderItems){
     items = orderItems.split(",");
     ingredients=[];
@@ -336,7 +388,10 @@ async function updateInventory(orderItems){
     }
 }
 
-//array of bowls
+/**
+* This function access' the database and returns the current menu items that fit into
+* the bowl category
+*/
 async function bowlContent(){
     let item;
     bowls =[];
@@ -354,7 +409,10 @@ async function bowlContent(){
     return bowls;
 }
 
-//array of gyros
+/**
+* This function access' the database and returns the current menu items that fit into
+* the gyro category
+*/
 async function gyrosContent(){
     let item;
     gyros=[];
@@ -372,7 +430,10 @@ async function gyrosContent(){
     return gyros;
 }
 
-//array of drinks
+/**
+* This function access' the database and returns the current menu items that fit into
+* the drinks category
+*/
 function drinksContent(){
     let drink1={}; //water bottle
     drink1.url=  "https://www.shutterstock.com/image-photo/plastic-water-bottle-big-small-600w-1907885707.jpg"
@@ -385,7 +446,10 @@ function drinksContent(){
     return drinks;
 }
 
-//array of extras
+/**
+* This function access' the database and returns the current menu items that weren't in any of the previously
+* mentioned categories.
+*/
 async function extrasContent(){
     //extras=["2 Meatballs", "2 Falafels", "Fries", "Garlic Fries", "Hummus & Pita", "Extra Dressing", "Extra Hummus", "Extra Protein", "Pita Bread"];
     let item;
@@ -405,8 +469,14 @@ async function extrasContent(){
     return extras;
 }
 
-//the quantity of times that items were ordered in a time frame for POS report
-//returns the number of times it was ordered
+
+/**
+* This function checks the database for orders between the two passed in dates to return
+* a list of the order items ordered between those dates.
+* 
+* @param date1   a string containing the first date of the date range
+* @param date2   a string containing the second date of the date range
+*/
 async function reportContent(date1, date2){ //params are item name the first date and the second date all strings
     quantity_str="";
     query_str ="SELECT order_items FROM receipts where timestamp between '"+date1+" "+"00:00:00' and '"+date2+" "+"00:00:00';";
@@ -422,7 +492,12 @@ async function reportContent(date1, date2){ //params are item name the first dat
     return data     
 }
 
-//the popular combos ordered in a time frame
+/**
+* This function finds the most ordered together items in a certain date range, stores them in a list, and return it
+* 
+* @param date1   a string containing the first date of the date range
+* @param date2   a string containing the second date of the date range
+*/
 async function popCombos(date1, date2) {
     let keyList = [];
     let valueList = [];
@@ -1004,5 +1079,4 @@ async function main(){
     app.listen(port,()=> console.log(`Listening to port ${port}`));
 }
 console.log("TESTING");
-roundTotal(10.1239183713193219800000000000000000123);
 main();
