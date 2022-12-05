@@ -18,12 +18,18 @@ import Header from "../Components/Header";
 // contexts
 import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
+import ReactCountryFlag from "react-country-flag";
 
 
 const managerButtonList = [
     {id: 1, buttonName: "Statistics", linkName: "/statistics"},
     {id: 2, buttonName: "Inventory", linkName: "/inventory"},
     {id: 3, buttonName: "Edit Menu", linkName: "/editMenu"}
+]
+
+const employeeButtonList = [
+    {id: 1, buttonName: "Low Stock", linkName: "/lowstockgui"},
+    {id: 2, buttonName: "Update Inventory", linkName: "/updateinventory"},
 ]
 
 var counter = 0;
@@ -69,8 +75,6 @@ const CashierGUI = () => {
                     console.log(data.data)
                 })
         }
-        
-
 
     },[isAuthenticated])
 
@@ -80,7 +84,8 @@ const CashierGUI = () => {
         }
 
         if (role === "Employee"){
-            setManagerButtons([...managerButtons].slice(0, managerButtons.length - 1))
+            //setManagerButtons([...managerButtons].slice(0, managerButtons.length - 1))
+            setManagerButtons([...employeeButtonList])
         }
 
         if (role == "Manager"){
@@ -88,8 +93,6 @@ const CashierGUI = () => {
         }
         
     },[role])
-
-    
 
     const bowlMenu = async () => {
         try {
@@ -143,6 +146,8 @@ const CashierGUI = () => {
     const extraMenu = async () => {
         try {
             const response = await fetch('https://project-3-6njq.onrender.com/getExtras', {
+            // const response = await fetch('http://localhost:5000/getExtras', {
+
                 method: 'POST',
                 body: JSON.stringify(),
                 headers: {
@@ -337,7 +342,7 @@ const CashierGUI = () => {
                 </Grid>
             </div>
             <div style = {{ display: "flex", minHeight: "30%", marginTop: "2.5%", marginBottom: "5%", paddingTop: "2.5%", paddingBottom: "2.5%", backgroundColor: "lightgrey" }}>
-                <div style = {{ minHeight: "90%", width: "45%", marginLeft: "2.5%", backgroundColor: "whitesmoke" }}>
+                <div style = {{ overflowY: "scroll", height: "300px", width: "45%", marginLeft: "2.5%", backgroundColor: "whitesmoke" }}>
                     <p style = {{ fontWeight: "bold", marginBottom: "1%", marginLeft: "1%", marginTop: "1%" }}>
                         
                         <TranslatedText text = {"Itemized Receipt"} key = {lang}/>
@@ -375,7 +380,7 @@ const CashierGUI = () => {
                             {managerButtons.map( elem => {
                                 return (
                                         <Link key = {elem.id} to={elem.linkName} style={{ textDecoration:"none" }}>
-                                            <Button style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "green", color: "white" }}><TranslatedText text = {elem.buttonName} key = {lang}/></Button>
+                                            <Button key = {elem.buttonName} style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "green", color: "white" }}><TranslatedText text = {elem.buttonName} key = {lang}/></Button>
                                         </Link>
                                     );
                                 })}

@@ -183,7 +183,7 @@ function getName() {
 
 // adding new items to menu
 let itemID;
-addMenu("tomato salad", 2.00, "Tomatoes,Dressing", "www.urmom.com");
+//addMenu("test", 2.00, "Tomatoes,Dressing", "www.urmom.com");
 async function addMenu(itemName, itemPrice, itemIngreds, url) {
     await getItemID()
     .then(()=>{
@@ -284,38 +284,33 @@ function roundTotal(num){
         if(hitDeci){
             numDigs++;
         }
-        if(numDigs == 3){
-            if(parseInt(char) > 4){
-                big = true;
-            }
-            break;
-        }
+        // if(numDigs == 3){
+        //     if(parseInt(char) > 4){
+        //         big = true;
+        //     }
+        //     break;
+        // }
     }
     // Rounds if necessary
-    newNum = parseFloat(newNum);
-    if(big){
-        num += 0.01;
-        newNum = "";
-        currNum = "";
-        currNum += num;
-        numDigs = 0;
-        hitDeci = false;
-        big = false;
-        for(let char of currNum){
-            newNum += char;
-            //console.log(newNum);
-            if(char == '.'){
-                hitDeci = true;
-                
-            }
-            if(hitDeci){
-                numDigs++;
-            }
-            if(numDigs==3){
-                break;
-            }
-        }
-    }
+    // newNum = parseFloat(newNum);
+    // if(big){
+    //     num += 0.01;
+    //     newNum = "";
+    //     currNum = "";
+    //     currNum += num;
+    //     numDigs = 0;
+    //     hitDeci = false;
+    //     big = false;
+    //     for(let char of currNum){
+    //         newNum += char;
+    //         if(char == '.'){
+    //             hitDeci = true;
+    //         }
+    //         if(hitDeci){
+    //             numDigs++;
+    //         }
+    //     }
+    // }
     return parseFloat(newNum);
 }
 
@@ -726,7 +721,11 @@ async function excessReport(dateOne, dateTwo){
         })
         let percentage = numSold / (numSold + numLeft);
         if(percentage <= 0.10){
-            returnItems.push(invItems[i].name);
+            let object ={};
+            object.name = invItems[i].name;
+            object.quantity = numLeft;
+            object.sales = numSold;
+            returnItems.push(object);
         }
     }
     // return the list
@@ -936,6 +935,13 @@ async function main(){
             console.log("Error: " + err.message);
         });
         // res.send(employeeType(req.body.pin) );  
+    })
+
+    app.post("/updateTopping",jsonParser,(req,res)=>{
+        (async ()=>{
+            let results = await updateToppings(req.body.list);
+            res.send(results);
+        })();
     })
 
     app.listen(port,()=> console.log(`Listening to port ${port}`));
