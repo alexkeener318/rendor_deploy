@@ -1,3 +1,10 @@
+/**
+* This class holds all the functions needed for the cashier GUI to communicate
+* with the backend 
+* @author   David Asatryan
+* @author   Emily Ha
+* @author   Sry Hak
+*/
 // react
 import { useContext, useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
@@ -10,16 +17,13 @@ import axios from 'axios'
 
 // components
 import TranslatedText from "../Components/TranslatedText";
-import LanguagePicker from "../Components/LanguagePicker";
 import Header from "../Components/Header";
 
 // pages
 
 // contexts
-import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
 import ReactCountryFlag from "react-country-flag";
-
 
 const managerButtonList = [
     {id: 1, buttonName: "Statistics", linkName: "/statistics"},
@@ -36,7 +40,6 @@ var counter = 0;
 
 const CashierGUI = () => {
     
-   // const {user,setUser} = useContext(UserContext)
     const {lang, setLang} = useContext(LanguageContext)
 
     
@@ -53,7 +56,6 @@ const CashierGUI = () => {
     const { logout } = useAuth0() 
     const [ role, setRole ] = useState('Employee')
 
-    // TODO: IMPLEMENT LOGIC FOR SERVER VS MANAGER
     const [managerButtons, setManagerButtons] = useState([...managerButtonList])
 
     const { isAuthenticated } = useAuth0()
@@ -72,7 +74,6 @@ const CashierGUI = () => {
             axios.post("https://project-3-6njq.onrender.com/employeeType", { pin:email })
                 .then(data => {
                     setRole(data.data.role)
-                    console.log(data.data)
                 })
         }
 
@@ -84,7 +85,6 @@ const CashierGUI = () => {
         }
 
         if (role === "Employee"){
-            //setManagerButtons([...managerButtons].slice(0, managerButtons.length - 1))
             setManagerButtons([...employeeButtonList])
         }
 
@@ -94,6 +94,10 @@ const CashierGUI = () => {
         
     },[role])
 
+    /**
+    * Retrieves the list of bowl menu items from the database
+    * uses this information to populate the Bowl tab for the menu 
+    */
     const bowlMenu = async () => {
         try {
             const response = await fetch('https://project-3-6njq.onrender.com/getBowls', {
@@ -116,9 +120,12 @@ const CashierGUI = () => {
         setResults([])
             setErr(err.message);
         }
-        // setResults([...bowlList]);
     }
 
+    /**
+    * Retrieves the list of gyro menu items from the database
+    * uses this information to populate the Gyro tab for the menu 
+    */
     const gyroMenu = async () => {
         try {
             const response = await fetch('https://project-3-6njq.onrender.com/getGyros', {
@@ -135,14 +142,17 @@ const CashierGUI = () => {
             }
         
             const result = await response.json();
-            console.log(result);
             setGyroList(result);
         } catch (err) {
         setResults(prevState => [])
             setErr(err.message);
         }
-        // setResults([...gyroList]);
     }
+
+    /**
+    * Retrieves the list of extra menu items from the database
+    * uses this information to populate the Extra tab for the menu 
+    */
     const extraMenu = async () => {
         try {
             const response = await fetch('https://project-3-6njq.onrender.com/getExtras', {
@@ -167,9 +177,12 @@ const CashierGUI = () => {
         setResults(prevState => [])
             setErr(err.message);
         }
-        // setResults([...extraList]);
     }
 
+    /**
+    * Retrieves the list of drink menu items from the database
+    * uses this information to populate the Drink tab for the menu 
+    */
     const drinkMenu = async () => {
         try {
             const response = await fetch('https://project-3-6njq.onrender.com/getDrinks', {
@@ -192,9 +205,12 @@ const CashierGUI = () => {
         setResults([])
             setErr(err.message);
         }
-        //setResults([...drinkList]);
     }
 
+    /**
+    * Takes the menu item selected by the user and adds it to the itemized receipt
+    * @param {string} item       the string of the menu item that was clicked by the user
+    */
     const handleClick = async (item) => {
         setReceipt([...receipt,{id:counter, name:item}]);
         counter++;
@@ -223,6 +239,11 @@ const CashierGUI = () => {
         }
     };
 
+    /**
+    * Checkouts customer order and sends order including items ordered, payment type, and employee to the database 
+    * @param {string} payment       the string that holds the current employee name
+    * @param {string} employeeName   the string that holds the current employee id
+    */
     const handleCheckout = async (payment, employeeName) => {
         setIsLoading(true);
         emptyReceipt()
@@ -267,11 +288,18 @@ const CashierGUI = () => {
         setResults([...drinkList]);
     },[drinkList])
 
+    /**
+    * Clears the itemized receipt
+    */
     const emptyReceipt = () => {
         setReceipt([]);
         counter = 0;
     };
 
+    /**
+    * Removes a specified item from the itemized receipt
+    * @param {number} id       contains the id of the item to be removed
+    */
     const removeItem = async (id) => {
         const newReceipt = receipt.filter(
             (receipt) => receipt.id !== id
@@ -332,10 +360,7 @@ const CashierGUI = () => {
                                     <TranslatedText text = {elem.name} key = {lang + elem.url}/>
                                 </CardContent>
                             </Card>
-                            {/* <Button key = {elem.url} onClick = {event => handleClick(elem.itemName)} style = {{ backgroundColor: "blue", color: "white", width: "100%", height: "100%", backgroundSize: "160%",backgroundImage: elem.url, backgroundPosition:"top center" }}>
-                                <TranslatedText text = {elem} key = {lang}/>
-                            </Button> */}
-                            {/* <Button onClick = {event => handleClick(elem.itemName)} style = {{ backgroundColor: "blue", color: "white", width: "100%", height: "100%" }}>{elem.itemName}</Button> */}
+            
                         </Grid>
                         );
                     })}
@@ -351,7 +376,7 @@ const CashierGUI = () => {
                         return (
                             <div key = { elem.id } onClick = {() => removeItem(elem.id)}>
                                 <p style = {{ marginLeft: "1%" }}> 
-                                    { elem.name } 
+                                <TranslatedText text = {elem.name} key = {lang}/>
                                 </p>
                             </div>
                         )
@@ -362,10 +387,6 @@ const CashierGUI = () => {
                         <TranslatedText text = {"Total"} key = {lang}/>
                         : $ { total }
                     </div>
-                    {/* <div style = {{ height: "20%", width: "100%", marginTop: "20%", backgroundColor: "whitesmoke" }} >
-                        <TranslatedText text = {"Employee ID"} key = {lang}/>
-                        : {(user.id ?? 'w')}
-                    </div> */}
                     <div style = {{ height: "20%", width: "100%", backgroundColor: "whitesmoke" , paddingBottom:20}} >
                         <TranslatedText text = {"Employee Name"} key = {lang}/>
                         : {( user?.name ?? 'w')}

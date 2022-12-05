@@ -1,3 +1,8 @@
+/**
+* This component receives text and returns a translated version of the same text
+* @author   David Asatryan
+*/
+
 import axios from 'axios'
 
 import { useState, useEffect, useContext } from "react";
@@ -13,18 +18,13 @@ const TranslatedText=(props)=>{
          
          setTranslation(result.data);
       }
-      // only translate if the text is not a number
-     // if (isNaN(parseFloat(props.text))){
+      
       if (lang !=="en"){
         getTranslation()
       }
       else {
         setTranslation(props.text)
       }
-      // }
-      // else {
-      //   setTranslation(props.text)
-      // }
     
     },[])
     

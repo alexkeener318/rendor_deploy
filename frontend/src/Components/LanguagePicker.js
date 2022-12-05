@@ -1,21 +1,22 @@
-import { Button, Select, FormControl, MenuItem } from "@mui/material"
-// import FormControl from '@mui/material/FormControl';
-// import Select from '@mui/material/Select';
+/**
+* This component serves as a dropdown which will allow the user to change the current language of the website
+* @author   David Asatryan
+*/
+import { Select, FormControl, MenuItem } from "@mui/material"
 
-import { useState, useContext } from "react";
-import { Link } from "react-router-dom";
-import TranslatedText from "./TranslatedText";
+import { useContext } from "react";
 
 import { LanguageContext } from "../contexts/language";
 
 import ReactCountryFlag from "react-country-flag"
 
-
-
-const LanguagePicker = (props) => {
+const LanguagePicker = () => {
   const {lang,setLang} = useContext(LanguageContext)
 
-
+    /**
+    * Changes the language of the website
+    * @param {Object} event contains the event that occured when a different language is chosen
+    */
     const changeLanguage = (event) =>{
       setLang(event.target.value)
     }
@@ -24,7 +25,6 @@ const LanguagePicker = (props) => {
         
           
     <div style={{display:"flex", alignItems:"center"}}>
-            
 
             <FormControl variant = "standard">
             <Select

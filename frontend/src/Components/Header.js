@@ -1,6 +1,8 @@
+/**
+* This component serves as a header which most pages will use to display a title or navigate to other pages
+* @author   David Asatryan
+*/
 import { Button, Select, FormControl, MenuItem } from "@mui/material"
-// import FormControl from '@mui/material/FormControl';
-// import Select from '@mui/material/Select';
 
 import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
@@ -26,10 +28,12 @@ const AuthNav = () => {
 const Header = (props) => {
   const {lang,setLang} = useContext(LanguageContext)
 
-
+    /**
+    * Changes the language of the website
+    * @param {Object} event contains the event that occured when a different language is chosen
+    */
     const changeLanguage = (event) =>{
       setLang(event.target.value)
-      console.log("lang is", lang)
     }
 
     return (
@@ -58,11 +62,8 @@ const Header = (props) => {
           
           <div style={{display:"flex", alignItems:"center"}}>
             <AuthNav/>
-          </div>
-
-            
+          </div>   
         </div>
-
         <hr/>
       </div>
     );

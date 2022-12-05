@@ -1,3 +1,8 @@
+/**
+* This class displays the current inventory of all of ingredients at the store
+* @author   David Asatryan
+*/
+
 // react
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
@@ -5,8 +10,6 @@ import { Link } from "react-router-dom";
 // external imports
 import axios from 'axios'
 import { Button, TextField } from "@mui/material";
-import { DataGrid, selectedGridRowsCountSelector } from '@mui/x-data-grid'; 
-import { createTheme, ThemeProvider } from "@mui/material";
 
 // components
 import Header from "../Components/Header"
@@ -38,6 +41,10 @@ const Inventory = ()=> {
       })
   },[startDate, endDate])
 
+  /**
+  * Retrieves all items that currently have a low stock and places them inside an array
+  * 
+  */
   const lowStock = async () => {
     setIsLoading(true);
     try {
@@ -72,34 +79,6 @@ const Inventory = ()=> {
       <div style={{display:"flex", justifyContent:"center", marginTop:20}}>
         <div style={{width:"90%"}}>
 
-
-          {/* A grid div which will contain the two text boxes */}
-          {/* <div style={{display:"flex", justifyContent:"space-evenly"}}>
-            <TextField
-                id="date"
-                label="Starting Date"
-                type="date"
-                //defaultValue="2022-05-24"
-                value = {startDate}
-                onChange = { ( event ) => setStartDate(event.target.value)}
-                sx={{ width: 220 }}
-                InputLabelProps={{
-                shrink: true,
-                }}
-            />
-            <TextField
-                id="date"
-                label="Ending Date"
-                type="date"
-                value = {endDate}
-                onChange = { ( event ) => setEndDate(event.target.value)}
-                sx={{ width: 220 }}
-                InputLabelProps={{
-                shrink: true,
-                }}
-            />
-          </div> */}
-
           {/* Start table here */}
           <div style={{height:"500px", overflowY:"scroll", border:"solid", borderWidth:2, borderColor:"blue", backgroundColor:"blue", marginTop:20}}>
 
@@ -107,14 +86,12 @@ const Inventory = ()=> {
               <FiveColRow item = {"Item id"} quantity = {"Name"} prevQuantity = {"Quantity"}  lastShipment = {"Unit"} nextShipment = {"Last Shipment"}/>
             </div>
             
-
             { (data ?? []).map( (row) =>{
               return (
                 <FiveColRow key = {row.ingredient_id} item = {row.ingredient_id} quantity = {row.name} prevQuantity = {row.quantity} lastShipment = {row.ingredient_unit} nextShipment = {row.last_shipment.slice(0,10)} />
               )
             }) }
             
-
           </div>
 
           <div style = {{  marginTop: "3%", paddingLeft: "2.5%", paddingRight: "2.5%", paddingBottom: "2%", backgroundColor: "lightgrey" }}>
@@ -132,7 +109,6 @@ const Inventory = ()=> {
                 <Button style = {{ height: "100%", width: "17.5%", marginLeft: "41.25%", marginTop: "1%", backgroundColor: "blue", color: "white" }}><TranslatedText text = "Update Inventory" key={lang}/></Button>
               </Link>
           </div>
-
 
         </div>
 
