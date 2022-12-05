@@ -36,7 +36,6 @@ var counter = 0;
 
 const CashierGUI = () => {
     
-   // const {user,setUser} = useContext(UserContext)
     const {lang, setLang} = useContext(LanguageContext)
 
     
@@ -53,7 +52,6 @@ const CashierGUI = () => {
     const { logout } = useAuth0() 
     const [ role, setRole ] = useState('Employee')
 
-    // TODO: IMPLEMENT LOGIC FOR SERVER VS MANAGER
     const [managerButtons, setManagerButtons] = useState([...managerButtonList])
 
     const { isAuthenticated } = useAuth0()
@@ -94,6 +92,7 @@ const CashierGUI = () => {
         
     },[role])
 
+    
     const bowlMenu = async () => {
         try {
             const response = await fetch('https://project-3-6njq.onrender.com/getBowls', {
