@@ -1,3 +1,13 @@
+/**
+* This class holds all the functions necessary in order to populate the database and
+* create each UI for the point of sales system.
+* 
+* @author   Alex Keener
+* @author   David Asatryan
+* @author   Emily Ha
+* @author   Reagan Reitmeyer
+* @author   Sry Hak
+*/
 // connect to the database
 const { query } = require('express');
 const express = require('../node_modules/express');
