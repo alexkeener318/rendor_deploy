@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/src/Pages/Inventory.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/src/Pages/Inventory.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* This class displays the current inventory of all of ingredients at the store
+* @author   David Asatryan
+*/
+
+// react
+import { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
+
+// external imports
+import axios from 'axios'
+import { Button, TextField } from "@mui/material";
+
+// components
+import Header from "../Components/Header"
+import FiveColRow from "../Components/FiveColRow";
+import TranslatedText from "../Components/TranslatedText";
+
+// pages
+
+// contexts
+import { UserContext } from "../contexts/user";
+import { LanguageContext } from '../contexts/language';
+
+
+const Inventory = ()=> {
+  const {lang, setLang} = useContext(LanguageContext)
+
+  const [startDate, setStartDate] = useState("2022-09-20")
+  const [endDate, setEndDate] = useState("2022-10-05")
+  const [data, setData] = useState([])
+  const [stockItems, setStockItems] = useState([])
+  const [isLoading, setIsLoading] = useState(false);
+  const [err, setErr] = useState('');
+
+  useEffect(()=>{
+    axios.get('https://project-3-6njq.onrender.com/getInventory')
+      .then(res => {
+        console.log(res.data)
+        setData(res.data)
+      })
+  },[startDate, endDate])
+
+  /**
+  * Retrieves all items that currently have a low stock and places them inside an array
+  * 
+  */
+  const lowStock = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('https://project-3-6njq.onrender.com/lowStock', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+        },
+      });
+
+      const result = await response.json();
+      setStockItems(result);
+      console.log(stockItems);
+
+    } catch (err) {
+        setErr(err.message);
+    } finally {
+        setIsLoading(false);
+    }
+  }
+ 
+
+  return (
+    &lt;div style={{ height: "100%"}}>
+      &lt;Header title = "Inventory" path = "/cashiergui"/>
+      
+
+      {/* A div which will have slight margins on both sides
+      This will be achieved by making a div with display flex, and another div within that  */}
+
+      &lt;div style={{display:"flex", justifyContent:"center", marginTop:20}}>
+        &lt;div style={{width:"90%"}}>
+
+          {/* Start table here */}
+          &lt;div style={{height:"500px", overflowY:"scroll", border:"solid", borderWidth:2, borderColor:"blue", backgroundColor:"blue", marginTop:20}}>
+
+            &lt;div style={{borderBottom:'solid white 3px', position:"sticky",  top:0}}>
+              &lt;FiveColRow item = {"Item id"} quantity = {"Name"} prevQuantity = {"Quantity"}  lastShipment = {"Unit"} nextShipment = {"Last Shipment"}/>
+            &lt;/div>
+            
+            { (data ?? []).map( (row) =>{
+              return (
+                &lt;FiveColRow key = {row.ingredient_id} item = {row.ingredient_id} quantity = {row.name} prevQuantity = {row.quantity} lastShipment = {row.ingredient_unit} nextShipment = {row.last_shipment.slice(0,10)} />
+              )
+            }) }
+            
+          &lt;/div>
+
+          &lt;div style = {{  marginTop: "3%", paddingLeft: "2.5%", paddingRight: "2.5%", paddingBottom: "2%", backgroundColor: "lightgrey" }}>
+              &lt;p style = {{fontSize: "20px", textAlign: "center", paddingTop: "2%"}}>
+                  &lt;Button onClick = {event => lowStock()} style = {{ height: "100%", width: "17.5%", backgroundColor: "blue", color: "white" }}>&lt;TranslatedText text = "Low Stock" key={lang}/>&lt;/Button>
+                  { (stockItems ?? []).map( elem => {
+                      return (
+                          &lt;div key = { elem.id }>
+                                  { elem }
+                          &lt;/div>
+                      )
+                  })}
+              &lt;/p>
+              &lt;Link to = "/updateInventory" style={{textDecoration:"none"}}>
+                &lt;Button style = {{ height: "100%", width: "17.5%", marginLeft: "41.25%", marginTop: "1%", backgroundColor: "blue", color: "white" }}>&lt;TranslatedText text = "Update Inventory" key={lang}/>&lt;/Button>
+              &lt;/Link>
+          &lt;/div>
+
+        &lt;/div>
+
+      &lt;/div>
+
+      &lt;br/>
+      &lt;br/>
+      &lt;br/>
+      &lt;br/>
+      
+    &lt;/div>
+  );
+}
+
+export default Inventory;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addInventoryItem">addInventoryItem</a></li><li><a href="global.html#addItem">addItem</a></li><li><a href="global.html#addMenu">addMenu</a></li><li><a href="global.html#bowlContent">bowlContent</a></li><li><a href="global.html#cardNumberGenerator">cardNumberGenerator</a></li><li><a href="global.html#checkStock">checkStock</a></li><li><a href="global.html#createData">createData</a></li><li><a href="global.html#deleteMenu">deleteMenu</a></li><li><a href="global.html#drinksContent">drinksContent</a></li><li><a href="global.html#employeeType">employeeType</a></li><li><a href="global.html#excessReport">excessReport</a></li><li><a href="global.html#extrasContent">extrasContent</a></li><li><a href="global.html#getID">getID</a></li><li><a href="global.html#getInventory">getInventory</a></li><li><a href="global.html#getItemID">getItemID</a></li><li><a href="global.html#getMenu">getMenu</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getRandomInt">getRandomInt</a></li><li><a href="global.html#gyrosContent">gyrosContent</a></li><li><a href="global.html#popCombos">popCombos</a></li><li><a href="global.html#removeItem">removeItem</a></li><li><a href="global.html#reportContent">reportContent</a></li><li><a href="global.html#roundTotal">roundTotal</a></li><li><a href="global.html#sendOrder">sendOrder</a></li><li><a href="global.html#statisticsGraph">statisticsGraph</a></li><li><a href="global.html#statisticsTable">statisticsTable</a></li><li><a href="global.html#updateInventory">updateInventory</a></li><li><a href="global.html#updateMenu">updateMenu</a></li><li><a href="global.html#updatePrice">updatePrice</a></li><li><a href="global.html#updateToppings">updateToppings</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Dec 05 2022 19:56:04 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/src/Pages/UpdateInventory.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/src/Pages/UpdateInventory.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* This class creates the UI that reports to the user sales information
+* during a specified time frame
+* @author   Sry Hak
+*/
+// react
+import { useContext, useEffect, useState } from "react";
+
+// external imports
+import { TextField,Button } from "@mui/material";
+
+// components
+import Header from "../Components/Header";
+import TranslatedText from "../Components/TranslatedText";
+
+// contexts
+import { LanguageContext } from '../contexts/language';
+
+
+const UpdateInventory = () => {
+    const {lang, setLang} = useContext(LanguageContext)
+    const [ingredientsList, setIngredientList] = useState([]);
+    const [tomato, setTomato] = useState();
+    const [salt, setSalt] = useState();
+    const [lettuce, setLettuce] = useState();
+    const [hummus, setHummus] = useState();
+    const [cheese, setCheese] = useState();
+    const [olives, setOlives] = useState();
+    const [onions, setOnions] = useState();
+    const [cucumbers, setCucumber] = useState();
+    const [cauliflower, setCauliflower] = useState();
+    const [peppers, setPeppers] = useState();
+    const [dressing, setDressing] = useState();
+    const [err, setErr] = useState('');
+
+
+    useEffect(() =>{
+        setIngredientList([tomato, salt, lettuce, hummus, cheese, olives, onions, cucumbers, cauliflower, peppers, dressing]);
+    },[tomato, salt, lettuce, hummus, cheese, olives, onions, cucumbers, cauliflower, peppers, dressing])
+
+    /**
+    * Deducts the specified amount for each topping in the database
+    * @param {number[]} ingredientsList       contains the amount to be deducted
+    */
+    const updateIngredients = async (ingredientsList) => {
+        console.log(ingredientsList);
+        try {
+            const response = await fetch('http://localhost:5000/updateTopping', {
+                method: 'POST',
+                body: JSON.stringify({ list: ingredientsList }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+            
+            const result = await response.json();
+            console.log(result);
+        } catch (err) {
+            setErr(err.message);
+        }
+    }
+
+    return (
+        &lt;div style = {{ height: "100%", paddingBottom: "10%" }}>
+            &lt;Header title = "Update Inventory" path = "/cashiergui">&lt;/Header>  
+
+            &lt;div style = {{  width: "60%", marginTop: "2%", marginLeft: "20%", backgroundColor: "lightgrey" }}>
+
+                &lt;div style = {{display:"flex"}}>
+                    &lt;div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                        &lt;h1 style = {{ marginTop: "2.5%", backgroundColor: "lightgrey" }}>&lt;TranslatedText text = "Item" key = {lang}/>&lt;/h1>
+                    &lt;/div>
+                    &lt;div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                        &lt;h1 style = {{ marginTop: "2.5%", backgroundColor: "lightgrey"}} >&lt;TranslatedText text = "Quantity Used" key = {lang}/>&lt;/h1>
+                    &lt;/div>
+                &lt;/div>
+
+                &lt;div style = {{display:"flex"}}>
+                    &lt;div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;h3 style = {{ height: "6%", marginTop: "6%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>&lt;TranslatedText text = "Tomatoes" key = {lang}/>&lt;/h3>
+                    &lt;/div>
+                    &lt;div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;TextField onChange = { ( event ) => setTomato(event.target.value)} value={tomato} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    &lt;/div>
+                &lt;/div>
+
+                &lt;div style = {{display:"flex"}}>
+                    &lt;div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>&lt;TranslatedText text = "Salt" key = {lang}/>&lt;/h3>
+                    &lt;/div>
+                    &lt;div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;TextField onChange = { ( event ) => setSalt(event.target.value)} value={salt} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    &lt;/div>
+                &lt;/div>
+
+                &lt;div style = {{display:"flex"}}>
+                    &lt;div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>&lt;TranslatedText text = "Lettuce" key = {lang}/>&lt;/h3>
+                    &lt;/div>
+                    &lt;div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;TextField onChange = { ( event ) => setLettuce(event.target.value)} value={lettuce} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    &lt;/div>
+                &lt;/div>
+
+                &lt;div style = {{display:"flex"}}>
+                    &lt;div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>&lt;TranslatedText text = "Hummus" key = {lang}/>&lt;/h3>
+                    &lt;/div>
+                    &lt;div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;TextField onChange = { ( event ) => setHummus(event.target.value)} value={hummus} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    &lt;/div>
+                &lt;/div>
+
+                &lt;div style = {{display:"flex"}}>
+                    &lt;div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>&lt;TranslatedText text = "Cheese" key = {lang}/>&lt;/h3>
+                    &lt;/div>
+                    &lt;div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;TextField onChange = { ( event ) => setCheese(event.target.value)} value={cheese} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    &lt;/div>
+                &lt;/div>
+
+                &lt;div style = {{display:"flex"}}>
+                    &lt;div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>&lt;TranslatedText text = "Olives" key = {lang}/>&lt;/h3>
+                    &lt;/div>
+                    &lt;div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;TextField onChange = { ( event ) => setOlives(event.target.value)} value={olives} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    &lt;/div>
+                &lt;/div>
+
+                &lt;div style = {{display:"flex"}}>
+                    &lt;div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>&lt;TranslatedText text = "Onions" key = {lang}/>&lt;/h3>
+                    &lt;/div>
+                    &lt;div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;TextField onChange = { ( event ) => setOnions(event.target.value)} value={onions} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    &lt;/div>
+                &lt;/div>
+
+                &lt;div style = {{display:"flex"}}>
+                    &lt;div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>&lt;TranslatedText text = "Cucumbers" key = {lang}/>&lt;/h3>
+                    &lt;/div>
+                    &lt;div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;TextField onChange = { ( event ) => setCucumber(event.target.value)} value={cucumbers} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    &lt;/div>
+                &lt;/div>
+
+                &lt;div style = {{display:"flex"}}>
+                    &lt;div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>&lt;TranslatedText text = "Cauliflowers" key = {lang}/>&lt;/h3>
+                    &lt;/div>
+                    &lt;div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;TextField onChange = { ( event ) => setCauliflower(event.target.value)} value={cauliflower} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    &lt;/div>
+                &lt;/div>
+
+                &lt;div style = {{display:"flex"}}>
+                    &lt;div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>&lt;TranslatedText text = "Peppers" key = {lang}/>&lt;/h3>
+                    &lt;/div>
+                    &lt;div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;TextField onChange = { ( event ) => setPeppers(event.target.value)} value={peppers} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    &lt;/div>
+                &lt;/div>
+
+                &lt;div style = {{display:"flex"}}>
+                    &lt;div className = "itemNameColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;h3 style = {{ height: "6%", marginTop: "3%", fontSize: "150%", fontWeight: "normal", backgroundColor: "lightgrey"}}>&lt;TranslatedText text = "Dressing" key = {lang}/>&lt;/h3>
+                    &lt;/div>
+                    &lt;div className = "quantityColumn" style = {{ width: "42.5%", marginLeft: "5%", textAlign: "center" }}>
+                    &lt;TextField onChange = { ( event ) => setDressing(event.target.value)} value={dressing} size="small" label="bags used" variant="filled" style = {{ width: "60%", marginTop: "2.5%", marginRight: "5%", backgroundColor: "white"}}/>
+                    &lt;/div>
+                &lt;/div>
+
+            &lt;/div>
+            &lt;div style = {{ height: "5%", width: "60%", marginLeft: "20%", paddingBottom: "2.5%", backgroundColor: "lightgrey" }}>
+                &lt;Button onClick = {event => 
+                    {updateIngredients(ingredientsList); 
+                        setTomato(""); 
+                        setSalt("");
+                        setLettuce("");
+                        setHummus("");
+                        setCheese("");
+                        setOlives("");
+                        setOnions("");
+                        setCucumber("");
+                        setCauliflower("");
+                        setPeppers("");
+                        setDressing("");
+                }} style = {{ height: "100%", width: "20%", marginLeft: "40%", marginTop:20,color: "white", backgroundColor: "blue" }}>&lt;TranslatedText text = "Update" key = {lang}/>&lt;/Button>
+            &lt;/div>
+        &lt;/div>
+    );
+}
+
+export default UpdateInventory;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addInventoryItem">addInventoryItem</a></li><li><a href="global.html#addItem">addItem</a></li><li><a href="global.html#addMenu">addMenu</a></li><li><a href="global.html#bowlContent">bowlContent</a></li><li><a href="global.html#cardNumberGenerator">cardNumberGenerator</a></li><li><a href="global.html#checkStock">checkStock</a></li><li><a href="global.html#createData">createData</a></li><li><a href="global.html#deleteMenu">deleteMenu</a></li><li><a href="global.html#drinksContent">drinksContent</a></li><li><a href="global.html#employeeType">employeeType</a></li><li><a href="global.html#excessReport">excessReport</a></li><li><a href="global.html#extrasContent">extrasContent</a></li><li><a href="global.html#getID">getID</a></li><li><a href="global.html#getInventory">getInventory</a></li><li><a href="global.html#getItemID">getItemID</a></li><li><a href="global.html#getMenu">getMenu</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getRandomInt">getRandomInt</a></li><li><a href="global.html#gyrosContent">gyrosContent</a></li><li><a href="global.html#popCombos">popCombos</a></li><li><a href="global.html#removeItem">removeItem</a></li><li><a href="global.html#reportContent">reportContent</a></li><li><a href="global.html#roundTotal">roundTotal</a></li><li><a href="global.html#sendOrder">sendOrder</a></li><li><a href="global.html#statisticsGraph">statisticsGraph</a></li><li><a href="global.html#statisticsTable">statisticsTable</a></li><li><a href="global.html#updateInventory">updateInventory</a></li><li><a href="global.html#updateMenu">updateMenu</a></li><li><a href="global.html#updatePrice">updatePrice</a></li><li><a href="global.html#updateToppings">updateToppings</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Dec 05 2022 19:56:04 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
