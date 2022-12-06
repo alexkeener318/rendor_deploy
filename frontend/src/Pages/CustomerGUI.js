@@ -25,6 +25,10 @@ var counter = 0;
 
 export const globalTotal = React.createContext()
 
+/**
+ * This functions produces the GUI for the customer. There are many functions nested in this that allow
+ * communication with backend for the customer to order.
+ */
 const CustomerGUI = () => {
     const {lang, setLang} = useContext(LanguageContext)
 

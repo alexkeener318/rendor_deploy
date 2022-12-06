@@ -3,6 +3,11 @@ import axios from 'axios'
 import { useState, useEffect, useContext } from "react";
 import { LanguageContext } from '../contexts/language';
 
+/**
+ * This function is used to translate text into a specified language.
+ * @param {Object} props an object holding values from parent
+ * @returns {string} translation of the page into specified language
+ */
 const TranslatedText=(props)=>{
     const {lang, setLang} = useContext(LanguageContext)
     const [translation, setTranslation]=useState("")

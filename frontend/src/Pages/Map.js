@@ -19,7 +19,9 @@ import translate, { setCORS } from "google-translate-api-browser";
 import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
 
-
+/**
+ * This GUI displays a map that shows the user where Pom & Honey is located.
+ */
 const Map = ()=> {
   const {lang, setLang} = useContext(LanguageContext)
 

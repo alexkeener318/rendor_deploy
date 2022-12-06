@@ -1,13 +1,9 @@
 {
     "plugins": ["plugins/markdown"],
     "source": {
-        "include": ["backend/server.js", "frontend/src/Pages"],
+        "include": ["backend/server.js", "frontend/src/Pages/"],
         "includePattern": ".js$",
         "excludePattern": "(node_modules/|jsdoc)"
-    },
-    "templates": {
-        "cleverLinks": true,
-        "monospaceLinks": true
     },
     "opts": {
         "destination": "./jsdoc",

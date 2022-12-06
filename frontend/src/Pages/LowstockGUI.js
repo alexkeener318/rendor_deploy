@@ -21,6 +21,10 @@ import TranslatedText from "../Components/TranslatedText";
 import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
 
+/**
+ * This low stock GUI displays a table of all of the items that are currently low on stock
+ * for the regular employee's use.
+ */
 const LowstockGUI = ()=> {
     const {lang, setLang} = useContext(LanguageContext)
     const [stockItems, setStockItems] = useState([])

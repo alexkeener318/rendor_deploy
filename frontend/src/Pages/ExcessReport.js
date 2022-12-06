@@ -20,6 +20,9 @@ import axios from 'axios'
 // contexts
 import { LanguageContext } from '../contexts/language';
 
+/**
+ * This class creates the UI that reports to the manager all items that haven't sold a lot of stock.
+ */
 const ExcessReport = () => {
     const [startDate, setStartDate] = useState("2022-09-20");
     const [endDate, setEndDate] = useState("2022-10-05");

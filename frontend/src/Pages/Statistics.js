@@ -30,6 +30,9 @@ function createData(time, amount) {
     return { time, amount };
 }
 
+/**
+ * This creates the UI that reports to the manager sales information during a specified time frame.
+ */
 const Statistics = () => {
     const {lang, setLang} = useContext(LanguageContext)
 

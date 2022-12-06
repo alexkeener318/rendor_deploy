@@ -38,6 +38,11 @@ const employeeButtonList = [
 
 var counter = 0;
 
+/**
+ * This functions produces the GUI for the cashier. This includes not only the manager, but also a
+ * regular employee. Differentiating between the two are specific buttons for inventory and statistics
+ * that only show if the current user logged in is a manager.
+ */
 const CashierGUI = () => {
     
     const {lang, setLang} = useContext(LanguageContext)

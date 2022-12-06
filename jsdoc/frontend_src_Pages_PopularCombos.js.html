@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: frontend/src/Pages/Inventory.js</title>
+    <title>JSDoc: Source: frontend/src/Pages/PopularCombos.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: frontend/src/Pages/Inventory.js</h1>
+    <h1 class="page-title">Source: frontend/src/Pages/PopularCombos.js</h1>
 
     
 
@@ -27,80 +27,44 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
-* This class displays the current inventory of all of ingredients at the store
-* @author   David Asatryan
+* This class creates the UI that reports to the user items that are commonly 
+* purchased together
+* @author   Sry Hak
 */
-
 // react
-import { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
 
 // external imports
 import axios from 'axios'
-import { Button, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 
 // components
 import Header from "../Components/Header"
-import FiveColRow from "../Components/FiveColRow";
-import TranslatedText from "../Components/TranslatedText";
-
-// pages
+import ThreeColRow from "../Components/ThreeColRow";
 
 // contexts
-import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
 
 /**
- * This is used to display the current inventory of all of ingredients.
+ * This creates the UI that reports to the user items that are commonly purchased together.
  */
-const Inventory = ()=> {
+const PopularCombos = ()=> {
   const {lang, setLang} = useContext(LanguageContext)
 
-  const [startDate, setStartDate] = useState("2022-09-20")
+  const [startDate, setStartDate] = useState("2022-09-20");
   const [endDate, setEndDate] = useState("2022-10-05")
-  const [data, setData] = useState([])
-  const [stockItems, setStockItems] = useState([])
-  const [isLoading, setIsLoading] = useState(false);
-  const [err, setErr] = useState('');
+  const [combos, setCombos] = useState([])
 
-  useEffect(()=>{
-    axios.get('https://project-3-6njq.onrender.com/getInventory')
-      .then(res => {
-        console.log(res.data)
-        setData(res.data)
+  useEffect(() => {
+    axios.post("https://project-3-6njq.onrender.com/popCombos", { startDate: startDate, endDate:endDate})
+      .then(data => {
+        setCombos(data.data)
       })
-  },[startDate, endDate])
-
-  /**
-  * Retrieves all items that currently have a low stock and places them inside an array
-  * 
-  */
-  const lowStock = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('https://project-3-6njq.onrender.com/lowStock', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-        },
-      });
-
-      const result = await response.json();
-      setStockItems(result);
-      console.log(stockItems);
-
-    } catch (err) {
-        setErr(err.message);
-    } finally {
-        setIsLoading(false);
-    }
-  }
- 
+  },[startDate,endDate])
 
   return (
     &lt;div style={{ height: "100%"}}>
-      &lt;Header title = "Inventory" path = "/cashiergui"/>
+      &lt;Header title = "Popular Combos" path = "/statistics"/>
       
 
       {/* A div which will have slight margins on both sides
@@ -109,39 +73,52 @@ const Inventory = ()=> {
       &lt;div style={{display:"flex", justifyContent:"center", marginTop:20}}>
         &lt;div style={{width:"90%"}}>
 
-          {/* Start table here */}
+
+          {/* A grid div which will contain the two text boxes */}
+          &lt;div style={{display:"flex", justifyContent:"space-evenly"}}>
+            
+            &lt;TextField
+                id="date"
+                label="Starting Date"
+                type="date"
+                //defaultValue="2022-05-24"
+                value = {startDate}
+                onChange = { ( event ) => setStartDate(event.target.value)}
+                sx={{ width: 220 }}
+                InputLabelProps={{
+                shrink: true,
+                }}
+            />
+
+            &lt;TextField
+                id="date"
+                label="Ending Date"
+                type="date"
+                value = {endDate}
+                onChange = { ( event ) => setEndDate(event.target.value)}
+                sx={{ width: 220 }}
+                InputLabelProps={{
+                shrink: true,
+                }}
+            />
+          &lt;/div>
+
           &lt;div style={{height:"500px", overflowY:"scroll", border:"solid", borderWidth:2, borderColor:"blue", backgroundColor:"blue", marginTop:20}}>
 
             &lt;div style={{borderBottom:'solid white 3px', position:"sticky",  top:0}}>
-              &lt;FiveColRow item = {"Item id"} quantity = {"Name"} prevQuantity = {"Quantity"}  lastShipment = {"Unit"} nextShipment = {"Last Shipment"}/>
+              &lt;ThreeColRow item = {"Item 1 "} quantity = {"Item 2"} price = {"Number of matches"}/>
             &lt;/div>
             
-            { (data ?? []).map( (row) =>{
-              return (
-                &lt;FiveColRow key = {row.ingredient_id} item = {row.ingredient_id} quantity = {row.name} prevQuantity = {row.quantity} lastShipment = {row.ingredient_unit} nextShipment = {row.last_shipment.slice(0,10)} />
-              )
-            }) }
-            
-          &lt;/div>
 
-          &lt;div style = {{  marginTop: "3%", paddingLeft: "2.5%", paddingRight: "2.5%", paddingBottom: "2%", backgroundColor: "lightgrey" }}>
-              &lt;p style = {{fontSize: "20px", textAlign: "center", paddingTop: "2%"}}>
-                  &lt;Button onClick = {event => lowStock()} style = {{ height: "100%", width: "17.5%", backgroundColor: "blue", color: "white" }}>&lt;TranslatedText text = "Low Stock" key={lang}/>&lt;/Button>
-                  { (stockItems ?? []).map( elem => {
-                      return (
-                          &lt;div key = { elem.id }>
-                                  { elem }
-                          &lt;/div>
-                      )
-                  })}
-              &lt;/p>
-              &lt;Link to = "/updateInventory" style={{textDecoration:"none"}}>
-                &lt;Button style = {{ height: "100%", width: "17.5%", marginLeft: "41.25%", marginTop: "1%", backgroundColor: "blue", color: "white" }}>&lt;TranslatedText text = "Update Inventory" key={lang}/>&lt;/Button>
-              &lt;/Link>
+            {(combos ?? []).map( (row) =>{
+              return (
+                &lt;ThreeColRow key = {row.id} item = {row.first} quantity = {row.second} price = {row.value} />
+              )
+            })}
+
           &lt;/div>
 
         &lt;/div>
-
       &lt;/div>
 
       &lt;br/>
@@ -153,7 +130,12 @@ const Inventory = ()=> {
   );
 }
 
-export default Inventory;</code></pre>
+export default PopularCombos;
+
+
+
+
+</code></pre>
         </article>
     </section>
 

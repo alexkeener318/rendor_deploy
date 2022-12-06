@@ -16,7 +16,9 @@ import TranslatedText from "../Components/TranslatedText";
 // contexts
 import { LanguageContext } from '../contexts/language';
 
-
+/**
+ * This class creates the UI that reports to the manager sales information during a specified time frame.
+ */
 const UpdateInventory = () => {
     const {lang, setLang} = useContext(LanguageContext)
     const [ingredientsList, setIngredientList] = useState([]);
