@@ -19,7 +19,9 @@ import TranslatedText from "../Components/TranslatedText";
 // contexts
 import { LanguageContext } from '../contexts/language';
 
-
+/**
+ * The edit menu function holds all the functions to allow users to add, edit, and delete a menu item.
+ */
 const EditMenu = () => {
     const {lang, setLang} = useContext(LanguageContext)
 

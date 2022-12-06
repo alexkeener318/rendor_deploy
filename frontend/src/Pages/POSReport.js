@@ -22,6 +22,9 @@ import TranslatedText from "../Components/TranslatedText";
 // contexts
 import { LanguageContext } from '../contexts/language';
 
+/**
+ * This displays a point of sales report between any two given dates for the manager.
+ */
 const POSReport = ()=> {
   const {lang, setLang} = useContext(LanguageContext)
 

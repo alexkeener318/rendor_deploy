@@ -17,7 +17,9 @@ import ThreeColRow from "../Components/ThreeColRow";
 // contexts
 import { LanguageContext } from '../contexts/language';
 
-
+/**
+ * This creates the UI that reports to the user items that are commonly purchased together.
+ */
 const PopularCombos = ()=> {
   const {lang, setLang} = useContext(LanguageContext)
 

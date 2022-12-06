@@ -22,7 +22,9 @@ import TranslatedText from "../Components/TranslatedText";
 import { UserContext } from "../contexts/user";
 import { LanguageContext } from '../contexts/language';
 
-
+/**
+ * This is used to display the current inventory of all of ingredients.
+ */
 const Inventory = ()=> {
   const {lang, setLang} = useContext(LanguageContext)
 

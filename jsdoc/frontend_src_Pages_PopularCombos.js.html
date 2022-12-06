@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/src/Pages/PopularCombos.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/src/Pages/PopularCombos.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* This class creates the UI that reports to the user items that are commonly 
+* purchased together
+* @author   Sry Hak
+*/
+// react
+import { useState, useContext, useEffect } from "react";
+
+// external imports
+import axios from 'axios'
+import { TextField } from "@mui/material";
+
+// components
+import Header from "../Components/Header"
+import ThreeColRow from "../Components/ThreeColRow";
+
+// contexts
+import { LanguageContext } from '../contexts/language';
+
+/**
+ * This creates the UI that reports to the user items that are commonly purchased together.
+ */
+const PopularCombos = ()=> {
+  const {lang, setLang} = useContext(LanguageContext)
+
+  const [startDate, setStartDate] = useState("2022-09-20");
+  const [endDate, setEndDate] = useState("2022-10-05")
+  const [combos, setCombos] = useState([])
+
+  useEffect(() => {
+    axios.post("https://project-3-6njq.onrender.com/popCombos", { startDate: startDate, endDate:endDate})
+      .then(data => {
+        setCombos(data.data)
+      })
+  },[startDate,endDate])
+
+  return (
+    &lt;div style={{ height: "100%"}}>
+      &lt;Header title = "Popular Combos" path = "/statistics"/>
+      
+
+      {/* A div which will have slight margins on both sides
+      This will be achieved by making a div with display flex, and another div within that  */}
+
+      &lt;div style={{display:"flex", justifyContent:"center", marginTop:20}}>
+        &lt;div style={{width:"90%"}}>
+
+
+          {/* A grid div which will contain the two text boxes */}
+          &lt;div style={{display:"flex", justifyContent:"space-evenly"}}>
+            
+            &lt;TextField
+                id="date"
+                label="Starting Date"
+                type="date"
+                //defaultValue="2022-05-24"
+                value = {startDate}
+                onChange = { ( event ) => setStartDate(event.target.value)}
+                sx={{ width: 220 }}
+                InputLabelProps={{
+                shrink: true,
+                }}
+            />
+
+            &lt;TextField
+                id="date"
+                label="Ending Date"
+                type="date"
+                value = {endDate}
+                onChange = { ( event ) => setEndDate(event.target.value)}
+                sx={{ width: 220 }}
+                InputLabelProps={{
+                shrink: true,
+                }}
+            />
+          &lt;/div>
+
+          &lt;div style={{height:"500px", overflowY:"scroll", border:"solid", borderWidth:2, borderColor:"blue", backgroundColor:"blue", marginTop:20}}>
+
+            &lt;div style={{borderBottom:'solid white 3px', position:"sticky",  top:0}}>
+              &lt;ThreeColRow item = {"Item 1 "} quantity = {"Item 2"} price = {"Number of matches"}/>
+            &lt;/div>
+            
+
+            {(combos ?? []).map( (row) =>{
+              return (
+                &lt;ThreeColRow key = {row.id} item = {row.first} quantity = {row.second} price = {row.value} />
+              )
+            })}
+
+          &lt;/div>
+
+        &lt;/div>
+      &lt;/div>
+
+      &lt;br/>
+      &lt;br/>
+      &lt;br/>
+      &lt;br/>
+      
+    &lt;/div>
+  );
+}
+
+export default PopularCombos;
+
+
+
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#CashierGUI">CashierGUI</a></li><li><a href="global.html#CustomerGUI">CustomerGUI</a></li><li><a href="global.html#EditMenu">EditMenu</a></li><li><a href="global.html#ExcessReport">ExcessReport</a></li><li><a href="global.html#Inventory">Inventory</a></li><li><a href="global.html#LowstockGUI">LowstockGUI</a></li><li><a href="global.html#Map">Map</a></li><li><a href="global.html#POSReport">POSReport</a></li><li><a href="global.html#PopularCombos">PopularCombos</a></li><li><a href="global.html#Statistics">Statistics</a></li><li><a href="global.html#TranslatedText">TranslatedText</a></li><li><a href="global.html#UpdateInventory">UpdateInventory</a></li><li><a href="global.html#addInventoryItem">addInventoryItem</a></li><li><a href="global.html#addItem">addItem</a></li><li><a href="global.html#addMenu">addMenu</a></li><li><a href="global.html#bowlContent">bowlContent</a></li><li><a href="global.html#cardNumberGenerator">cardNumberGenerator</a></li><li><a href="global.html#checkStock">checkStock</a></li><li><a href="global.html#createData">createData</a></li><li><a href="global.html#deleteMenu">deleteMenu</a></li><li><a href="global.html#drinksContent">drinksContent</a></li><li><a href="global.html#employeeType">employeeType</a></li><li><a href="global.html#excessReport">excessReport</a></li><li><a href="global.html#extrasContent">extrasContent</a></li><li><a href="global.html#getID">getID</a></li><li><a href="global.html#getInventory">getInventory</a></li><li><a href="global.html#getItemID">getItemID</a></li><li><a href="global.html#getMenu">getMenu</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getRandomInt">getRandomInt</a></li><li><a href="global.html#gyrosContent">gyrosContent</a></li><li><a href="global.html#popCombos">popCombos</a></li><li><a href="global.html#removeItem">removeItem</a></li><li><a href="global.html#reportContent">reportContent</a></li><li><a href="global.html#roundTotal">roundTotal</a></li><li><a href="global.html#sendOrder">sendOrder</a></li><li><a href="global.html#statisticsGraph">statisticsGraph</a></li><li><a href="global.html#statisticsTable">statisticsTable</a></li><li><a href="global.html#updateInventory">updateInventory</a></li><li><a href="global.html#updateMenu">updateMenu</a></li><li><a href="global.html#updatePrice">updatePrice</a></li><li><a href="global.html#updateToppings">updateToppings</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Dec 05 2022 22:30:20 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

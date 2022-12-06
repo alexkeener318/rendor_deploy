@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/src/Pages/CashierGUI.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/src/Pages/CashierGUI.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
 * This class holds all the functions needed for the cashier GUI to communicate
 * with the backend 
 * @author   David Asatryan
@@ -339,91 +367,113 @@ const CashierGUI = () => {
 
     return (
         
-        <div style = {{ width: "90%", height: "100%", marginLeft: "5%" }}>
-            <Header title = "Pom & Honey" path = "none"/>
+        &lt;div style = {{ width: "90%", height: "100%", marginLeft: "5%" }}>
+            &lt;Header title = "Pom &amp; Honey" path = "none"/>
 
-            <div className="menuOptions" style={{ height: "7.5%", marginTop: "2.5%" }}>
-                <Button onClick={bowlMenu} style = {{ height: "100%", width: "17.5%", marginRight: "7%", marginLeft: "4.5%", backgroundColor: "blue", color: "white" }}><TranslatedText key = {lang} text = {"Bowls"}/></Button>
-                <Button onClick={gyroMenu} style = {{ height: "100%", width: "17.5%", marginRight: "7%", backgroundColor: "blue", color: "white" }}><TranslatedText text = {"Gyro"} key = {lang}/></Button>
-                <Button onClick={extraMenu} style = {{ height: "100%", width: "17.5%", marginRight: "7%", backgroundColor: "blue", color: "white" }}><TranslatedText text = {"Extra"} key = {lang}/></Button>
-                <Button onClick={drinkMenu} style = {{ height: "100%", width: "17.5%", backgroundColor: "blue", color: "white" }}><TranslatedText text = {"Drinks"} key = {lang}/></Button>
-            </div>
-            <div style = {{ minHeight: "80%", marginTop: "2.5%", padding: "2.5%", backgroundColor: "lightgrey" }}>
-                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} style={{ height: "100%" }}>
-                {results.length!==0 && results.map( elem => {
+            &lt;div className="menuOptions" style={{ height: "7.5%", marginTop: "2.5%" }}>
+                &lt;Button onClick={bowlMenu} style = {{ height: "100%", width: "17.5%", marginRight: "7%", marginLeft: "4.5%", backgroundColor: "blue", color: "white" }}>&lt;TranslatedText key = {lang} text = {"Bowls"}/>&lt;/Button>
+                &lt;Button onClick={gyroMenu} style = {{ height: "100%", width: "17.5%", marginRight: "7%", backgroundColor: "blue", color: "white" }}>&lt;TranslatedText text = {"Gyro"} key = {lang}/>&lt;/Button>
+                &lt;Button onClick={extraMenu} style = {{ height: "100%", width: "17.5%", marginRight: "7%", backgroundColor: "blue", color: "white" }}>&lt;TranslatedText text = {"Extra"} key = {lang}/>&lt;/Button>
+                &lt;Button onClick={drinkMenu} style = {{ height: "100%", width: "17.5%", backgroundColor: "blue", color: "white" }}>&lt;TranslatedText text = {"Drinks"} key = {lang}/>&lt;/Button>
+            &lt;/div>
+            &lt;div style = {{ minHeight: "80%", marginTop: "2.5%", padding: "2.5%", backgroundColor: "lightgrey" }}>
+                &lt;Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} style={{ height: "100%" }}>
+                {results.length!==0 &amp;&amp; results.map( elem => {
                      return (
-                        <Grid  item xs = {3}  style = {{height:"40vh"}}>
+                        &lt;Grid  item xs = {3}  style = {{height:"40vh"}}>
                             
                             {/* menu item goes here */}
-                            <Card  className = "hoverCard" key = {elem.url} onClick = {event => handleClick(elem.name)} >
-                                <CardMedia
+                            &lt;Card  className = "hoverCard" key = {elem.url} onClick = {event => handleClick(elem.name)} >
+                                &lt;CardMedia
                                     key = {elem.url}
                                     component = {"img"}
                                     style ={{height:"75%",backgroundImage: ("url(\"" + elem.url + "\")"), backgroundPosition:"top center", backgroundSize:"120%" }}
                                 /> 
-                                <CardContent style={{textAlign:"center", height:"25%"}}>
-                                    <TranslatedText text = {elem.name} key = {lang + elem.url}/>
-                                </CardContent>
-                            </Card>
+                                &lt;CardContent style={{textAlign:"center", height:"25%"}}>
+                                    &lt;TranslatedText text = {elem.name} key = {lang + elem.url}/>
+                                &lt;/CardContent>
+                            &lt;/Card>
             
-                        </Grid>
+                        &lt;/Grid>
                         );
                     })}
-                </Grid>
-            </div>
-            <div style = {{ display: "flex", minHeight: "30%", marginTop: "2.5%", marginBottom: "5%", paddingTop: "2.5%", paddingBottom: "2.5%", backgroundColor: "lightgrey" }}>
-                <div style = {{ overflowY: "scroll", height: "300px", width: "45%", marginLeft: "2.5%", backgroundColor: "whitesmoke" }}>
-                    <p style = {{ fontWeight: "bold", marginBottom: "1%", marginLeft: "1%", marginTop: "1%" }}>
+                &lt;/Grid>
+            &lt;/div>
+            &lt;div style = {{ display: "flex", minHeight: "30%", marginTop: "2.5%", marginBottom: "5%", paddingTop: "2.5%", paddingBottom: "2.5%", backgroundColor: "lightgrey" }}>
+                &lt;div style = {{ overflowY: "scroll", height: "300px", width: "45%", marginLeft: "2.5%", backgroundColor: "whitesmoke" }}>
+                    &lt;p style = {{ fontWeight: "bold", marginBottom: "1%", marginLeft: "1%", marginTop: "1%" }}>
                         
-                        <TranslatedText text = {"Itemized Receipt"} key = {lang}/>
-                    </p>
+                        &lt;TranslatedText text = {"Itemized Receipt"} key = {lang}/>
+                    &lt;/p>
                     {receipt.map( elem => {
                         return (
-                            <div key = { elem.id } onClick = {() => removeItem(elem.id)}>
-                                <p style = {{ marginLeft: "1%" }}> 
-                                <TranslatedText text = {elem.name} key = {lang}/>
-                                </p>
-                            </div>
+                            &lt;div key = { elem.id } onClick = {() => removeItem(elem.id)}>
+                                &lt;p style = {{ marginLeft: "1%" }}> 
+                                &lt;TranslatedText text = {elem.name} key = {lang}/>
+                                &lt;/p>
+                            &lt;/div>
                         )
                     })}
-                </div>
-                <div style = {{ minHeight: "90%", width: "15%", marginLeft: "2.5%" }}>
-                    <div style = {{ height: "20%", width: "100%", marginTop: "20%", backgroundColor: "whitesmoke" }} >
-                        <TranslatedText text = {"Total"} key = {lang}/>
+                &lt;/div>
+                &lt;div style = {{ minHeight: "90%", width: "15%", marginLeft: "2.5%" }}>
+                    &lt;div style = {{ height: "20%", width: "100%", marginTop: "20%", backgroundColor: "whitesmoke" }} >
+                        &lt;TranslatedText text = {"Total"} key = {lang}/>
                         : $ { total }
-                    </div>
-                    <div style = {{ height: "20%", width: "100%", backgroundColor: "whitesmoke" , paddingBottom:20}} >
-                        <TranslatedText text = {"Employee Name"} key = {lang}/>
+                    &lt;/div>
+                    &lt;div style = {{ height: "20%", width: "100%", backgroundColor: "whitesmoke" , paddingBottom:20}} >
+                        &lt;TranslatedText text = {"Employee Name"} key = {lang}/>
                         : {( user?.name ?? 'w')}
-                    </div>
-                </div>
-                <div style = {{ minHeight: "90%", width: "30%", marginLeft: "2.5%" }}>
-                    <div style = {{ minHeight: "60%", width: "100%", paddingTop: "2.5%", backgroundColor: "whitesmoke" }}>
-                        <div className="checkoutButtons" style = {{ width:"80%", marginLeft: "10%" }}>
-                            <Button onClick = {event => handleCheckout("Credit Card", "Sry")} style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "blue", color: "white" }}><TranslatedText text = "Credit" key={lang}/></Button>
-                            <Button onClick = {event => handleCheckout("Debit Card", "Sry")} style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "blue", color: "white" }}><TranslatedText text = "Debit" key={lang}/></Button>
-                            <Button onClick = {event => handleCheckout("Retail Swipes", "Sry")} style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "blue", color: "white" }}><TranslatedText text = "Retail Swipes" key={lang}/></Button>
+                    &lt;/div>
+                &lt;/div>
+                &lt;div style = {{ minHeight: "90%", width: "30%", marginLeft: "2.5%" }}>
+                    &lt;div style = {{ minHeight: "60%", width: "100%", paddingTop: "2.5%", backgroundColor: "whitesmoke" }}>
+                        &lt;div className="checkoutButtons" style = {{ width:"80%", marginLeft: "10%" }}>
+                            &lt;Button onClick = {event => handleCheckout("Credit Card", "Sry")} style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "blue", color: "white" }}>&lt;TranslatedText text = "Credit" key={lang}/>&lt;/Button>
+                            &lt;Button onClick = {event => handleCheckout("Debit Card", "Sry")} style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "blue", color: "white" }}>&lt;TranslatedText text = "Debit" key={lang}/>&lt;/Button>
+                            &lt;Button onClick = {event => handleCheckout("Retail Swipes", "Sry")} style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "blue", color: "white" }}>&lt;TranslatedText text = "Retail Swipes" key={lang}/>&lt;/Button>
                             {managerButtons.map( elem => {
                                 return (
-                                        <Link key = {elem.id} to={elem.linkName} style={{ textDecoration:"none" }}>
-                                            <Button key = {elem.buttonName} style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "green", color: "white" }}><TranslatedText text = {elem.buttonName} key = {lang}/></Button>
-                                        </Link>
+                                        &lt;Link key = {elem.id} to={elem.linkName} style={{ textDecoration:"none" }}>
+                                            &lt;Button key = {elem.buttonName} style = {{ height: "47.5%", width: "47.5%", marginTop: "2.5%", marginLeft: "1.66%", backgroundColor: "green", color: "white" }}>&lt;TranslatedText text = {elem.buttonName} key = {lang}/>&lt;/Button>
+                                        &lt;/Link>
                                     );
                                 })}
                                 
-                        </div>
-                    </div>
+                        &lt;/div>
+                    &lt;/div>
                    
-                </div>
-            </div>
+                &lt;/div>
+            &lt;/div>
 
-            <div style = {{width:"100%", display:"flex", justifyContent:"center"}}>
-                <Link to = "/map" style={{textDecoration:"none"}}>
-                    <Button variant = "contained"><TranslatedText text = "Find us on the map" key = {lang}/>!!</Button>
-                </Link>
-            </div>
-        </div>
+            &lt;div style = {{width:"100%", display:"flex", justifyContent:"center"}}>
+                &lt;Link to = "/map" style={{textDecoration:"none"}}>
+                    &lt;Button variant = "contained">&lt;TranslatedText text = "Find us on the map" key = {lang}/>!!&lt;/Button>
+                &lt;/Link>
+            &lt;/div>
+        &lt;/div>
     )
 }
 
-export default CashierGUI;
+export default CashierGUI;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#CashierGUI">CashierGUI</a></li><li><a href="global.html#CustomerGUI">CustomerGUI</a></li><li><a href="global.html#EditMenu">EditMenu</a></li><li><a href="global.html#ExcessReport">ExcessReport</a></li><li><a href="global.html#Inventory">Inventory</a></li><li><a href="global.html#LowstockGUI">LowstockGUI</a></li><li><a href="global.html#Map">Map</a></li><li><a href="global.html#POSReport">POSReport</a></li><li><a href="global.html#PopularCombos">PopularCombos</a></li><li><a href="global.html#Statistics">Statistics</a></li><li><a href="global.html#TranslatedText">TranslatedText</a></li><li><a href="global.html#UpdateInventory">UpdateInventory</a></li><li><a href="global.html#addInventoryItem">addInventoryItem</a></li><li><a href="global.html#addItem">addItem</a></li><li><a href="global.html#addMenu">addMenu</a></li><li><a href="global.html#bowlContent">bowlContent</a></li><li><a href="global.html#cardNumberGenerator">cardNumberGenerator</a></li><li><a href="global.html#checkStock">checkStock</a></li><li><a href="global.html#createData">createData</a></li><li><a href="global.html#deleteMenu">deleteMenu</a></li><li><a href="global.html#drinksContent">drinksContent</a></li><li><a href="global.html#employeeType">employeeType</a></li><li><a href="global.html#excessReport">excessReport</a></li><li><a href="global.html#extrasContent">extrasContent</a></li><li><a href="global.html#getID">getID</a></li><li><a href="global.html#getInventory">getInventory</a></li><li><a href="global.html#getItemID">getItemID</a></li><li><a href="global.html#getMenu">getMenu</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getRandomInt">getRandomInt</a></li><li><a href="global.html#gyrosContent">gyrosContent</a></li><li><a href="global.html#popCombos">popCombos</a></li><li><a href="global.html#removeItem">removeItem</a></li><li><a href="global.html#reportContent">reportContent</a></li><li><a href="global.html#roundTotal">roundTotal</a></li><li><a href="global.html#sendOrder">sendOrder</a></li><li><a href="global.html#statisticsGraph">statisticsGraph</a></li><li><a href="global.html#statisticsTable">statisticsTable</a></li><li><a href="global.html#updateInventory">updateInventory</a></li><li><a href="global.html#updateMenu">updateMenu</a></li><li><a href="global.html#updatePrice">updatePrice</a></li><li><a href="global.html#updateToppings">updateToppings</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Dec 05 2022 22:30:20 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

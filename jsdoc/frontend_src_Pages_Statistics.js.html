@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/src/Pages/Statistics.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/src/Pages/Statistics.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* This class creates the UI that reports to the user sales information
+* during a specified time frame
+* @author   Sry Hak
+*/
+// react
+import { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+// external imports
+import { useTheme } from '@mui/material/styles';
+import { Button } from "@mui/material"
+import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
+import { TextField } from "@mui/material";
+import axios from 'axios'
+
+// components
+import Header from "../Components/Header";
+import TranslatedText from "../Components/TranslatedText";
+
+// contexts
+import { LanguageContext } from '../contexts/language';
+
+/**
+* Creates datapoint objects for the statistics graph
+* @param {string} time       contains the timestamp for the x axis
+* @param {number} amount       contains the gross revenue for the y axis
+*/
+function createData(time, amount) {
+    return { time, amount };
+}
+
+/**
+ * This creates the UI that reports to the manager sales information during a specified time frame.
+ */
+const Statistics = () => {
+    const {lang, setLang} = useContext(LanguageContext)
+
+  const theme = useTheme();
+  const [startDate, setStartDate] = useState("2022-09-20");
+  const [endDate, setEndDate] = useState("2022-10-05");
+  const [revenue, setRevenue] = useState();
+  const [credit, setCredit] = useState();
+  const [dining, setDining] = useState();
+  const [orders, setOrders] = useState();
+  const [graphData, setGraphData] = useState([]);
+
+/**
+* Updates/rerenders the graph
+* @param {string} time       contains the timestamp for the x axis
+* @param {number} amount       contains the gross revenue for the y axis
+*/
+  function updateState( time, total) {
+    setGraphData(graphData => [...graphData, createData(time, total)]);
+  }
+
+  useEffect(() => {
+    axios.post("https://project-3-6njq.onrender.com/statsTable", { startDate: startDate, endDate:endDate})
+      .then(data => {
+        setRevenue(data.data.grossRevenue);
+        setCredit(data.data.credit);
+        setDining(data.data.dining);
+        setOrders(data.data.orders);
+      })
+
+    axios.post("https://project-3-6njq.onrender.com/statsGraph", { startDate: startDate, endDate:endDate})
+      .then(retrievedData => {
+        setGraphData([]);
+        let numElements = retrievedData.data.length-1; 
+
+        if (numElements >= 5) {
+            let elementsPerBreakpoint = numElements/5;
+            let breakpointTotal; 
+            let time = 0;
+            let elemIndex = 0;
+            for (var breakpoint = 0; breakpoint &lt; 5; breakpoint++) {
+                breakpointTotal = 0;
+                for (var i = 0; i &lt; elementsPerBreakpoint; i++) {
+                    breakpointTotal += retrievedData.data[elemIndex].total;
+                    elemIndex++;
+                }
+                updateState(retrievedData.data[elemIndex].timestamp, breakpointTotal);
+            }
+        }
+      })
+  },[startDate,endDate])
+
+  useEffect(() => {
+    console.log(graphData);
+  }, [graphData])
+
+
+  return (
+    &lt;div style={{height: "80%"}}>
+        &lt;Header title = "Statistics" path = "/cashiergui">&lt;/Header>
+
+        &lt;span className="statsContainer" style={{
+            borderTop: "5%",
+            display: "flex",
+            height: "100%",
+            paddingTop: "5%",
+            paddingRight: "10%",
+            paddingLeft: "10%"
+        }}>
+            &lt;div className="leftComponent" style={{
+                width: "45%",
+                height: "75%",
+                marginRight: "10%"
+            }}>
+                &lt;div>
+                    &lt;TextField
+                        id="date"
+                        label="Starting Date"
+                        type="date"
+                        value = {startDate}
+                        onChange = { ( event ) => setStartDate(event.target.value) }
+                        sx={{ width: 220 }}
+                        InputLabelProps={{
+                        shrink: true,
+                        }}
+                        style = {{  
+                            width: "40%",
+                            marginRight: "20%"
+                        }}
+                    />
+
+                    &lt;TextField
+                        id="date"
+                        label="Ending Date"
+                        type="date"
+                        value = {endDate}
+                        onChange = { ( event ) => setEndDate(event.target.value)}
+                        sx={{ width: 220 }}
+                        InputLabelProps={{
+                        shrink: true,
+                        }}
+                        style = {{  
+                            width: "40%"
+                        }}
+                    />
+                &lt;/div>
+                &lt;table style = {{
+                    marginTop: "5%",
+                    width: "100%",
+                    height: "70%",
+                    backgroundColor: "blue",
+                    color: "white"
+                }}>
+                    &lt;tr>
+                        &lt;td>&lt;TranslatedText text = "Gross Revenue" key = {lang}/>&lt;/td>
+                        &lt;td>$ {revenue}&lt;/td>
+                    &lt;/tr>
+                    &lt;tr>
+                        &lt;td>&lt;TranslatedText text = "Credit" key = {lang}/>&lt;/td>
+                        &lt;td>$ {credit}&lt;/td>
+                    &lt;/tr>
+                    &lt;tr>
+                        &lt;td>&lt;TranslatedText text = "Dining" key = {lang}/>&lt;/td>
+                        &lt;td>$ {dining}&lt;/td>
+                    &lt;/tr>
+                    &lt;tr>
+                        &lt;td>&lt;TranslatedText text = "Orders" key = {lang}/>&lt;/td>
+                        &lt;td>{orders}&lt;/td>
+                    &lt;/tr>
+                &lt;/table>
+
+                &lt;div className="reportButtonsContainer" style={{
+                    marginTop: "5%",
+                }}>
+                    &lt;Link to="/posreport" style={{ textDecoration:"none" }}>
+                        &lt;Button className = "reportButtons" style ={{backgroundColor:"red", width: "25%"}} variant = "contained" >POS &lt;br /> &lt;TranslatedText  text = {"Report"} key = {lang}/>&lt;/Button>
+                    &lt;/Link>
+                    &lt;Link to="/popularcombos" style={{ textDecoration:"none" }}>
+                        &lt;Button className = "reportButtons" style ={{backgroundColor:"red", width: "25%", marginLeft: "12.5%"}} variant = "contained" >&lt;TranslatedText  text = {"Popular Combos"} key = {lang}/>&lt;/Button>
+                    &lt;/Link>
+                    &lt;Link to="/excessreport" style={{ textDecoration:"none" }}>
+                        &lt;Button className = "reportButtons" style ={{backgroundColor:"red", width: "25%", marginLeft: "12.5%"}} variant = "contained" >&lt;TranslatedText  text = {"Excess Report"} key = {lang}/>&lt;/Button>
+                    &lt;/Link>
+                &lt;/div>
+
+            &lt;/div>
+
+            &lt;ResponsiveContainer 
+                width = "45%"
+                height = "70%"
+            >
+                &lt;LineChart
+                    data = {graphData}
+                    margin={{
+                        top: 16,
+                        right: 16,
+                        bottom: 0,
+                        left: 24,
+                    }}
+                    >
+                    &lt;XAxis
+                        dataKey="time"
+                        stroke={theme.palette.text.secondary}
+                        style={theme.typography.body2}
+                    />
+                        &lt;Label
+                        style={{
+                            textAnchor: 'middle',
+                            fill: theme.palette.text.primary,
+                            ...theme.typography.body1,
+                        }}
+                        >
+                        Time/Date
+                        &lt;/Label>
+                    &lt;YAxis
+                        stroke={theme.palette.text.secondary}
+                        style={theme.typography.body2}
+                    >
+                        &lt;Label
+                        angle={270}
+                        position="left"
+                        style={{
+                            textAnchor: 'middle',
+                            fill: theme.palette.text.primary,
+                            ...theme.typography.body1,
+                        }}
+                        >
+                        Sales ($)
+                        &lt;/Label>
+                    &lt;/YAxis>
+                    &lt;Line
+                        isAnimationActive={false}
+                        type="monotone"
+                        dataKey="amount"
+                        stroke={theme.palette.primary.main}z
+                        dot={false}
+                    />
+                &lt;/LineChart>
+            &lt;/ResponsiveContainer>
+        &lt;/span>
+
+    &lt;/div>
+  )
+}
+
+export default Statistics;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#CashierGUI">CashierGUI</a></li><li><a href="global.html#CustomerGUI">CustomerGUI</a></li><li><a href="global.html#EditMenu">EditMenu</a></li><li><a href="global.html#ExcessReport">ExcessReport</a></li><li><a href="global.html#Inventory">Inventory</a></li><li><a href="global.html#LowstockGUI">LowstockGUI</a></li><li><a href="global.html#Map">Map</a></li><li><a href="global.html#POSReport">POSReport</a></li><li><a href="global.html#PopularCombos">PopularCombos</a></li><li><a href="global.html#Statistics">Statistics</a></li><li><a href="global.html#TranslatedText">TranslatedText</a></li><li><a href="global.html#UpdateInventory">UpdateInventory</a></li><li><a href="global.html#addInventoryItem">addInventoryItem</a></li><li><a href="global.html#addItem">addItem</a></li><li><a href="global.html#addMenu">addMenu</a></li><li><a href="global.html#bowlContent">bowlContent</a></li><li><a href="global.html#cardNumberGenerator">cardNumberGenerator</a></li><li><a href="global.html#checkStock">checkStock</a></li><li><a href="global.html#createData">createData</a></li><li><a href="global.html#deleteMenu">deleteMenu</a></li><li><a href="global.html#drinksContent">drinksContent</a></li><li><a href="global.html#employeeType">employeeType</a></li><li><a href="global.html#excessReport">excessReport</a></li><li><a href="global.html#extrasContent">extrasContent</a></li><li><a href="global.html#getID">getID</a></li><li><a href="global.html#getInventory">getInventory</a></li><li><a href="global.html#getItemID">getItemID</a></li><li><a href="global.html#getMenu">getMenu</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getRandomInt">getRandomInt</a></li><li><a href="global.html#gyrosContent">gyrosContent</a></li><li><a href="global.html#popCombos">popCombos</a></li><li><a href="global.html#removeItem">removeItem</a></li><li><a href="global.html#reportContent">reportContent</a></li><li><a href="global.html#roundTotal">roundTotal</a></li><li><a href="global.html#sendOrder">sendOrder</a></li><li><a href="global.html#statisticsGraph">statisticsGraph</a></li><li><a href="global.html#statisticsTable">statisticsTable</a></li><li><a href="global.html#updateInventory">updateInventory</a></li><li><a href="global.html#updateMenu">updateMenu</a></li><li><a href="global.html#updatePrice">updatePrice</a></li><li><a href="global.html#updateToppings">updateToppings</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Dec 05 2022 22:30:20 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

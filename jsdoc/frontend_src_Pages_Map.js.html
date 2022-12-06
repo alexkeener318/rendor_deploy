@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/src/Pages/Map.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/src/Pages/Map.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* This class displays a map that shows the user where Pom &amp; Honey is located
+* @author   David Asatryan
+*/
+// react
+import { useState, useEffect, useContext } from "react";
+
+// external imports
+import axios from 'axios'
+
+// components
+import Header from "../Components/Header"
+import TranslatedText from "../Components/TranslatedText";
+import translate, { setCORS } from "google-translate-api-browser";
+
+// pages
+
+// contexts
+import { UserContext } from "../contexts/user";
+import { LanguageContext } from '../contexts/language';
+
+/**
+ * This GUI displays a map that shows the user where Pom &amp; Honey is located.
+ */
+const Map = ()=> {
+  const {lang, setLang} = useContext(LanguageContext)
+
+  return (
+    &lt;div style={{ height: "100%"}}>
+      &lt;Header title = "Map" path = "/"/>
+      
+        {/* &lt;GoogleMap zoom = {10} center ={{lat: 30.613048885620053, lng: -96.34111433863698}} mapContainerStyle={{minWidth:"70%", minHeight:"70%"}}>
+            &lt;Marker position = {{lat: 30.613048885620053, lng: -96.34111433863698}} />
+        &lt;/GoogleMap> */}
+        &lt;br/>
+        &lt;h2 style={{textAlign:"center"}}>&lt;TranslatedText text = {"Find us on the first floor of the MSC!"} key = {lang}/> &lt;/h2>
+        &lt;br/>
+        &lt;div style={{width:"100%", display:"flex", justifyContent:"center"}}>
+            &lt;iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13735.079319450622!2d-96.341286!3d30.6122548!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xf7a405b853c13270!2sPom%20%26%20Honey%20-%20MSC!5e0!3m2!1sen!2sus!4v1668908460274!5m2!1sen!2sus" frameBorder="0" style={{border:0, minHeight:"70vh", width:"80%", minWidth:"350px"}} allowFullScreen="" loading="lazy" aria-hidden="false" tabIndex="0">&lt;/iframe>
+        &lt;/div>
+
+      &lt;br/>
+      &lt;br/>
+      &lt;br/>
+      &lt;br/>
+      
+    &lt;/div>
+  );
+}
+
+export default Map;
+
+
+
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#CashierGUI">CashierGUI</a></li><li><a href="global.html#CustomerGUI">CustomerGUI</a></li><li><a href="global.html#EditMenu">EditMenu</a></li><li><a href="global.html#ExcessReport">ExcessReport</a></li><li><a href="global.html#Inventory">Inventory</a></li><li><a href="global.html#LowstockGUI">LowstockGUI</a></li><li><a href="global.html#Map">Map</a></li><li><a href="global.html#POSReport">POSReport</a></li><li><a href="global.html#PopularCombos">PopularCombos</a></li><li><a href="global.html#Statistics">Statistics</a></li><li><a href="global.html#TranslatedText">TranslatedText</a></li><li><a href="global.html#UpdateInventory">UpdateInventory</a></li><li><a href="global.html#addInventoryItem">addInventoryItem</a></li><li><a href="global.html#addItem">addItem</a></li><li><a href="global.html#addMenu">addMenu</a></li><li><a href="global.html#bowlContent">bowlContent</a></li><li><a href="global.html#cardNumberGenerator">cardNumberGenerator</a></li><li><a href="global.html#checkStock">checkStock</a></li><li><a href="global.html#createData">createData</a></li><li><a href="global.html#deleteMenu">deleteMenu</a></li><li><a href="global.html#drinksContent">drinksContent</a></li><li><a href="global.html#employeeType">employeeType</a></li><li><a href="global.html#excessReport">excessReport</a></li><li><a href="global.html#extrasContent">extrasContent</a></li><li><a href="global.html#getID">getID</a></li><li><a href="global.html#getInventory">getInventory</a></li><li><a href="global.html#getItemID">getItemID</a></li><li><a href="global.html#getMenu">getMenu</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getRandomInt">getRandomInt</a></li><li><a href="global.html#gyrosContent">gyrosContent</a></li><li><a href="global.html#popCombos">popCombos</a></li><li><a href="global.html#removeItem">removeItem</a></li><li><a href="global.html#reportContent">reportContent</a></li><li><a href="global.html#roundTotal">roundTotal</a></li><li><a href="global.html#sendOrder">sendOrder</a></li><li><a href="global.html#statisticsGraph">statisticsGraph</a></li><li><a href="global.html#statisticsTable">statisticsTable</a></li><li><a href="global.html#updateInventory">updateInventory</a></li><li><a href="global.html#updateMenu">updateMenu</a></li><li><a href="global.html#updatePrice">updatePrice</a></li><li><a href="global.html#updateToppings">updateToppings</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Dec 05 2022 22:30:20 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
